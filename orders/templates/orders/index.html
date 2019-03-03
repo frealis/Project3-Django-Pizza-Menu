@@ -7,11 +7,9 @@
     <li><a href="{% url 'logout' %}">Logout</a></li>
 </ul>
 
-<button onclick="tbody_array()">tbody</button>
-
 <table id="table">
-  <thead></thead>
-  <tbody id="tbody">
+<thead></thead>
+<tbody id="tbody">
   <!-- Regular Pizza -->
   <tr>
     <td>Regular Pizza</td>
@@ -22,8 +20,8 @@
     {% if item.group == 'Regular Pizza' %}
       <tr id="{{ item.item }}">
         <td>{{ item.item }}</td>
-        <td>{{ item.price_sm }} <input type="checkbox" name=item.item value=item.price_sm onchange="show_toppings()"></td>
-        <td>{{ item.price_lg }} <input type="checkbox" name=item.item value=item.price_lg ></td>  
+        <td>{{ item.price_sm }} <input type="checkbox" name=item.item value=item.price_sm onclick="show_toppings( '{{ item.item }}' )" /></td>
+        <td>{{ item.price_lg }} <input type="checkbox" name=item.item value=item.price_lg onclick="show_toppings( '{{ item.item }}' )"></td>  
       </tr>
     {% endif %}
   {% endfor %}
@@ -109,8 +107,8 @@
     </tr>
     {% endif %}
   {% endfor %}
-  </tbody>
-  <tfoot></tfoot>
+</tbody>
+<tfoot></tfoot>
 </table>
 
 <script>
@@ -120,49 +118,56 @@
   // Create a new row, <tr>, that includes list of toppings, hidden by default.
   const tr = document.createElement('tr');
   const td = document.createElement('td');
-  td.className = 'topping1';
+  td.className = 'toppings';
   td.innerHTML = toppings_items;
   td.style.display = 'none';
   tr.append(td);
 
-  // Testing
-  // function tbody_array() {
-  //   var array = []
-  //   for (let i = 0; i < tbody.childNodes.length; i++) {
-  //     array[i] = tbody.childNodes[i];
-  //     if (array[i].id === '1 topping') {
-  //       console.log(i);
-  //     };
-  //   };
-  //   console.log(array);
-  // };
-
-  var array = [];
-  var index = 0;
-  for (let i = 0; i < tbody.childNodes.length; i++) {
-    array[i] = tbody.childNodes[i];
-    if (array[i].id === '1 topping') {
-      console.log(i);
-      index = i + 1;
-    };
-  };
-
-  // Add toppings row <tr> to DOM. 
-  document.querySelector('tbody').insertBefore(tr, tbody.childNodes[index]);
-
   // Show toppings list when checkbox is clicked
   toppings_visible = false;
-  function show_toppings() {
-    console.log('show_toppings() called successfully');
+  number_of_selections = 0;
+  function show_toppings(param) {
+    number_of_selections++;
+    console.log(number_of_selections);
 
-    if (toppings_visible === false) {
-      toppings_visible = true;
-      var topping1 = document.querySelector('.topping1');
-      topping1.style.display = 'inline';
+    if (number_of_selections > 1) {
+      
+      // Clear all selections
+      number_of_selections = 0;
+      var toppings = document.querySelector('.toppings');
+      toppings.style.display = 'none';
+
+      var input = document.getElementsByTagName('input')
+      for (i = 0; i < input.length; i++) {
+        input[i].checked = false;
+      }
+
     } else {
-      toppings_visible = false;
-      var topping1 = document.querySelector('.topping1');
-      topping1.style.display = 'none';
+      if (param !== 'Cheese') {
+
+        // Figure out the index of the HTML child objects of <tbody>.
+        var array = [];
+        var index = 0;
+        for (let i = 0; i < tbody.childNodes.length; i++) {
+          array[i] = tbody.childNodes[i];
+          if (array[i].id === param) {
+            index = i + 1;
+          };
+        };
+
+        // Add toppings row <tr> to DOM. 
+        document.querySelector('tbody').insertBefore(tr, tbody.childNodes[index]);
+
+        // Toggle toppings visibility
+        var toppings = document.querySelector('.toppings');
+        if (toppings_visible === false) {
+          toppings_visible = true;
+          toppings.style.display = 'inline';
+        } else {
+          toppings_visible = false;
+          toppings.style.display = 'none';
+        };
+      };
     };
   };
   
