@@ -123,39 +123,51 @@
   td.style.display = 'none';
   tr.append(td);
 
-  // Show toppings list when checkbox is clicked
+  // Checkbox selection & toppings variables
   toppings_visible = false;
   number_of_selections = 0;
   current_selection = "";
   previous_selection = "";
 
+  // Handle when a user clicks a checkbox on the menu
   function select_item(param) {
     number_of_selections++;
     current_selection = param;
     
-    // Give previous_selection a value since it starts off as an empty string
+    // Give var previous_selection a value since it starts off as an empty string
     if (previous_selection === "") {
       previous_selection = current_selection;
     };
 
-    // User clicks on an item that was already selected  
+    // Handle when a user clicks on an item that was either already selected, or 
+    // when nothing on the menu was previously selected
     if (current_selection === previous_selection) {
 
       // Hide toppings
-      hide_toppings();
+      if (number_of_selections > 1) {
+        hide_toppings();
 
       // Show toppings
-      show_toppings(param);
+      } else {
+        show_toppings(param);
+      };
 
     // User clicks on an item that was -not- already selected
     } else {
 
-      // Hide toppings
+      // Hide toppings & de-select all checkboxes
       hide_toppings();
 
       // Show toppings
       show_toppings(param);
+
+      // Re-activate new checkbox selection
+      number_of_selections = 1;
+
     };
+    
+    // Update var previous_selection before function exits
+    previous_selection = current_selection;
   };
 
   // Hide toppings
