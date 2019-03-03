@@ -20,8 +20,8 @@
     {% if item.group == 'Regular Pizza' %}
       <tr id="{{ item.item }}">
         <td>{{ item.item }}</td>
-        <td>{{ item.price_sm }} <input type="checkbox" name="{{ item.item }}" value="{{ item.price_sm }}" onclick="show_toppings( '{{ item.item }}' )" /></td>
-        <td>{{ item.price_lg }} <input type="checkbox" name="{{ item.item }}" value="{{ item.price_lg }}" onclick="show_toppings( '{{ item.item }}' )"></td>  
+        <td>{{ item.price_sm }} <input type="checkbox" name="{{ item.item }}" value="{{ item.price_sm }}" onclick="select_item( '{{ item.item }}' )" /></td>
+        <td>{{ item.price_lg }} <input type="checkbox" name="{{ item.item }}" value="{{ item.price_lg }}" onclick="select_item( '{{ item.item }}' )"></td>  
       </tr>
     {% endif %}
   {% endfor %}
@@ -129,7 +129,7 @@
   current_selection = "";
   previous_selection = "";
 
-  function show_toppings(param) {
+  function select_item(param) {
     number_of_selections++;
     current_selection = param;
     
@@ -138,54 +138,66 @@
       previous_selection = current_selection;
     };
 
-    // User clicked on an item that was already selected  
+    // User clicks on an item that was already selected  
     if (current_selection === previous_selection) {
 
-      // Clear all selections & hide toppings
-      if (number_of_selections > 1) {
-        number_of_selections = 0;
-        var toppings = document.querySelector('.toppings');
-        toppings.style.display = 'none';
-        toppings_visible = false;
-        var input = document.getElementsByTagName('input')
-        for (i = 0; i < input.length; i++) {
-          input[i].checked = false;
-        }
+      // Hide toppings
+      hide_toppings();
 
-      // Create, position, and display the toppings items
-      } else {
-        if (param !== 'Cheese') {
+      // Show toppings
+      show_toppings(param);
 
-          // Figure out the index of the HTML child objects of <tbody>.
-          var array = [];
-          var index = 0;
-          for (let i = 0; i < tbody.childNodes.length; i++) {
-            array[i] = tbody.childNodes[i];
-            if (array[i].id === param) {
-              index = i + 1;
-            };
-          };
+    // User clicks on an item that was -not- already selected
+    } else {
 
-          // Add toppings row <tr> to DOM. 
-          document.querySelector('tbody').insertBefore(tr, tbody.childNodes[index]);
+      // Hide toppings
+      hide_toppings();
 
-          // Toggle toppings visibility
-          var toppings = document.querySelector('.toppings');
-          if (toppings_visible === false) {
-            toppings_visible = true;
-            toppings.style.display = 'inline';
-          } else {
-            toppings_visible = false;
-            toppings.style.display = 'none';
-          };
+      // Show toppings
+      show_toppings(param);
+    };
+  };
+
+  // Hide toppings
+  function hide_toppings() {
+    if (number_of_selections > 1) {
+      number_of_selections = 0;
+      var toppings = document.querySelector('.toppings');
+      toppings.style.display = 'none';
+      toppings_visible = false;
+      var input = document.getElementsByTagName('input')
+      for (i = 0; i < input.length; i++) {
+        input[i].checked = false;
+      };
+    };
+  };
+
+  // Show toppings
+  function show_toppings(param) {
+    if (param !== 'Cheese') {
+
+      // Figure out the index of the HTML child objects of <tbody>.
+      var array = [];
+      var index = 0;
+      for (let i = 0; i < tbody.childNodes.length; i++) {
+        array[i] = tbody.childNodes[i];
+        if (array[i].id === param) {
+          index = i + 1;
         };
       };
 
-    // User clicked on an item that was -not- already selected
-     } else {
+      // Add toppings row <tr> to DOM. 
+      document.querySelector('tbody').insertBefore(tr, tbody.childNodes[index]);
 
-      // 
-
+      // Toggle toppings visibility
+      var toppings = document.querySelector('.toppings');
+      if (toppings_visible === false) {
+        toppings_visible = true;
+        toppings.style.display = 'inline';
+      } else {
+        toppings_visible = false;
+        toppings.style.display = 'none';
+      };
     };
   };
   
