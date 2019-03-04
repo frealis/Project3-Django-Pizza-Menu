@@ -15,14 +15,25 @@ number_of_selections = 0;
 current_selection = "";
 previous_selection = "";
 
+function x(obj) {
+  console.log('data-tr_id: ', obj.getAttribute('data-tr_id'));
+  console.log('name: ', obj.getAttribute('name'));
+  console.log('data-toppings: ', obj.getAttribute('data-toppings'));
+}
+
 // Handle when a user clicks a checkbox on the menu
-function select_item(tr_id, td_name) {
+// function select_item(tr_id, td_name, data_toppings) {
+function select_item(obj) {
+
+  tr_id = obj.getAttribute('data-tr_id');
+  td_name = obj.getAttribute('name');
+  data_toppings = obj.getAttribute('data-toppings');
+
+  x(obj);
+
   number_of_selections++;
   current_selection = td_name;
 
-  console.log('select_item(tr_id): ', tr_id);
-  console.log('select_item(td_name): ', td_name);
-  
   // Give var previous_selection a value since it starts off as an empty string
   if (previous_selection === "") {
     previous_selection = current_selection;
@@ -32,8 +43,8 @@ function select_item(tr_id, td_name) {
   // when nothing on the menu was previously selected
   if (current_selection === previous_selection) {
 
-    // Hide toppings
-    if (number_of_selections > 1) {
+    // Hide toppings & de-select all checkboxes
+    if (number_of_selections > 1 || data_toppings === 'false') {
       hide_toppings();
 
     // Show toppings
@@ -48,12 +59,13 @@ function select_item(tr_id, td_name) {
     hide_toppings();
 
     // Show toppings
-    show_toppings(tr_id, td_name);
+    if (data_toppings === 'true') {
+      show_toppings(tr_id, td_name);
+    };
 
     // Re-activate new checkbox selection
     number_of_selections = 1;
-    // document.getElementsByName(param)[0].checked = true;
-    // console.log(document.getElementsByName(param)[0].checked);
+    document.getElementsByName(td_name)[0].checked = true;
   };
   
   // Update var previous_selection before function exits
@@ -65,8 +77,10 @@ function hide_toppings() {
   if (number_of_selections > 1) {
     number_of_selections = 0;
     var toppings = document.querySelector('.toppings');
-    toppings.style.display = 'none';
-    toppings_visible = false;
+    if (toppings) {
+      toppings.style.display = 'none';
+      toppings_visible = false;
+    }
     var input = document.getElementsByTagName('input')
     for (i = 0; i < input.length; i++) {
       input[i].checked = false;
@@ -76,7 +90,11 @@ function hide_toppings() {
 
 // Show toppings
 function show_toppings(tr_id, td_name) {
-  if (tr_id !== 'Cheese') {
+  if (tr_id !== 'Regular Pizza + Cheese' && tr_id !== 'Sicilian Pizza + Cheese') {
+
+    // console.log('td_id + "Cheese": ', tr_id + 'Cheese');
+    // console.log('show_toppings(tr_id): ', tr_id);
+    // console.log('show_toppings(td_name): ', td_name);
 
     // Figure out the index of the HTML child objects of <tbody>.
     var array = [];
@@ -87,9 +105,6 @@ function show_toppings(tr_id, td_name) {
         index = i + 1;
       };
     };
-
-    console.log('show_toppings(tr_id): ', tr_id);
-    console.log('show_toppings(td_name): ', td_name);
 
     // Add toppings row <tr> to DOM. 
     document.querySelector('tbody').insertBefore(tr, tbody.childNodes[index]);
@@ -105,6 +120,3 @@ function show_toppings(tr_id, td_name) {
     };
   };
 };
-
-// [] is CSS attribute selector
-// document.querySelector('[id="1 topping"]').append(tr); 
