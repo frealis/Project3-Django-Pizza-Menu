@@ -41,7 +41,7 @@ function select_item(obj) {
 
     // Show toppings
     } else {
-      show_toppings(tr_id, td_name, data_toppings);
+      show_toppings(tr_id, data_toppings);
     };
 
   // User clicks on an item that was -not- already selected
@@ -52,7 +52,7 @@ function select_item(obj) {
 
     // Show toppings
     if (data_toppings === 'true') {
-      show_toppings(tr_id, td_name, data_toppings);
+      show_toppings(tr_id, data_toppings);
     };
 
     // Re-activate new checkbox selection
@@ -81,7 +81,7 @@ function hide_toppings() {
 };
 
 // Show toppings
-function show_toppings(tr_id, td_name, data_toppings) {
+function show_toppings(tr_id, data_toppings) {
   if (data_toppings === 'true') {
 
     // Figure out the index of the HTML child objects of <tbody>.
