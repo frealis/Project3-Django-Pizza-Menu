@@ -39,7 +39,7 @@
     <td>Large</td>
   </tr>
   {% for item in menu %}
-    {% if item.group == 'Sicilian Pizza' %}
+    {% if item.group == 'Sicilian Pizza' and item.item != 'Cheese' %}
     <tr id="{{ item.group }} + {{ item.item }}">
       <td>{{ item.item }}</td>
       <td>{{ item.price_sm }} <input type="checkbox" data-tr_id="{{ item.group }} + {{ item.item }}" name="{{ item.item }} + {{ item.price_sm }}" value="{{ item.price_sm }}" data-toppings="true" onclick="select_item(this);" /></td>  
