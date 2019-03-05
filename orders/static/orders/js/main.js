@@ -1,25 +1,14 @@
-// List all toppings here
-toppings_items = 'toppings items go here';
+// --------------------- SELECT ITEM ---------------------
 
-// Create a new row, <tr>, that includes list of toppings, hidden by default.
-const tr = document.createElement('tr');
-const td = document.createElement('td');
-td.className = 'toppings';
-td.innerHTML = toppings_items;
-td.style.display = 'none';
-tr.append(td);
-
-// Checkbox selection & toppings variables
-toppings_visible = false;
+// Variables
 number_of_selections = 0;
 current_selection = "";
 previous_selection = "";
 
 // Handle when a user clicks a checkbox on the menu
-// function select_item(tr_id, td_name, data_toppings) {
 function select_item(obj) {
 
-  // select_item() variables
+  // Variables
   tr_id = obj.getAttribute('data-tr_id');
   td_name = obj.getAttribute('name');
   data_toppings = obj.getAttribute('data-toppings');
@@ -64,13 +53,15 @@ function select_item(obj) {
   previous_selection = current_selection;
 };
 
+// --------------------- HIDE TOPPINGS ---------------------
+
 // Hide toppings
 function hide_toppings() {
   if (number_of_selections > 1) {
     number_of_selections = 0;
-    var toppings = document.querySelector('.toppings');
+    var toppings = document.querySelector('.td_toppings');
     if (toppings) {
-      toppings.style.display = 'none';
+      toppings.parentNode.removeChild(toppings);
       toppings_visible = false;
     }
     var input = document.getElementsByTagName('input')
@@ -80,9 +71,41 @@ function hide_toppings() {
   };
 };
 
+// --------------------- SHOW EXTRAS ---------------------
+
+// // List all extras here
+// extras_items = 'extras items go here';
+
+// // Create a new row, <tr>, that includes list of extras, hidden by default.
+// const tr_extras = document.createElement('tr');
+// const td_extras = document.createElement('td');
+// td_extras.className = 'extras';
+// td_extras.innerHTML = extras_items;
+// td_extras.style.display = 'none';
+// tr_extras.append(td_extras);
+
+// Show extras
+extras_visible = false;
+function extras() {
+  //
+};
+
+// --------------------- SHOW TOPPINGS ---------------------
+
+// List all toppings here
+toppings_items = 'toppings items go here';
+
 // Show toppings
 function show_toppings(tr_id, data_toppings) {
+
   if (data_toppings === 'true') {
+
+    // Create a new row, <tr>, that includes list of toppings, hidden by default.
+    const tr_toppings = document.createElement('tr');
+    const td_toppings = document.createElement('td');
+    td_toppings.innerHTML = toppings_items;
+    tr_toppings.className = 'td_toppings';
+    tr_toppings.append(td_toppings);
 
     // Figure out the index of the HTML child objects of <tbody>.
     var array = [];
@@ -95,16 +118,6 @@ function show_toppings(tr_id, data_toppings) {
     };
 
     // Add toppings row <tr> to DOM. 
-    document.querySelector('tbody').insertBefore(tr, tbody.childNodes[index]);
-
-    // Toggle toppings visibility
-    var toppings = document.querySelector('.toppings');
-    if (toppings_visible === false) {
-      toppings_visible = true;
-      toppings.style.display = 'inline';
-    } else {
-      toppings_visible = false;
-      toppings.style.display = 'none';
-    };
+    document.querySelector('tbody').insertBefore(tr_toppings, tbody.childNodes[index]);
   };
 };
