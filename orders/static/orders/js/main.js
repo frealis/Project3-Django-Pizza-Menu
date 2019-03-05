@@ -1,10 +1,5 @@
 // --------------------- SELECT ITEM ---------------------
 
-// Global variables
-number_of_selections = 0;
-current_selection = "";
-previous_selection = "";
-
 // Handle when a user clicks a checkbox on the menu
 function select_item(obj) {
 
@@ -13,53 +8,21 @@ function select_item(obj) {
   td_name = obj.getAttribute('name');
   data_toppings = obj.getAttribute('data-toppings');
   data_extras = obj.getAttribute('data-extras');
-  number_of_selections++;
-  current_selection = td_name;
 
-  // Give var previous_selection a value since it starts off as an empty string
-  if (previous_selection === "") {
-    previous_selection = current_selection;
+  // Hide all
+  hide_all();
+
+  // Show toppings
+  if (data_toppings === 'true') {
+    show_toppings(tr_id);
+
+  // Show extras
+  } else if (data_extras === 'true') {
+    show_extras(tr_id);
   };
 
-  // Handle when a user clicks on an item that was either already selected, or 
-  // when nothing on the menu was previously selected
-  if (current_selection === previous_selection) {
-
-    // Hide toppings & de-select all checkboxes
-    if (number_of_selections > 1) {
-      hide_all();
-
-    // Show toppings
-    } else if (data_toppings === 'true') {
-      show_toppings(tr_id);
-
-    // Show extras
-    } else if (data_extras === 'true') {
-      show_extras(tr_id);
-    };
-
-  // User clicks on an item that was -not- already selected
-  } else {
-
-    // Hide toppings & de-select all checkboxes
-    hide_all();
-
-    // Show toppings
-    if (data_toppings === 'true') {
-      show_toppings(tr_id);
-
-    // Show extras
-    } else if (data_extras === 'true') {
-      show_extras(tr_id);
-    };
-
-    // Re-activate new checkbox selection
-    number_of_selections = 1;
-    document.getElementsByName(td_name)[0].checked = true;
-  };
-  
-  // Update var previous_selection before function exits
-  previous_selection = current_selection;
+  // Re-activate new checkbox selection
+  document.getElementsByName(td_name)[0].checked = true;
 };
 
 // --------------------- SHOW EXTRAS ---------------------
@@ -70,7 +33,7 @@ extras_items = 'extras items go here';
 // Show extras
 function show_extras(tr_id) {
 
-  // Create a new row, <tr>, that includes list of extras, hidden by default.
+  // Create a new row, <tr>, that includes list of extras.
   const tr_extras = document.createElement('tr');
   const td_extras = document.createElement('td');
   td_extras.innerHTML = extras_items;
@@ -89,7 +52,7 @@ toppings_items = 'toppings items go here';
 // Show toppings
 function show_toppings(tr_id) {
 
-  // Create a new row, <tr>, that includes list of toppings, hidden by default.
+  // Create a new row, <tr>, that includes list of toppings.
   const tr_toppings = document.createElement('tr');
   const td_toppings = document.createElement('td');
   td_toppings.innerHTML = toppings_items;
@@ -119,7 +82,6 @@ function index (tr_id) {
 
 // Hide toppings and extras
 function hide_all() {
-  number_of_selections = 0;
 
   // Hide extras
   var extras = document.querySelector('.tr_extras');
