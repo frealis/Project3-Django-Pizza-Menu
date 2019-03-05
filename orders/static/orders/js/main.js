@@ -1,3 +1,23 @@
+document.addEventListener('DOMContentLoaded', function() {
+
+  // Retrieve extras and toppings items data from <div> located within <thead>
+  // on index.html, which gets serialized in views.py before retrieval here
+  storage = document.querySelector('#storage');
+  storage_extras = storage.getAttribute('data-storage_extras');
+  storage_toppings = storage.getAttribute('data-storage_toppings');
+
+  // Attach 'click' event listeners to all <input> buttons
+  inputs = document.querySelectorAll('input')
+  for (let i = 0; i < inputs.length; i++) {
+    inputs[i].addEventListener('click', function() {
+      select_item(this);
+    });
+  };
+
+  console.log(JSON.parse(storage_extras)[0]['fields']['item']);
+
+});
+
 // --------------------- SELECT ITEM ---------------------
 
 // Handle when a user clicks a checkbox on the menu
