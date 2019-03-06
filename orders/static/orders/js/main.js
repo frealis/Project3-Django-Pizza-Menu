@@ -14,110 +14,129 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   };
 
-  console.log(JSON.parse(storage_extras)[0]['fields']['item']);
+  // console.log(JSON.parse(storage_extras)[0]['fields']['item']);
 
-});
+  // --------------------- SELECT ITEM ---------------------
 
-// --------------------- SELECT ITEM ---------------------
+  // Handle when a user clicks a checkbox on the menu
+  function select_item(obj) {
 
-// Handle when a user clicks a checkbox on the menu
-function select_item(obj) {
+    // Get data from individual selected item
+    tr_id = obj.getAttribute('data-tr_id');
+    td_name = obj.getAttribute('name');
+    data_toppings = obj.getAttribute('data-toppings');
+    data_extras = obj.getAttribute('data-extras');
 
-  // Variables
-  tr_id = obj.getAttribute('data-tr_id');
-  td_name = obj.getAttribute('name');
-  data_toppings = obj.getAttribute('data-toppings');
-  data_extras = obj.getAttribute('data-extras');
+    // Hide all selections, extras, and toppings
+    hide_all();
 
-  // Hide all
-  hide_all();
+    // Show toppings
+    if (data_toppings === 'true') {
+      show_toppings(tr_id);
 
-  // Show toppings
-  if (data_toppings === 'true') {
-    show_toppings(tr_id);
+    // Show extras
+    } else if (data_extras === 'true') {
+      show_extras(tr_id);
+    };
+
+    // Re-activate current checkbox selection
+    document.getElementsByName(td_name)[0].checked = true;
+  };
+
+  // --------------------- SHOW EXTRAS ---------------------
 
   // Show extras
-  } else if (data_extras === 'true') {
-    show_extras(tr_id);
+  function show_extras(tr_id) {
+
+    console.log(tr_id);
+
+    // Create a new row, <tr>, that includes list of extras.
+    const tr_extras = document.createElement('tr');
+    const td_extras = document.createElement('td');
+    const ul_extras = document.createElement('ul');
+    for (let i = 0; i < JSON.parse(storage_extras).length; i++) {
+      if (tr_id === 'Subs + Steak + Cheese') {
+        var li_extras = document.createElement('li');
+        li_extras.innerHTML = JSON.parse(storage_extras)[i]['fields']['item'];
+        ul_extras.append(li_extras);
+      } else {
+        if (JSON.parse(storage_extras)[i]['fields']['item'] === 'Extra Cheese') {
+          var li_extras = document.createElement('li');
+          li_extras.innerHTML = JSON.parse(storage_extras)[i]['fields']['item'];
+          ul_extras.append(li_extras);
+        };
+      };
+    };
+    td_extras.append(ul_extras);
+    tr_extras.className = 'tr_extras';
+    tr_extras.append(td_extras);
+
+    // Add extras row, <tr>, to DOM. 
+    document.querySelector('tbody').insertBefore(tr_extras, tbody.childNodes[index(tr_id) + 1]);
   };
 
-  // Re-activate new checkbox selection
-  document.getElementsByName(td_name)[0].checked = true;
-};
+  // --------------------- SHOW TOPPINGS ---------------------
 
-// --------------------- SHOW EXTRAS ---------------------
+  // List all toppings here
+  toppings_items = 'toppings items go here';
 
-// List all extras here
-extras_items = 'extras items go here';
+  // Show toppings
+  function show_toppings(tr_id) {
 
-// Show extras
-function show_extras(tr_id) {
+    // Create a new row, <tr>, that includes list of toppings.
+    const tr_toppings = document.createElement('tr');
+    const td_toppings = document.createElement('td');
+    const ul_toppings = document.createElement('ul');
+    for (let i = 0; i < JSON.parse(storage_toppings).length; i++) {
+      const li_toppings = document.createElement('li');
+      li_toppings.innerHTML = JSON.parse(storage_toppings)[i]['fields']['item'];
+      ul_toppings.append(li_toppings);
+    }
+    td_toppings.append(ul_toppings);
+    tr_toppings.className = 'tr_toppings';
+    tr_toppings.append(td_toppings);
 
-  // Create a new row, <tr>, that includes list of extras.
-  const tr_extras = document.createElement('tr');
-  const td_extras = document.createElement('td');
-  td_extras.innerHTML = extras_items;
-  tr_extras.className = 'tr_extras';
-  tr_extras.append(td_extras);
+    // Add toppings row, <tr>, to DOM. 
+    document.querySelector('tbody').insertBefore(tr_toppings, tbody.childNodes[index(tr_id) + 1]);
+  };
 
-  // Add toppings row <tr> to DOM. 
-  document.querySelector('tbody').insertBefore(tr_extras, tbody.childNodes[index(tr_id)]);
-};
+  // --------------------- FIND INDEX ---------------------
 
-// --------------------- SHOW TOPPINGS ---------------------
+  // Figure out the index of the HTML child objects of <tbody>, namely topping and
+  // extra rows, <tr>'s, within the DOM.
+  function index (tr_id) {
+    var array = [];
+    var index = 0;
+    for (let i = 0; i < tbody.childNodes.length; i++) {
+      array[i] = tbody.childNodes[i];
+      if (array[i].id === tr_id) {
+        index = i;
+      };
+    };
+    return index;
+  }
 
-// List all toppings here
-toppings_items = 'toppings items go here';
+  // --------------------- HIDE ALL ---------------------
 
-// Show toppings
-function show_toppings(tr_id) {
+  // Hide toppings and extras
+  function hide_all() {
 
-  // Create a new row, <tr>, that includes list of toppings.
-  const tr_toppings = document.createElement('tr');
-  const td_toppings = document.createElement('td');
-  td_toppings.innerHTML = toppings_items;
-  tr_toppings.className = 'tr_toppings';
-  tr_toppings.append(td_toppings);
+    // Hide extras
+    var extras = document.querySelector('.tr_extras');
+    if (extras) {
+      extras.parentNode.removeChild(extras);
+    }
 
-  // Add toppings row <tr> to DOM. 
-  document.querySelector('tbody').insertBefore(tr_toppings, tbody.childNodes[index(tr_id)]);
-};
+    // Hide toppings
+    var toppings = document.querySelector('.tr_toppings');
+    if (toppings) {
+      toppings.parentNode.removeChild(toppings);
+    }
 
-// --------------------- FIND INDEX ---------------------
-
-// Figure out the index of the HTML child objects of <tbody>.
-function index (tr_id) {
-  var array = [];
-  var index = 0;
-  for (let i = 0; i < tbody.childNodes.length; i++) {
-    array[i] = tbody.childNodes[i];
-    if (array[i].id === tr_id) {
-      index = i + 1;
+    // Uncheck all checkboxes
+    var input = document.getElementsByTagName('input')
+    for (i = 0; i < input.length; i++) {
+      input[i].checked = false;
     };
   };
-  return index;
-}
-
-// --------------------- HIDE ALL ---------------------
-
-// Hide toppings and extras
-function hide_all() {
-
-  // Hide extras
-  var extras = document.querySelector('.tr_extras');
-  if (extras) {
-    extras.parentNode.removeChild(extras);
-  }
-
-  // Hide toppings
-  var toppings = document.querySelector('.tr_toppings');
-  if (toppings) {
-    toppings.parentNode.removeChild(toppings);
-  }
-
-  // Uncheck all checkboxes
-  var input = document.getElementsByTagName('input')
-  for (i = 0; i < input.length; i++) {
-    input[i].checked = false;
-  };
-};
+});
