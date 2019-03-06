@@ -14,8 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   };
 
-  // console.log(JSON.parse(storage_extras)[0]['fields']['item']);
-
   // --------------------- SELECT ITEM ---------------------
 
   // Handle when a user clicks a checkbox on the menu
@@ -53,26 +51,41 @@ document.addEventListener('DOMContentLoaded', function() {
     // Create a new row, <tr>, that includes list of extras.
     const tr_extras = document.createElement('tr');
     const td_extras = document.createElement('td');
+    const td_extras_input = document.createElement('td');
     const ul_extras = document.createElement('ul');
     for (let i = 0; i < JSON.parse(storage_extras).length; i++) {
       if (tr_id === 'Subs + Steak + Cheese') {
         var li_extras = document.createElement('li');
         li_extras.innerHTML = JSON.parse(storage_extras)[i]['fields']['item'];
         ul_extras.append(li_extras);
+
+        var br_extras = document.createElement('br');
+        var input_extras = document.createElement('input');
+        input_extras.className = tr_id
+        input_extras.type = 'checkbox'
+        td_extras_input.append(input_extras, br_extras);
       } else {
         if (JSON.parse(storage_extras)[i]['fields']['item'] === 'Extra Cheese') {
           var li_extras = document.createElement('li');
           li_extras.innerHTML = JSON.parse(storage_extras)[i]['fields']['item'];
           ul_extras.append(li_extras);
+
+          var input_extras = document.createElement('input');
+          input_extras.className = tr_id
+          input_extras.type = 'checkbox'
+          td_extras_input.append(input_extras);
         };
       };
     };
     td_extras.append(ul_extras);
     tr_extras.className = 'tr_extras';
-    tr_extras.append(td_extras);
+    tr_extras.append(td_extras, td_extras_input);
 
     // Add extras row, <tr>, to DOM. 
     document.querySelector('tbody').insertBefore(tr_extras, tbody.childNodes[index(tr_id) + 1]);
+  
+    // Add input checkboxes to extras items
+
   };
 
   // --------------------- SHOW TOPPINGS ---------------------
