@@ -14,6 +14,63 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   };
 
+  // --------------------- CREATE CHECKBOX ---------------------
+
+  function create_checkbox(tr_id) {
+    const checkbox = document.createElement('input');
+    checkbox.className = tr_id;
+    checkbox.type = 'checkbox';
+    return checkbox;
+  }
+
+  // --------------------- CREATE LIST ---------------------
+
+  function create_list(li_innerHTML) {
+    const li = document.createElement('li');
+    li.innerHTML = li_innerHTML;
+    return li;
+  }
+
+  // --------------------- HIDE ALL ---------------------
+
+  // Hide toppings and extras
+  function hide_all() {
+
+    // Hide extras
+    var extras = document.querySelector('.tr_extras');
+    if (extras) {
+      extras.parentNode.removeChild(extras);
+    }
+
+    // Hide toppings
+    var toppings = document.querySelector('.tr_toppings');
+    if (toppings) {
+      toppings.parentNode.removeChild(toppings);
+    }
+
+    // Uncheck all checkboxes
+    var input = document.getElementsByTagName('input')
+    for (i = 0; i < input.length; i++) {
+      input[i].checked = false;
+    };
+  };
+
+  // --------------------- INDEX ---------------------
+
+  // Figure out the index of the HTML child objects of <tbody>, namely topping and
+  // extra rows, <tr>'s, within the DOM.
+  function index (tr_id) {
+    var array = [];
+    var index = 0;
+    for (let i = 0; i < tbody.childNodes.length; i++) {
+      array[i] = tbody.childNodes[i];
+      if (array[i].id === tr_id) {
+        index = i;
+      };
+    };
+    return index;
+  }
+
   // --------------------- SELECT ITEM ---------------------
 
   // Handle when a user clicks a checkbox on the menu
@@ -87,23 +144,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('tbody').insertBefore(tr_extras, tbody.childNodes[index(tr_id) + 1]);
   };
 
-  // --------------------- CREATE CHECKBOX ---------------------
-
-  function create_checkbox(tr_id) {
-    const checkbox = document.createElement('input');
-    checkbox.className = tr_id;
-    checkbox.type = 'checkbox';
-    return checkbox;
-  }
-
-  // --------------------- CREATE LIST ---------------------
-
-  function create_list(li_innerHTML) {
-    const li = document.createElement('li');
-    li.innerHTML = li_innerHTML;
-    return li;
-  }
-
   // --------------------- SHOW TOPPINGS ---------------------
 
   // List all toppings here
@@ -127,45 +167,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add toppings row, <tr>, to DOM. 
     document.querySelector('tbody').insertBefore(tr_toppings, tbody.childNodes[index(tr_id) + 1]);
-  };
-
-  // --------------------- FIND INDEX ---------------------
-
-  // Figure out the index of the HTML child objects of <tbody>, namely topping and
-  // extra rows, <tr>'s, within the DOM.
-  function index (tr_id) {
-    var array = [];
-    var index = 0;
-    for (let i = 0; i < tbody.childNodes.length; i++) {
-      array[i] = tbody.childNodes[i];
-      if (array[i].id === tr_id) {
-        index = i;
-      };
-    };
-    return index;
-  }
-
-  // --------------------- HIDE ALL ---------------------
-
-  // Hide toppings and extras
-  function hide_all() {
-
-    // Hide extras
-    var extras = document.querySelector('.tr_extras');
-    if (extras) {
-      extras.parentNode.removeChild(extras);
-    }
-
-    // Hide toppings
-    var toppings = document.querySelector('.tr_toppings');
-    if (toppings) {
-      toppings.parentNode.removeChild(toppings);
-    }
-
-    // Uncheck all checkboxes
-    var input = document.getElementsByTagName('input')
-    for (i = 0; i < input.length; i++) {
-      input[i].checked = false;
-    };
   };
 });
