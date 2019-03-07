@@ -105,32 +105,31 @@ document.addEventListener('DOMContentLoaded', function() {
   function show_extras(tr_id) {
 
     // Create a new row, <tr>, that includes list of extras.
-    // const br_extras = document.createElement('br');
     const tr_extras = document.createElement('tr');
     const td_extras = document.createElement('td');
-    const td_extras_input = document.createElement('td');
+    const td_extras_checkbox = document.createElement('td');
     const ul_extras = document.createElement('ul');
     for (let i = 0; i < JSON.parse(storage_extras).length; i++) {
 
       // Show all 4 extras items for the Steak + Cheese sub
       if (tr_id === 'Subs + Steak + Cheese') {
 
-       // Create list that contains extras item
+       // Create list of sub extras
        ul_extras.append(create_list(JSON.parse(storage_extras)[i]['fields']['item']));
           
         // Create a checkbox
         const br_extras = document.createElement('br');
-        td_extras_input.append(create_checkbox(tr_id), br_extras);
+        td_extras_checkbox.append(create_checkbox(tr_id), br_extras);
 
       // Only show the Extra Cheese option for all other subs
       } else {
         if (JSON.parse(storage_extras)[i]['fields']['item'] === 'Extra Cheese') {
 
-          // Create list that contains extras item
+          // Create list item of 'Extra Cheese' for all subs
           ul_extras.append(create_list(JSON.parse(storage_extras)[i]['fields']['item']));
           
           // Create a checkbox
-          td_extras_input.append(create_checkbox(tr_id));
+          td_extras_checkbox.append(create_checkbox(tr_id));
         };
       };
     };
@@ -138,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Stitch together the extras row, <tr>, that will be inserted into the DOM
     td_extras.append(ul_extras);
     tr_extras.className = 'tr_extras';
-    tr_extras.append(td_extras, td_extras_input);
+    tr_extras.append(td_extras, td_extras_checkbox);
 
     // Add extras row, <tr>, to DOM. 
     document.querySelector('tbody').insertBefore(tr_extras, tbody.childNodes[index(tr_id) + 1]);
@@ -146,24 +145,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // --------------------- SHOW TOPPINGS ---------------------
 
-  // List all toppings here
-  toppings_items = 'toppings items go here';
-
   // Show toppings
   function show_toppings(tr_id) {
 
     // Create a new row, <tr>, that includes list of toppings.
     const tr_toppings = document.createElement('tr');
     const td_toppings = document.createElement('td');
+    const td_toppings_checkbox = document.createElement('td');
     const ul_toppings = document.createElement('ul');
     for (let i = 0; i < JSON.parse(storage_toppings).length; i++) {
-      const li_toppings = document.createElement('li');
-      li_toppings.innerHTML = JSON.parse(storage_toppings)[i]['fields']['item'];
-      ul_toppings.append(li_toppings);
-    }
+
+      // Create list of pizza toppings
+      ul_toppings.append(create_list(JSON.parse(storage_toppings)[i]['fields']['item']));
+    
+      // Create a checkbox
+      const br_extras = document.createElement('br');
+      td_toppings_checkbox.append(create_checkbox(tr_id), br_extras);
+    };
+
+    // Stitch together the toppings row, <tr>, that will be inserted into the DOM
     td_toppings.append(ul_toppings);
     tr_toppings.className = 'tr_toppings';
-    tr_toppings.append(td_toppings);
+    tr_toppings.append(td_toppings, td_toppings_checkbox);
 
     // Add toppings row, <tr>, to DOM. 
     document.querySelector('tbody').insertBefore(tr_toppings, tbody.childNodes[index(tr_id) + 1]);
