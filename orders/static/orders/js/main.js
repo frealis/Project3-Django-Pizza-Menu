@@ -16,18 +16,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // --------------------- CREATE CHECKBOX ---------------------
 
-  function create_checkbox(tr_id) {
+  function create_checkbox(tr_id, name) {
     const checkbox = document.createElement('input');
     checkbox.className = tr_id;
+    checkbox.name = name
     checkbox.type = 'checkbox';
     return checkbox;
   }
 
   // --------------------- CREATE LIST ---------------------
 
-  function create_list(li_innerHTML) {
+  function create_list(name) {
     const li = document.createElement('li');
-    li.innerHTML = li_innerHTML;
+    li.name = name
+    li.innerHTML = name;
     return li;
   }
 
@@ -153,14 +155,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const td_toppings = document.createElement('td');
     const td_toppings_checkbox = document.createElement('td');
     const ul_toppings = document.createElement('ul');
+
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    const table = document.createElement('table');
+
     for (let i = 0; i < JSON.parse(storage_toppings).length; i++) {
+    // for (let i = 0; i < 5; i++) {
+
+      // Parse storage_toppings string and grab the name of the individual topping
+      topping = JSON.parse(storage_toppings)[i]['fields']['item']
 
       // Create list of pizza toppings
-      ul_toppings.append(create_list(JSON.parse(storage_toppings)[i]['fields']['item']));
+      ul_toppings.append(create_list(topping));
     
       // Create a checkbox
       const br_extras = document.createElement('br');
-      td_toppings_checkbox.append(create_checkbox(tr_id), br_extras);
+      td_toppings_checkbox.append(create_checkbox(tr_id, topping), br_extras);
     };
 
     // Stitch together the toppings row, <tr>, that will be inserted into the DOM
@@ -172,3 +183,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('tbody').insertBefore(tr_toppings, tbody.childNodes[index(tr_id) + 1]);
   };
 });
+
+  // --------------------- CREATE SPAN ---------------------
+
+  function create_span(name) {
+    const span = document.createElement('span');
+    span.name = name
+    span.innerHTML = name;
+    return span;
+  }

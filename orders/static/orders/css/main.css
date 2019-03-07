@@ -1,5 +1,13 @@
 .container {
   background: #e2dac1;
-  margin: 10;
   border: 3px solid black;
+  font-family: arial;
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
 }
