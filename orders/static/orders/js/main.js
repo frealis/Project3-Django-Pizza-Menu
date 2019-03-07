@@ -19,34 +19,34 @@ document.addEventListener('DOMContentLoaded', function() {
   // Handle when a user clicks a checkbox on the menu
   function select_item(obj) {
 
-    // Get data from individual selected item
+    // Get data from individual selected item -- tr_id represents the unique row
+    // that the selected menu item is on, and td_id represents its unique checkbox
     tr_id = obj.getAttribute('data-tr_id');
-    td_name = obj.getAttribute('name');
+    td_id = obj.getAttribute('data-td_id');
     data_toppings = obj.getAttribute('data-toppings');
     data_extras = obj.getAttribute('data-extras');
 
     // Hide all selections, extras, and toppings
     hide_all();
 
-    // Show toppings
-    if (data_toppings === 'true') {
-      show_toppings(tr_id);
-
     // Show extras
-    } else if (data_extras === 'true') {
+    if (data_extras === 'true') {
       show_extras(tr_id);
+
+    // Show toppings
+    } else if (data_toppings === 'true') {
+      show_toppings(tr_id);
     };
 
     // Re-activate current checkbox selection
-    document.getElementsByName(td_name)[0].checked = true;
+    // document.getElementsByName(td_id)[0].checked = true;
+    document.querySelectorAll('[data-td_id = "' + td_id + '"]')[0].checked = true;
   };
 
   // --------------------- SHOW EXTRAS ---------------------
 
   // Show extras
   function show_extras(tr_id) {
-
-    console.log(tr_id);
 
     // Create a new row, <tr>, that includes list of extras.
     const tr_extras = document.createElement('tr');
@@ -61,12 +61,12 @@ document.addEventListener('DOMContentLoaded', function() {
         li_extras.innerHTML = JSON.parse(storage_extras)[i]['fields']['item'];
         ul_extras.append(li_extras);
 
-        // Create checkboxes
-        const br_extras = document.createElement('br');
-        const input_extras = document.createElement('input');
-        input_extras.className = tr_id
-        input_extras.type = 'checkbox'
-        td_extras_input.append(input_extras, br_extras);
+        // // Create checkboxes
+        // const br_extras = document.createElement('br');
+        // const input_extras = document.createElement('input');
+        // input_extras.className = tr_id
+        // input_extras.type = 'checkbox'
+        // td_extras_input.append(input_extras, br_extras);
 
       // Only show the Extra Cheese option for all other subs
       } else {
@@ -75,12 +75,14 @@ document.addEventListener('DOMContentLoaded', function() {
           li_extras.innerHTML = JSON.parse(storage_extras)[i]['fields']['item'];
           ul_extras.append(li_extras);
 
-          // Create checkbox
           const br_extras = document.createElement('br');
-          const input_extras = document.createElement('input');
-          input_extras.className = tr_id
-          input_extras.type = 'checkbox'
-          td_extras_input.append(input_extras, br_extras);
+          td_extras_input.append(create_checkbox(tr_id), br_extras);
+          // // Create checkbox
+          // const br_extras = document.createElement('br');
+          // const input_extras = document.createElement('input');
+          // input_extras.className = tr_id
+          // input_extras.type = 'checkbox'
+          // td_extras_input.append(input_extras, br_extras);
         };
       };
     };
@@ -93,6 +95,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add extras row, <tr>, to DOM. 
     document.querySelector('tbody').insertBefore(tr_extras, tbody.childNodes[index(tr_id) + 1]);
   };
+
+// --------------------- CREATE CHECKBOX ---------------------
+
+  function create_checkbox(tr_id) {
+    // const br_extras = document.createElement('br');
+    const input_extras = document.createElement('input');
+    input_extras.className = tr_id
+    input_extras.type = 'checkbox'
+    return input_extras
+    // td_extras_input.append(input_extras, br_extras);
+  }
 
   // --------------------- SHOW TOPPINGS ---------------------
 
