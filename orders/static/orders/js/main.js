@@ -39,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     // Re-activate current checkbox selection
-    // document.getElementsByName(td_id)[0].checked = true;
     document.querySelectorAll('[data-td_id = "' + td_id + '"]')[0].checked = true;
   };
 
@@ -49,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function show_extras(tr_id) {
 
     // Create a new row, <tr>, that includes list of extras.
+    // const br_extras = document.createElement('br');
     const tr_extras = document.createElement('tr');
     const td_extras = document.createElement('td');
     const td_extras_input = document.createElement('td');
@@ -57,20 +57,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Show all 4 extras items for the Steak + Cheese sub
       if (tr_id === 'Subs + Steak + Cheese') {
-        const li_extras = document.createElement('li');
-        li_extras.innerHTML = JSON.parse(storage_extras)[i]['fields']['item'];
-        ul_extras.append(li_extras);
+
+       // Create list that contains extras item
+       ul_extras.append(create_list(JSON.parse(storage_extras)[i]['fields']['item']));
+          
+        // Create a checkbox
         const br_extras = document.createElement('br');
         td_extras_input.append(create_checkbox(tr_id), br_extras);
 
       // Only show the Extra Cheese option for all other subs
       } else {
         if (JSON.parse(storage_extras)[i]['fields']['item'] === 'Extra Cheese') {
-          const li_extras = document.createElement('li');
-          li_extras.innerHTML = JSON.parse(storage_extras)[i]['fields']['item'];
-          ul_extras.append(li_extras);
-          const br_extras = document.createElement('br');
-          td_extras_input.append(create_checkbox(tr_id), br_extras);
+
+          // Create list that contains extras item
+          ul_extras.append(create_list(JSON.parse(storage_extras)[i]['fields']['item']));
+          
+          // Create a checkbox
+          td_extras_input.append(create_checkbox(tr_id));
         };
       };
     };
@@ -84,15 +87,21 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('tbody').insertBefore(tr_extras, tbody.childNodes[index(tr_id) + 1]);
   };
 
-// --------------------- CREATE CHECKBOX ---------------------
+  // --------------------- CREATE CHECKBOX ---------------------
 
   function create_checkbox(tr_id) {
-    // const br_extras = document.createElement('br');
-    const input_extras = document.createElement('input');
-    input_extras.className = tr_id
-    input_extras.type = 'checkbox'
-    return input_extras
-    // td_extras_input.append(input_extras, br_extras);
+    const checkbox = document.createElement('input');
+    checkbox.className = tr_id;
+    checkbox.type = 'checkbox';
+    return checkbox;
+  }
+
+  // --------------------- CREATE LIST ---------------------
+
+  function create_list(li_innerHTML) {
+    const li = document.createElement('li');
+    li.innerHTML = li_innerHTML;
+    return li;
   }
 
   // --------------------- SHOW TOPPINGS ---------------------
