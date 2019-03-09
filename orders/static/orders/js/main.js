@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
   storage_extras = storage.getAttribute('data-storage_extras');
   storage_toppings = storage.getAttribute('data-storage_toppings');
 
-  // Attach 'click' event listeners to all <input> buttons
+  // Attach 'click' event listeners to all <input> checkboxes on page load
   inputs = document.querySelectorAll('input')
   for (let i = 0; i < inputs.length; i++) {
     inputs[i].addEventListener('click', function() {
@@ -16,13 +16,38 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // --------------------- CREATE CHECKBOX ---------------------
 
-  function create_checkbox(tr_id, name) {
+  function create_checkbox(tr_id, name, limit) {
     const checkbox = document.createElement('input');
     checkbox.className = tr_id;
     checkbox.name = name
     checkbox.type = 'checkbox';
+
+    checkbox.onclick = function() {
+      let count = 0;
+      list = document.getElementsByClassName(tr_id);
+
+      for (let i = 0; i < list.length; i++) {
+        if (list[i].checked === true) {
+          count++;
+        };
+      };
+
+      if (count === limit) {
+        for (let i = 0; i < list.length; i++) {
+          if (list[i].checked !== true) {
+            list[i].disabled = true;
+          };
+        };
+
+      } else {
+        for (let i = 0; i < list.length; i++) {
+          list[i].disabled = false;
+        };
+      };
+
+    };
     return checkbox;
-  }
+  };
 
   // --------------------- CREATE LIST ---------------------
 
@@ -80,10 +105,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Get data from individual selected item -- tr_id represents the unique row
     // that the selected menu item is on, and td_id represents its unique checkbox
-    tr_id = obj.getAttribute('data-tr_id');
-    td_id = obj.getAttribute('data-td_id');
-    data_toppings = obj.getAttribute('data-toppings');
     data_extras = obj.getAttribute('data-extras');
+    data_toppings = obj.getAttribute('data-toppings');
+    name = obj.getAttribute('name');
+    td_id = obj.getAttribute('data-td_id');
+    tr_id = obj.getAttribute('data-tr_id');
+
+    // console.log(obj);
 
     // Hide all selections, extras, and toppings
     hide_all();
@@ -91,10 +119,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // Show extras
     if (data_extras === 'true') {
       show_extras(tr_id);
-
+    };
+    
     // Show toppings
-    } else if (data_toppings === 'true') {
-      show_toppings(tr_id);
+    if (data_toppings === 'true') {
+      if (name === '1 topping') {
+        show_toppings(tr_id, 1);
+      } else if (name === '2 toppings') {
+        show_toppings(tr_id, 2);
+      } else if (name === '3 toppings') {
+        show_toppings(tr_id, 3);
+      } if (name === '1 item') {
+        show_toppings(tr_id, 1);
+      } else if (name === '2 items') {
+        show_toppings(tr_id, 2);
+      } else if (name === '3 items') {
+        show_toppings(tr_id, 3);
+      };
     };
 
     // Re-activate current checkbox selection
@@ -113,6 +154,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const ul_extras = document.createElement('ul');
     for (let i = 0; i < JSON.parse(storage_extras).length; i++) {
 
+      // Parse storage_extras string and grab the name of the individual extra
+      extra = JSON.parse(storage_extras)[i]['fields']['item']
+
       // Show all 4 extras items for the Steak + Cheese sub
       if (tr_id === 'Subs + Steak + Cheese') {
 
@@ -121,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
           
         // Create a checkbox
         const br_extras = document.createElement('br');
-        td_extras_checkbox.append(create_checkbox(tr_id), br_extras);
+        td_extras_checkbox.append(create_checkbox(tr_id, extra), br_extras);
 
       // Only show the Extra Cheese option for all other subs
       } else {
@@ -131,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
           ul_extras.append(create_list(JSON.parse(storage_extras)[i]['fields']['item']));
           
           // Create a checkbox
-          td_extras_checkbox.append(create_checkbox(tr_id));
+          td_extras_checkbox.append(create_checkbox(tr_id, extra));
         };
       };
     };
@@ -148,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // --------------------- SHOW TOPPINGS ---------------------
 
   // Show toppings
-  function show_toppings(tr_id) {
+  function show_toppings(tr_id, limit) {
 
     // Create a new row, <tr>, that includes list of toppings.
     const tr_toppings = document.createElement('tr');
@@ -156,22 +200,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const td_toppings_checkbox = document.createElement('td');
     const ul_toppings = document.createElement('ul');
 
-    const tr = document.createElement('tr');
-    const td = document.createElement('td');
-    const table = document.createElement('table');
-
     for (let i = 0; i < JSON.parse(storage_toppings).length; i++) {
-    // for (let i = 0; i < 5; i++) {
 
       // Parse storage_toppings string and grab the name of the individual topping
       topping = JSON.parse(storage_toppings)[i]['fields']['item']
 
       // Create list of pizza toppings
       ul_toppings.append(create_list(topping));
-    
+
       // Create a checkbox
       const br_extras = document.createElement('br');
-      td_toppings_checkbox.append(create_checkbox(tr_id, topping), br_extras);
+      td_toppings_checkbox.append(create_checkbox(tr_id, topping, limit), br_extras);
     };
 
     // Stitch together the toppings row, <tr>, that will be inserted into the DOM
@@ -183,12 +222,3 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('tbody').insertBefore(tr_toppings, tbody.childNodes[index(tr_id) + 1]);
   };
 });
-
-  // --------------------- CREATE SPAN ---------------------
-
-  function create_span(name) {
-    const span = document.createElement('span');
-    span.name = name
-    span.innerHTML = name;
-    return span;
-  }
