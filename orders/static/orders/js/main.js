@@ -22,29 +22,31 @@ document.addEventListener('DOMContentLoaded', function() {
     checkbox.name = name
     checkbox.type = 'checkbox';
 
+    // Built-in onclick function
     checkbox.onclick = function() {
       let count = 0;
       list = document.getElementsByClassName(tr_id);
 
+      // Count the total number of checkboxes currently selected
       for (let i = 0; i < list.length; i++) {
         if (list[i].checked === true) {
           count++;
         };
       };
 
+      // If limit exists (3rd argument) then disable all unselected checkboxes
+      // when count reaches the limit
       if (count === limit) {
         for (let i = 0; i < list.length; i++) {
           if (list[i].checked !== true) {
             list[i].disabled = true;
           };
         };
-
       } else {
         for (let i = 0; i < list.length; i++) {
           list[i].disabled = false;
         };
       };
-
     };
     return checkbox;
   };
@@ -110,8 +112,6 @@ document.addEventListener('DOMContentLoaded', function() {
     name = obj.getAttribute('name');
     td_id = obj.getAttribute('data-td_id');
     tr_id = obj.getAttribute('data-tr_id');
-
-    // console.log(obj);
 
     // Hide all selections, extras, and toppings
     hide_all();
