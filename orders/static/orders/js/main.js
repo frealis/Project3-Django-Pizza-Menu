@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   };
 
+  current_selection = '';
+  previous_selection = '';
+
   // --------------------- CREATE CHECKBOX ---------------------
 
   function create_checkbox(tr_id, name, limit) {
@@ -111,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
     td_id = obj.getAttribute('data-td_id');
     tr_id = obj.getAttribute('data-tr_id');
 
-    // console.log(obj);
+    console.log(obj);
 
     // Hide all selections, extras, and toppings
     hide_all();
@@ -138,8 +141,17 @@ document.addEventListener('DOMContentLoaded', function() {
       };
     };
 
-    // Re-activate current checkbox selection
-    document.querySelectorAll('[data-td_id = "' + td_id + '"]')[0].checked = true;
+    // Update previous and current selections
+    current_selection = td_id;
+    if (previous_selection === current_selection) {
+      hide_all();
+      current_selection = '';
+    } else {
+      // Re-activate current checkbox selection
+      document.querySelectorAll('[data-td_id = "' + td_id + '"]')[0].checked = true;
+    };
+    console.log('prev: ', previous_selection, ' curr: ', current_selection);
+    previous_selection = current_selection;
   };
 
   // --------------------- SHOW EXTRAS ---------------------
