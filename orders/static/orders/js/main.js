@@ -111,6 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
     data_extras = obj.getAttribute('data-extras');
     data_toppings = obj.getAttribute('data-toppings');
     name = obj.getAttribute('name');
+    size = obj.getAttribute('data-size');
     td_id = obj.getAttribute('data-td_id');
     tr_id = obj.getAttribute('data-tr_id');
 
@@ -121,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Show extras
     if (data_extras === 'true') {
-      show_extras(tr_id);
+      show_extras(tr_id, size);
     };
     
     // Show toppings
@@ -157,27 +158,40 @@ document.addEventListener('DOMContentLoaded', function() {
   // --------------------- SHOW EXTRAS ---------------------
 
   // Show extras
-  function show_extras(tr_id) {
+  function show_extras(tr_id, size) {
+
+    // console.log(storage_extras);
 
     // Create a new row, <tr>, that includes list of extras.
     const tr_extras = document.createElement('tr');
     const td_extras = document.createElement('td');
     const td_extras_checkbox = document.createElement('td');
+    const td_extras_price = document.createElement('td');
     const ul_extras = document.createElement('ul');
     for (let i = 0; i < JSON.parse(storage_extras).length; i++) {
 
       // Parse storage_extras string and grab the name of the individual extra
       extra = JSON.parse(storage_extras)[i]['fields']['item']
+      extra_price_sm = JSON.parse(storage_extras)[i]['fields']['price_sm']
+      extra_price_lg = JSON.parse(storage_extras)[i]['fields']['price_lg']
 
       // Show all 4 extras items for the Steak + Cheese sub
       if (tr_id === 'Subs + Steak + Cheese') {
 
-       // Create list of sub extras
-       ul_extras.append(create_list(JSON.parse(storage_extras)[i]['fields']['item']));
-          
+        // Create list of sub extras
+        ul_extras.append(create_list(JSON.parse(storage_extras)[i]['fields']['item']));
+
+        // Display extras' prices
+        const br_extras_prices = document.createElement('br');
+        if (size === 'small') {
+          td_extras_price.append('+ ', extra_price_sm, br_extras_prices);
+        } else if (size === 'large') {
+          td_extras_price.append('+ ', extra_price_lg, br_extras_prices);
+        };
+
         // Create a checkbox
-        const br_extras = document.createElement('br');
-        td_extras_checkbox.append(create_checkbox(tr_id, extra), br_extras);
+        const br_extras_checkbox = document.createElement('br');
+        td_extras_checkbox.append(create_checkbox(tr_id, extra), br_extras_checkbox);
 
       // Only show the Extra Cheese option for all other subs
       } else {
@@ -186,6 +200,14 @@ document.addEventListener('DOMContentLoaded', function() {
           // Create list item of 'Extra Cheese' for all subs
           ul_extras.append(create_list(JSON.parse(storage_extras)[i]['fields']['item']));
           
+          // Display 'Extra Cheese' price for all subs
+          const br_extras_prices = document.createElement('br');
+          if (size === 'small') {
+            td_extras_price.append('+ ', extra_price_sm, br_extras_prices);
+          } else if (size === 'large') {
+            td_extras_price.append('+ ', extra_price_lg, br_extras_prices);
+          };
+
           // Create a checkbox
           td_extras_checkbox.append(create_checkbox(tr_id, extra));
         };
@@ -195,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Stitch together the extras row, <tr>, that will be inserted into the DOM
     td_extras.append(ul_extras);
     tr_extras.className = 'tr_extras';
-    tr_extras.append(td_extras, td_extras_checkbox);
+    tr_extras.append(td_extras, td_extras_price, td_extras_checkbox);
 
     // Add extras row, <tr>, to DOM. 
     document.querySelector('tbody').insertBefore(tr_extras, tbody.childNodes[index(tr_id) + 1]);
