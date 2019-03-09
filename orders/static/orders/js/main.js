@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   };
 
+  // Variables used to keep track of menu item selections
   current_selection = '';
   previous_selection = '';
 
@@ -25,23 +26,25 @@ document.addEventListener('DOMContentLoaded', function() {
     checkbox.name = name
     checkbox.type = 'checkbox';
 
+    // Built-in anonymous onclick function for each checkbox
     checkbox.onclick = function() {
       let count = 0;
       list = document.getElementsByClassName(tr_id);
 
+      // Update the count for the total number of checkboxes selected
       for (let i = 0; i < list.length; i++) {
         if (list[i].checked === true) {
           count++;
         };
       };
 
+      // Disable all other checkboxes if a limit argument exists (3rd argument)
       if (count === limit) {
         for (let i = 0; i < list.length; i++) {
           if (list[i].checked !== true) {
             list[i].disabled = true;
           };
         };
-
       } else {
         for (let i = 0; i < list.length; i++) {
           list[i].disabled = false;
@@ -115,8 +118,6 @@ document.addEventListener('DOMContentLoaded', function() {
     td_id = obj.getAttribute('data-td_id');
     tr_id = obj.getAttribute('data-tr_id');
 
-    console.log(obj);
-
     // Hide all selections, extras, and toppings
     hide_all();
 
@@ -151,7 +152,6 @@ document.addEventListener('DOMContentLoaded', function() {
       // Re-activate current checkbox selection
       document.querySelectorAll('[data-td_id = "' + td_id + '"]')[0].checked = true;
     };
-    console.log('prev: ', previous_selection, ' curr: ', current_selection);
     previous_selection = current_selection;
   };
 
@@ -159,8 +159,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Show extras
   function show_extras(tr_id, size) {
-
-    // console.log(storage_extras);
 
     // Create a new row, <tr>, that includes list of extras.
     const tr_extras = document.createElement('tr');
