@@ -66,12 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Hide toppings and extras
   function hide_all(obj, delete_index, scenario) {
 
-    // Variables
-    data_extras = obj.getAttribute('data-extras');
-    data_toppings = obj.getAttribute('data-toppings');
-    name = obj.getAttribute('name');
-    size = obj.getAttribute('data-size');
-    td_id = obj.getAttribute('data-td_id');
+    // Variables passed in from <input> attributes on index.html
     tr_id = obj.getAttribute('data-tr_id');
 
     // Scenario 2: If the same checkbox is clicked twice in a row, clear both of 
@@ -122,8 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // --------------------- SELECT ITEM ---------------------
 
-  // Handle when a user clicks a checkbox on the menu -- basically these
-  // checkboxes behave like radio buttons
+  // Handle when a user clicks a checkbox on the menu
   function select_item(obj) {
 
     // Get data from individual selected item -- tr_id represents the unique row
@@ -135,10 +129,41 @@ document.addEventListener('DOMContentLoaded', function() {
     td_id = obj.getAttribute('data-td_id');
     tr_id = obj.getAttribute('data-tr_id');
 
+    // Update active selections
+    active_selections.push({'td_id': td_id, 'tr_id': tr_id});
+
     // Show extras
     if (data_extras === 'true') {
       show_extras(tr_id, size);
+
+      // Scenario 1: Handle a different checkbox being clicked, but on the same row 
+      // as an active selection
+      del_scenario_1 = []
+      for (let i = 0; i < active_selections.length; i++) {
+        if (active_selections[i]) {
+          if (!(active_selections[i]['td_id'] === td_id) && active_selections[i]['tr_id'] === tr_id) {
+            del_scenario_1.push(i);
+          };        
+        };
+      };
+      if (del_scenario_1.length === 1) {
+        hide_all(obj, del_scenario_1, del_scenario_1.length);
+      };
+
+      // Scenario 2: Handle the same checkbox being clicked twice
+      del_scenario_2 = [];
+      for (let i = 0; i < active_selections.length; i++) {
+        if (active_selections[i]) {
+          if (active_selections[i]['td_id'] === td_id && active_selections[i]['tr_id'] === tr_id) {
+            del_scenario_2.push(i);
+          };
+        };
+      };
+      if (del_scenario_2.length === 2) {
+        hide_all(obj, del_scenario_2, del_scenario_2.length);
+      };
     };
+  
     
     // Show toppings
     if (data_toppings === 'true') {
@@ -157,46 +182,8 @@ document.addEventListener('DOMContentLoaded', function() {
       };
     };
 
-    // Update active selections
-    active_selections.push({'td_id': td_id, 'tr_id': tr_id});
-
-    // Scenario 2: Handle the same checkbox being clicked twice
-    del_scenario_2 = [];
-    for (let i = 0; i < active_selections.length; i++) {
-      if (active_selections[i]) {
-        if (active_selections[i]['td_id'] === td_id && active_selections[i]['tr_id'] === tr_id) {
-          del_scenario_2.push(i);
-          // console.log('index: ', del_scenario_2);
-          // console.log('as_before: ', active_selections);
-        };
-      };
-    };
-    if (del_scenario_2.length === 2) {
-      hide_all(obj, del_scenario_2, del_scenario_2.length);
-      // console.log('as_after: ', active_selections);
-    };
-
-    // Scenario 1: Handle a different checkbox being clicked, but on the same row 
-    // as an active selection
-    del_scenario_1 = []
-    // console.log('before: ', del_scenario_1);
-
-    for (let i = 0; i < active_selections.length; i++) {
-      if (active_selections[i]) {
-        if (!(active_selections[i]['td_id'] === td_id) && active_selections[i]['tr_id'] === tr_id) {
-          del_scenario_1.push(i);
-          // console.log('after: ', del_scenario_1);
-        };        
-      };
-    };
-    if (del_scenario_1.length === 1) {
-      // console.log('call hide_all, del_scenario_1.length: ', del_scenario_1.length)
-      hide_all(obj, del_scenario_1, del_scenario_1.length);
-    };
-
-    // Re-activate current checkbox selection
-    // document.querySelectorAll('[data-td_id = "' + td_id + '"]')[0].checked = true;
   };
+
 
   // --------------------- SHOW EXTRAS ---------------------
 
