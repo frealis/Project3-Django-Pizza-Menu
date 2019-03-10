@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // --------------------- HIDE ALL ---------------------
 
   // Hide toppings and extras
-  function hide_all(obj, insertion_deletion) {
+  function hide_all(obj, delete_index, scenario) {
 
     // Variables
     data_extras = obj.getAttribute('data-extras');
@@ -74,16 +74,12 @@ document.addEventListener('DOMContentLoaded', function() {
     td_id = obj.getAttribute('data-td_id');
     tr_id = obj.getAttribute('data-tr_id');
 
-    // If the same checkbox is clicked twice in a row, wipe everything/toggle off
-    if (insertion_deletion) {
-      delete active_selections[insertion_deletion[0]];
-      delete active_selections[insertion_deletion[1]];
-
-      console.log('active_selections: ', active_selections);
-      console.log('tr_id: ', tr_id);
-
+    // Scenario 2: If the same checkbox is clicked twice in a row, clear both of 
+    // its entries in active_selections[] and hide the extras items
+    if (delete_index && scenario === 2) {
+      delete active_selections[delete_index[0]];
+      delete active_selections[delete_index[1]];
       const extras = document.querySelectorAll('[class = "' + tr_id + '"]');
-      console.log(extras[1].parentNode);
       if (extras) {
         for (let i = 0; i < extras.length; i++) {
           extras[i].parentNode.removeChild(extras[i]);
@@ -91,39 +87,21 @@ document.addEventListener('DOMContentLoaded', function() {
       };
     };
 
-        // Hide all extras & toppings, uncheck all checkboxes
-        // const extras = document.querySelector('.tr_extras')
-        // if (extras) {
-        //   extras.parentNode.removeChild(extras);
-        // };
-        // const toppings = document.querySelector('.tr_toppings');
-        // if (toppings) {
-        //   toppings.parentNode.removeChild(toppings);
-        // };
-        // const input = document.getElementsByTagName('input')
-        // for (j = 0; j < input.length; j++) {
-        //   input[j].checked = false;
-        // };
-
-      // If a selection is changed from small to large or vice-versa, de-select
-      // everything and then re-select the current selection, but leave any visible
-      // extras or toppings intact
-      //  } else if (!(active_selections[i]['td_id'] === td_id)) {
-
-      //   console.log('!active_selections: ', active_selections[i]['td_id'], ' i: ', i);
-
-      //   // Uncheck all checkboxes
-      //   const input = document.getElementsByTagName('input');
-      //   for (l = 0; l < input.length; l++) {
-      //     input[l].checked = false;
-      //   };
-      // };
-
-        // Re-select the current selection
-        // active_selections.push({'td_id': td_id});
-        // document.querySelectorAll('[data-td_id = "' + td_id + '"]')[0].checked = true;
-      // };
-  //   };
+    // Scenario 1: If a different checkbox is checked but in the same row as 
+    // active selection, set *.clicked = false and clear that active selection 
+    // from active_selections[] 
+    if (delete_index && scenario === 1) {
+      var as_td_id = active_selections[delete_index[0]]['td_id']
+      var uncheck = document.querySelectorAll('[data-td_id = "' + as_td_id + '"]');
+      if (uncheck) {
+        for (let i = 0; i < uncheck.length; i++) {
+          uncheck[i].checked = false;
+        };
+      };
+      delete active_selections[delete_index[0]];
+      const extras = document.querySelector('[class = "' + tr_id + '"]');
+      extras.parentNode.removeChild(extras);
+    };
   };
 
   // --------------------- INDEX ---------------------
@@ -140,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
       };
     };
     return index;
-  }
+  };
 
   // --------------------- SELECT ITEM ---------------------
 
@@ -182,19 +160,38 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update active selections
     active_selections.push({'td_id': td_id, 'tr_id': tr_id});
 
-    // If the current selection exists in the active_selections[] list twice, then
-    // remove them from the list
-    index_deletion = [];
+    // Scenario 2: Handle the same checkbox being clicked twice
+    del_scenario_2 = [];
     for (let i = 0; i < active_selections.length; i++) {
       if (active_selections[i]) {
         if (active_selections[i]['td_id'] === td_id && active_selections[i]['tr_id'] === tr_id) {
-          index_deletion.push(i)
-        };
-        if (index_deletion.length === 2) {
-          console.log(index_deletion);
-          hide_all(obj, index_deletion);
+          del_scenario_2.push(i);
+          // console.log('index: ', del_scenario_2);
+          // console.log('as_before: ', active_selections);
         };
       };
+    };
+    if (del_scenario_2.length === 2) {
+      hide_all(obj, del_scenario_2, del_scenario_2.length);
+      // console.log('as_after: ', active_selections);
+    };
+
+    // Scenario 1: Handle a different checkbox being clicked, but on the same row 
+    // as an active selection
+    del_scenario_1 = []
+    // console.log('before: ', del_scenario_1);
+
+    for (let i = 0; i < active_selections.length; i++) {
+      if (active_selections[i]) {
+        if (!(active_selections[i]['td_id'] === td_id) && active_selections[i]['tr_id'] === tr_id) {
+          del_scenario_1.push(i);
+          // console.log('after: ', del_scenario_1);
+        };        
+      };
+    };
+    if (del_scenario_1.length === 1) {
+      // console.log('call hide_all, del_scenario_1.length: ', del_scenario_1.length)
+      hide_all(obj, del_scenario_1, del_scenario_1.length);
     };
 
     // Re-activate current checkbox selection
