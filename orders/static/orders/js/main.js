@@ -81,13 +81,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
       console.log('active_selections: ', active_selections);
       console.log('tr_id: ', tr_id);
-      console.log(document.querySelectorAll(tr_id));
-      console.log(document.querySelectorAll('[class = "' + tr_id + '"]'));
 
       const extras = document.querySelectorAll('[class = "' + tr_id + '"]');
-      console.log(extras);
+      console.log(extras[1].parentNode);
       if (extras) {
-        extras.parentNode.removeChild(extras);
+        for (let i = 0; i < extras.length; i++) {
+          extras[i].parentNode.removeChild(extras[i]);
+        };
       };
     };
 
