@@ -69,19 +69,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Variables passed in from <input> attributes on index.html
     tr_id = obj.getAttribute('data-tr_id');
 
-    // Scenario 2: If the same checkbox is clicked twice in a row, clear both of 
-    // its entries in active_selections[] and hide the extras items
-    if (delete_index && scenario === 2) {
-      delete active_selections[delete_index[0]];
-      delete active_selections[delete_index[1]];
-      const extras = document.querySelectorAll('[class = "' + tr_id + '"]');
-      if (extras) {
-        for (let i = 0; i < extras.length; i++) {
-          extras[i].parentNode.removeChild(extras[i]);
-        };
-      };
-    };
-
     // Scenario 1: If a different checkbox is checked but in the same row as 
     // active selection, set *.clicked = false and clear that active selection 
     // from active_selections[] 
@@ -96,6 +83,19 @@ document.addEventListener('DOMContentLoaded', function() {
       delete active_selections[delete_index[0]];
       const extras = document.querySelector('[class = "' + tr_id + '"]');
       extras.parentNode.removeChild(extras);
+    };
+
+    // Scenario 2: If the same checkbox is clicked twice in a row, clear both of 
+    // its entries in active_selections[] and hide the extras items
+    if (delete_index && scenario === 2) {
+      delete active_selections[delete_index[0]];
+      delete active_selections[delete_index[1]];
+      const extras = document.querySelectorAll('[class = "' + tr_id + '"]');
+      if (extras) {
+        for (let i = 0; i < extras.length; i++) {
+          extras[i].parentNode.removeChild(extras[i]);
+        };
+      };
     };
   };
 
@@ -132,12 +132,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update active selections
     active_selections.push({'td_id': td_id, 'tr_id': tr_id});
 
-    // Show extras
+    // HANDLE EXTRAS ---------------------------------
     if (data_extras === 'true') {
       show_extras(tr_id, size);
 
-      // Scenario 1: Handle a different checkbox being clicked, but on the same row 
-      // as an active selection
+      // Scenario 1: Handle a different checkbox being clicked, but on the same 
+      // row as an active selection
       del_scenario_1 = []
       for (let i = 0; i < active_selections.length; i++) {
         if (active_selections[i]) {
@@ -163,9 +163,8 @@ document.addEventListener('DOMContentLoaded', function() {
         hide_all(obj, del_scenario_2, del_scenario_2.length);
       };
     };
-  
     
-    // Show toppings
+    // HANDLE TOPPINGS ---------------------------------
     if (data_toppings === 'true') {
       if (name === '1 topping') {
         show_toppings(tr_id, 1);
@@ -180,8 +179,34 @@ document.addEventListener('DOMContentLoaded', function() {
       } else if (name === '3 items') {
         show_toppings(tr_id, 3);
       };
-    };
 
+      // Scenario 1: Handle a different checkbox being clicked, but on the same 
+      // row as an active selection
+      del_scenario_1 = []
+      for (let i = 0; i < active_selections.length; i++) {
+        if (active_selections[i]) {
+          if (!(active_selections[i]['td_id'] === td_id) && active_selections[i]['tr_id'] === tr_id) {
+            del_scenario_1.push(i);
+          };        
+        };
+      };
+      if (del_scenario_1.length === 1) {
+        hide_all(obj, del_scenario_1, del_scenario_1.length);
+      };
+
+      // Scenario 2: Handle the same checkbox being clicked twice
+      del_scenario_2 = [];
+      for (let i = 0; i < active_selections.length; i++) {
+        if (active_selections[i]) {
+          if (active_selections[i]['td_id'] === td_id && active_selections[i]['tr_id'] === tr_id) {
+            del_scenario_2.push(i);
+          };
+        };
+      };
+      if (del_scenario_2.length === 2) {
+        hide_all(obj, del_scenario_2, del_scenario_2.length);
+      };
+    };
   };
 
 
@@ -276,7 +301,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Stitch together the toppings row, <tr>, that will be inserted into the DOM
     td_toppings.append(ul_toppings);
-    tr_toppings.className = 'tr_toppings';
+    tr_toppings.className = tr_id;
     tr_toppings.append(td_toppings, td_toppings_checkbox);
 
     // Add toppings row, <tr>, to DOM. 
