@@ -14,15 +14,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   };
 
-  // Variables used to keep track of menu item selections
-  current_selection = '';
-  previous_selection = '';
+  // List of dictionaries used to keep track of active menu item selections
+  active_selections = []
 
   // --------------------- CREATE CHECKBOX ---------------------
 
   function create_checkbox(tr_id, name, limit) {
     const checkbox = document.createElement('input');
-    checkbox.className = tr_id;
     checkbox.name = name
     checkbox.type = 'checkbox';
 
@@ -50,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
           list[i].disabled = false;
         };
       };
-
     };
     return checkbox;
   };
@@ -67,25 +64,66 @@ document.addEventListener('DOMContentLoaded', function() {
   // --------------------- HIDE ALL ---------------------
 
   // Hide toppings and extras
-  function hide_all() {
+  function hide_all(obj, insertion_deletion) {
 
-    // Hide extras
-    var extras = document.querySelector('.tr_extras');
-    if (extras) {
-      extras.parentNode.removeChild(extras);
-    }
+    // Variables
+    data_extras = obj.getAttribute('data-extras');
+    data_toppings = obj.getAttribute('data-toppings');
+    name = obj.getAttribute('name');
+    size = obj.getAttribute('data-size');
+    td_id = obj.getAttribute('data-td_id');
+    tr_id = obj.getAttribute('data-tr_id');
 
-    // Hide toppings
-    var toppings = document.querySelector('.tr_toppings');
-    if (toppings) {
-      toppings.parentNode.removeChild(toppings);
-    }
+    // If the same checkbox is clicked twice in a row, wipe everything/toggle off
+    if (insertion_deletion) {
+      delete active_selections[insertion_deletion[0]];
+      delete active_selections[insertion_deletion[1]];
 
-    // Uncheck all checkboxes
-    var input = document.getElementsByTagName('input')
-    for (i = 0; i < input.length; i++) {
-      input[i].checked = false;
+      console.log('active_selections: ', active_selections);
+      console.log('tr_id: ', tr_id);
+      console.log(document.querySelectorAll(tr_id));
+      console.log(document.querySelectorAll('[class = "' + tr_id + '"]'));
+
+      const extras = document.querySelectorAll('[class = "' + tr_id + '"]');
+      console.log(extras);
+      if (extras) {
+        extras.parentNode.removeChild(extras);
+      };
     };
+
+        // Hide all extras & toppings, uncheck all checkboxes
+        // const extras = document.querySelector('.tr_extras')
+        // if (extras) {
+        //   extras.parentNode.removeChild(extras);
+        // };
+        // const toppings = document.querySelector('.tr_toppings');
+        // if (toppings) {
+        //   toppings.parentNode.removeChild(toppings);
+        // };
+        // const input = document.getElementsByTagName('input')
+        // for (j = 0; j < input.length; j++) {
+        //   input[j].checked = false;
+        // };
+
+      // If a selection is changed from small to large or vice-versa, de-select
+      // everything and then re-select the current selection, but leave any visible
+      // extras or toppings intact
+      //  } else if (!(active_selections[i]['td_id'] === td_id)) {
+
+      //   console.log('!active_selections: ', active_selections[i]['td_id'], ' i: ', i);
+
+      //   // Uncheck all checkboxes
+      //   const input = document.getElementsByTagName('input');
+      //   for (l = 0; l < input.length; l++) {
+      //     input[l].checked = false;
+      //   };
+      // };
+
+        // Re-select the current selection
+        // active_selections.push({'td_id': td_id});
+        // document.querySelectorAll('[data-td_id = "' + td_id + '"]')[0].checked = true;
+      // };
+  //   };
   };
 
   // --------------------- INDEX ---------------------
@@ -106,7 +144,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // --------------------- SELECT ITEM ---------------------
 
-  // Handle when a user clicks a checkbox on the menu
+  // Handle when a user clicks a checkbox on the menu -- basically these
+  // checkboxes behave like radio buttons
   function select_item(obj) {
 
     // Get data from individual selected item -- tr_id represents the unique row
@@ -117,9 +156,6 @@ document.addEventListener('DOMContentLoaded', function() {
     size = obj.getAttribute('data-size');
     td_id = obj.getAttribute('data-td_id');
     tr_id = obj.getAttribute('data-tr_id');
-
-    // Hide all selections, extras, and toppings
-    hide_all();
 
     // Show extras
     if (data_extras === 'true') {
@@ -143,21 +179,30 @@ document.addEventListener('DOMContentLoaded', function() {
       };
     };
 
-    // Update previous and current selections
-    current_selection = td_id;
-    if (previous_selection === current_selection) {
-      hide_all();
-      current_selection = '';
-    } else {
-      // Re-activate current checkbox selection
-      document.querySelectorAll('[data-td_id = "' + td_id + '"]')[0].checked = true;
+    // Update active selections
+    active_selections.push({'td_id': td_id, 'tr_id': tr_id});
+
+    // If the current selection exists in the active_selections[] list twice, then
+    // remove them from the list
+    index_deletion = [];
+    for (let i = 0; i < active_selections.length; i++) {
+      if (active_selections[i]) {
+        if (active_selections[i]['td_id'] === td_id && active_selections[i]['tr_id'] === tr_id) {
+          index_deletion.push(i)
+        };
+        if (index_deletion.length === 2) {
+          console.log(index_deletion);
+          hide_all(obj, index_deletion);
+        };
+      };
     };
-    previous_selection = current_selection;
+
+    // Re-activate current checkbox selection
+    // document.querySelectorAll('[data-td_id = "' + td_id + '"]')[0].checked = true;
   };
 
   // --------------------- SHOW EXTRAS ---------------------
 
-  // Show extras
   function show_extras(tr_id, size) {
 
     // Create a new row, <tr>, that includes list of extras.
@@ -169,6 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
     for (let i = 0; i < JSON.parse(storage_extras).length; i++) {
 
       // Parse storage_extras string and grab the name of the individual extra
+      // names and prices
       extra = JSON.parse(storage_extras)[i]['fields']['item']
       extra_price_sm = JSON.parse(storage_extras)[i]['fields']['price_sm']
       extra_price_lg = JSON.parse(storage_extras)[i]['fields']['price_lg']
@@ -214,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Stitch together the extras row, <tr>, that will be inserted into the DOM
     td_extras.append(ul_extras);
-    tr_extras.className = 'tr_extras';
+    tr_extras.className = tr_id;
     tr_extras.append(td_extras, td_extras_price, td_extras_checkbox);
 
     // Add extras row, <tr>, to DOM. 
@@ -223,7 +269,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // --------------------- SHOW TOPPINGS ---------------------
 
-  // Show toppings
   function show_toppings(tr_id, limit) {
 
     // Create a new row, <tr>, that includes list of toppings.
