@@ -14,13 +14,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   };
 
-  // List of dictionaries used to keep track of active menu item selections
+  // List of dictionaries used to keep track of active menu item selections and
+  // initialize total price & add it to the DOM on initial page load
   active_selections = []
+  let total_price = 0;
+  document.querySelector('#total_price').append(total_price.toFixed(2));
 
   // --------------------- CREATE CHECKBOX ---------------------
 
   function create_checkbox(tr_id, name, limit) {
     const checkbox = document.createElement('input');
+    checkbox.className = tr_id
     checkbox.name = name
     checkbox.type = 'checkbox';
 
@@ -33,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
       for (let i = 0; i < list.length; i++) {
         if (list[i].checked === true) {
           count++;
+          console.log(count);
         };
       };
 
@@ -48,6 +53,9 @@ document.addEventListener('DOMContentLoaded', function() {
           list[i].disabled = false;
         };
       };
+
+      // Call stage_items() function
+      stage_items();
     };
     return checkbox;
   };
@@ -61,10 +69,10 @@ document.addEventListener('DOMContentLoaded', function() {
     return li;
   }
 
-  // --------------------- HIDE ALL ---------------------
+  // --------------------- HIDE ---------------------
 
   // Hide toppings and extras
-  function hide_all(obj, delete_index, scenario) {
+  function hide(obj, delete_index, scenario) {
 
     // Variables passed in from <input> attributes on index.html
     tr_id = obj.getAttribute('data-tr_id');
@@ -81,19 +89,21 @@ document.addEventListener('DOMContentLoaded', function() {
         };
       };
       delete active_selections[delete_index[0]];
-      const extras = document.querySelector('[class = "' + tr_id + '"]');
-      extras.parentNode.removeChild(extras);
+      const items = document.querySelector('[class = "' + tr_id + '"]');
+      if (items) {
+        items.parentNode.removeChild(items);
+      };
     };
 
     // Scenario 2: If the same checkbox is clicked twice in a row, clear both of 
-    // its entries in active_selections[] and hide the extras items
+    // its entries in active_selections[] and hide the items
     if (delete_index && scenario === 2) {
       delete active_selections[delete_index[0]];
       delete active_selections[delete_index[1]];
-      const extras = document.querySelectorAll('[class = "' + tr_id + '"]');
-      if (extras) {
-        for (let i = 0; i < extras.length; i++) {
-          extras[i].parentNode.removeChild(extras[i]);
+      const items = document.querySelectorAll('[class = "' + tr_id + '"]');
+      if (items) {
+        for (let i = 0; i < items.length; i++) {
+          items[i].parentNode.removeChild(items[i]);
         };
       };
     };
@@ -129,11 +139,13 @@ document.addEventListener('DOMContentLoaded', function() {
     td_id = obj.getAttribute('data-td_id');
     tr_id = obj.getAttribute('data-tr_id');
 
-    // Update active selections
-    active_selections.push({'td_id': td_id, 'tr_id': tr_id});
-
     // HANDLE EXTRAS ---------------------------------
     if (data_extras === 'true') {
+
+      // Update active selections
+      active_selections.push({'td_id': td_id, 'tr_id': tr_id});
+
+      // Show extras items
       show_extras(tr_id, size);
 
       // Scenario 1: Handle a different checkbox being clicked, but on the same 
@@ -147,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
       };
       if (del_scenario_1.length === 1) {
-        hide_all(obj, del_scenario_1, del_scenario_1.length);
+        hide(obj, del_scenario_1, del_scenario_1.length);
       };
 
       // Scenario 2: Handle the same checkbox being clicked twice
@@ -160,12 +172,16 @@ document.addEventListener('DOMContentLoaded', function() {
         };
       };
       if (del_scenario_2.length === 2) {
-        hide_all(obj, del_scenario_2, del_scenario_2.length);
+        hide(obj, del_scenario_2, del_scenario_2.length);
       };
     };
     
     // HANDLE TOPPINGS ---------------------------------
     if (data_toppings === 'true') {
+
+      // Update active selections
+      active_selections.push({'td_id': td_id, 'tr_id': tr_id});
+
       if (name === '1 topping') {
         show_toppings(tr_id, 1);
       } else if (name === '2 toppings') {
@@ -178,6 +194,8 @@ document.addEventListener('DOMContentLoaded', function() {
         show_toppings(tr_id, 2);
       } else if (name === '3 items') {
         show_toppings(tr_id, 3);
+      } else if (name === 'Special') {
+        show_toppings(tr_id, 5);
       };
 
       // Scenario 1: Handle a different checkbox being clicked, but on the same 
@@ -191,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
       };
       if (del_scenario_1.length === 1) {
-        hide_all(obj, del_scenario_1, del_scenario_1.length);
+        hide(obj, del_scenario_1, del_scenario_1.length);
       };
 
       // Scenario 2: Handle the same checkbox being clicked twice
@@ -204,9 +222,11 @@ document.addEventListener('DOMContentLoaded', function() {
         };
       };
       if (del_scenario_2.length === 2) {
-        hide_all(obj, del_scenario_2, del_scenario_2.length);
+        hide(obj, del_scenario_2, del_scenario_2.length);
       };
     };
+
+    stage_items();
   };
 
 
@@ -306,5 +326,58 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add toppings row, <tr>, to DOM. 
     document.querySelector('tbody').insertBefore(tr_toppings, tbody.childNodes[index(tr_id) + 1]);
+  };
+
+  // --------------------- STAGE ITEMS ---------------------
+
+  // Place currently selected items into a "staging area" that is visible on
+  // index.html and updated everytime the select_item() function is called, or
+  // everytime an extras or toppings checkbox is checked
+  function stage_items() {
+    document.querySelector('#current_selections').innerHTML = '';
+    document.querySelector('#total_price').innerHTML = '';
+    x = document.querySelectorAll('[type="checkbox"]')
+    selected_menu_items = [];
+    selected_extras_toppings = [];
+
+    // Gather a list of every currently selected item on the menu. Menu item 
+    // selections have data-tr_id attributes, and toppings and extras items have 
+    // their class attribute = to the tr_id value of the menu item that they are 
+    // associated with
+    for (let i = 0; i < x.length; i++) {
+      if (x[i].dataset.tr_id && x[i].checked) {
+        selected_menu_items.push(x[i]);
+      };
+      if (x[i]['className'] && x[i].checked) {
+        selected_extras_toppings.push(x[i]);
+      };
+    };
+  
+    // Append selected menu items to a list
+    let total_price = 0;
+    const ul = document.createElement('ul');
+    for (let j = 0; j < selected_menu_items.length; j++) {
+      const li = document.createElement('li');
+      li.append(selected_menu_items[j].dataset.group, ': ', selected_menu_items[j].name);
+
+      // Append selected extras or toppings to their respective menu item
+      for (let k = 0; k < selected_extras_toppings.length; k++) {
+        if (selected_menu_items[j].dataset.tr_id === selected_extras_toppings[k]['className']) {
+          const br = document.createElement('br');
+          li.append(', ', br, selected_extras_toppings[k]['name']);
+        };
+      };
+
+      // Stitch together selected menu items, extras, and toppings and calculate
+      // the total price
+      const br = document.createElement('br');
+      li.append(', ', br, '$', selected_menu_items[j].value);
+      ul.append(li);
+      total_price += parseFloat(selected_menu_items[j].value);
+    };
+
+    // Place selected items and total price into the DOM
+    document.querySelector('#current_selections').appendChild(ul);
+    document.querySelector('#total_price').append(total_price.toFixed(2));
   };
 });

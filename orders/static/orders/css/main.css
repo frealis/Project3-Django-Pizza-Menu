@@ -1,10 +1,39 @@
 .container {
   background: #e2dac1;
   border: 3px solid black;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   font-family: arial;
   font-size: 18px;
   margin: 0;
   padding: 0;
+  width: 720px;
+}
+
+.menu_items {
+  margin: 10px;
+  width: 400px;
+}
+
+.staging_area {
+  margin: 10px;
+  width: 280px;
+}
+
+.staging_area_header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.staging_area_header_left{
+  flex: 1;
+}
+
+.staging_area_header_right {
+  margin-left: auto;
+  justify-content: flex-end;
 }
 
 table {
