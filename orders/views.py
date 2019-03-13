@@ -62,3 +62,19 @@ def register_view(request):
     return HttpResponseRedirect(reverse("index"))
   else:
     return render(request, "orders/login.html", {"message": "Invalid credentials."})
+
+# Test
+def test_view(request):
+  if request.method == "POST":
+    x = request.POST
+    print(x)
+
+    
+
+    context = {
+      # "form_data": request.POST["Cheese"],
+    }
+
+      # return HttpResponseRedirect(reverse("test")
+      # return HttpResponseRedirect(reverse("flight", args=(flight_id,)))
+    return render(request, "orders/test.html", context)
