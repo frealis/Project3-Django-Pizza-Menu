@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // order to limit the number of toppings that can be selected depending on the
   // pizza, and the 'price' parameter is intended to add the price of any selected 
   // extras for subs.
-  function create_checkbox(tr_id, name, limit, price) {
+  function create_checkbox(tr_id, name, limit, price, size) {
     const checkbox = document.createElement('input');
     checkbox.className = tr_id;
     checkbox.name = name;
@@ -39,6 +39,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Built-in anonymous onclick function for each checkbox
     checkbox.onclick = function() {
+      // console.log('tr_id: ', tr_id);
+      // console.log('name', name);
+      // console.log('limit', limit);
+      // console.log('price', price);
+      // console.log('size', size);
+
       let count = 0;
       list = document.getElementsByClassName(tr_id);
 
@@ -62,8 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
       };
 
-      // Call stage_items() function
-      stage_items();
+      stage_items(size);
     };
     return checkbox;
   };
@@ -147,6 +152,8 @@ document.addEventListener('DOMContentLoaded', function() {
     td_id = obj.getAttribute('data-td_id');
     tr_id = obj.getAttribute('data-tr_id');
 
+    // console.log(size);
+
     // HANDLE EXTRAS ---------------------------------
     if (data_extras === 'true') {
 
@@ -191,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function() {
       active_selections.push({'td_id': td_id, 'tr_id': tr_id});
 
       if (name === '1 topping') {
-        show_toppings(tr_id, 1);
+        show_toppings(tr_id, size, 1);
       } else if (name === '2 toppings') {
         show_toppings(tr_id, 2);
       } else if (name === '3 toppings') {
@@ -234,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
       };
     };
 
-    stage_items();
+    stage_items(size);
   };
 
 
@@ -248,6 +255,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const td_extras_checkbox = document.createElement('td');
     const td_extras_price = document.createElement('td');
     const ul_extras = document.createElement('ul');
+
+    // Checkbox variables
+    let limit = 10;
+    let price = 0;
+
     for (let i = 0; i < JSON.parse(storage_extras).length; i++) {
 
       // Parse storage_extras string and grab the name of the individual extra
@@ -263,27 +275,26 @@ document.addEventListener('DOMContentLoaded', function() {
         ul_extras.append(create_list(JSON.parse(storage_extras)[i]['fields']['item']));
 
         // Display extras' prices
-        const br_extras_prices = document.createElement('br');
+        const br_price = document.createElement('br');
         if (size === 'small') {
-          td_extras_price.append('+ ', extra_price_sm, br_extras_prices);
+          td_extras_price.append('+ ', extra_price_sm, br_price);
+          price = extra_price_sm;
         } else if (size === 'large') {
-          td_extras_price.append('+ ', extra_price_lg, br_extras_prices);
+          td_extras_price.append('+ ', extra_price_lg, br_price);
+          price = extra_price_lg;
         };
 
         // Create a checkbox
-        const br_extras_checkbox = document.createElement('br');
-        td_extras_checkbox.append(create_checkbox(tr_id, extra, size), br_extras_checkbox);
+        const br_checkbox = document.createElement('br');
+        td_extras_checkbox.append(create_checkbox(tr_id, extra, limit, price, size), br_checkbox);
 
       // Only show the Extra Cheese option for all other subs
       } else {
         if (JSON.parse(storage_extras)[i]['fields']['item'] === 'Extra Cheese') {
-          // Create a price variable to be passed to the create_checkbox() 
-          // function
-          let price = 0;
 
           // Create list item of 'Extra Cheese' for all subs
-          ul_extras.append(create_list(JSON.parse(storage_extras)[i]['fields']['item']));
-          
+          ul_extras.append(create_list(JSON.parse(storage_extras)[i]['fields']['item']));    
+
           // Display 'Extra Cheese' price for all subs
           const br_extras_prices = document.createElement('br');
           if (size === 'small') {
@@ -294,12 +305,9 @@ document.addEventListener('DOMContentLoaded', function() {
             price = extra_price_lg;
           };
 
-          // Create a checkbox - set arbitrary limit number, since the 'limit'
-          // parameter is supposed to be used for pizza toppings. Just make sure
-          // that the limit set here is always more than the total amount of
-          // extras that can go on a sub.
-          limit = 10;
-          td_extras_checkbox.append(create_checkbox(tr_id, extra, limit, price));
+          // Create a checkbox
+
+          td_extras_checkbox.append(create_checkbox(tr_id, extra, limit, price, size));
         };
       };
     };
@@ -315,13 +323,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // --------------------- SHOW TOPPINGS ---------------------
 
-  function show_toppings(tr_id, limit) {
+  function show_toppings(tr_id, size, limit) {
+
+    // console.log(size);
 
     // Create a new row, <tr>, that includes list of toppings.
     const tr_toppings = document.createElement('tr');
     const td_toppings = document.createElement('td');
     const td_toppings_checkbox = document.createElement('td');
     const ul_toppings = document.createElement('ul');
+
+    // Checkbox variables
+    let price = 0;
 
     for (let i = 0; i < JSON.parse(storage_toppings).length; i++) {
 
@@ -333,7 +346,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Create a checkbox, omitting the 'price' parameter
       const br_extras = document.createElement('br');
-      td_toppings_checkbox.append(create_checkbox(tr_id, topping, limit), br_extras);
+      td_toppings_checkbox.append(create_checkbox(tr_id, topping, limit, price, size), br_extras);
     };
 
     // Stitch together the toppings row, <tr>, that will be inserted into the DOM
@@ -350,13 +363,13 @@ document.addEventListener('DOMContentLoaded', function() {
   // Place currently selected items into a "staging area" that is visible on
   // index.html and updated everytime the select_item() function is called, or
   // everytime an extras or toppings checkbox is checked
-  function stage_items() {
+  function stage_items(size) {
     document.querySelector('#current_selections').innerHTML = '';
     document.querySelector('#total_price').innerHTML = '';
     x = document.querySelectorAll('[type="checkbox"]')
     selected_menu_items = [];
     selected_extras_toppings = [];
-
+    
     // Gather a list of every currently selected item on the menu. Menu item 
     // selections have data-tr_id attributes, and toppings and extras items have 
     // their class attribute = to the tr_id value of the menu item that they are 
@@ -375,7 +388,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const ul = document.createElement('ul');
     for (let j = 0; j < selected_menu_items.length; j++) {
       const li = document.createElement('li');
-      li.append(selected_menu_items[j].dataset.group, ': ', selected_menu_items[j].name);
+      li.append(selected_menu_items[j].dataset.group, ': ', selected_menu_items[j].name, ', ', size);
 
       // Append selected extras or toppings to their respective menu item
       let total_extras_price = 0;
@@ -389,7 +402,7 @@ document.addEventListener('DOMContentLoaded', function() {
           // Add price if it exists (extras have a price, toppings don't)
           if (selected_extras_toppings[k].dataset.price !== 'undefined') {
             const extras_price = parseFloat(selected_extras_toppings[k].dataset.price)
-            console.log(selected_extras_toppings[k].dataset.price);
+            // console.log(selected_extras_toppings[k].dataset.price);
             total_extras_price += extras_price;
           };
         };
