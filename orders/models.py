@@ -9,7 +9,7 @@ class MenuItem(models.Model):
   price_lg = models.DecimalField(max_digits=5, decimal_places=2)
   price = models.DecimalField(max_digits=5, decimal_places=2)
   def __str__(self):
-    return f"{self.group}, {self.item} | small: ${self.price_sm} | large: ${self.price_lg} | single size: ${self.price}"
+    return f"{self.group}, {self.item} | small: ${self.price_sm} | large: ${self.price_lg} | 1 size: ${self.price}"
 
 class Topping(models.Model):
   item = models.CharField(max_length=64)
