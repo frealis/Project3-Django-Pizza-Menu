@@ -1,6 +1,8 @@
 {% extends "orders/base.html" %}
 
 {% block body %}
+<div id="result"></div>
+
 <div>
   <h3>Hello, {{ user.first_name }}</h3>
   <ul>
@@ -9,10 +11,9 @@
   </ul>
 </div>
 
+<!-- <form action="{% url 'test' %}" method="post">
+{% csrf_token %} -->
 <div class="container">
-
-  <!-- <form action="{% url 'test' %}" method="post">
-  {% csrf_token %} -->
 
   <!-- MENU ITEMS -->
   <div class="menu_items">
@@ -136,13 +137,19 @@
   </div>
 
   <!-- STAGING AREA -->
+  <!-- <form action="{% url 'test' %}" method="post"> -->
+  <div id="csrf">
+    {% csrf_token %}
+  </div>
+
   <div class="staging_area">
-    <div class="staging_area_header">
-      <div class="staging_area_header_left">
+    <div class="header">
+      <div class="left">
         Selections:
       </div>
-      <div class="staging_area_header_right">
-        <input type="submit" value="Add Selections to Order">
+      <div class="right">
+        <!-- <input type="submit" id="form" value="Add Selections to Order"> -->
+        <button id="form">Add to Order</button>
       </div>
     </div>
   
@@ -153,5 +160,7 @@
   </div>
 
   <!-- </form> -->
+
 </div>
+<!-- </form> -->
 {% endblock %}

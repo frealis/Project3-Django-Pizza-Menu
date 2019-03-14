@@ -21,18 +21,19 @@
   width: 280px;
 }
 
-.staging_area_header {
+.header {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: space-between;
+  width: 270px;
 }
 
-.staging_area_header_left{
-  flex: 1;
+.left{
+  justify-content: flex-start;
 }
 
-.staging_area_header_right {
-  margin-left: auto;
+.right {
   justify-content: flex-end;
 }
 

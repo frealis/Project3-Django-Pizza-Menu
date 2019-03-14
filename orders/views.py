@@ -66,10 +66,30 @@ def register_view(request):
 # Test
 def test_view(request):
   if request.method == "POST":
-    x = request.POST
-    print(x)
+    print('============= test_view() called =============')
+    # x = request.POST
+    # print(request)
 
-    
+    # # Query for currency exchange rate
+    # currency = request.form.get("currency")
+    # res = requests.get("http://api.fixer.io/lastest", params={
+    #   "base": "USD", "symbols": currency})
+
+    # Collect data on every checkbox that is selected
+    # checked = request.form.get("1 topping")
+    # print(checked)
+
+    # # Make sure request succeeded
+    # if res.status_code != 200:
+    #   return jsonify({"success": False})
+
+    # # Make sure currency is in response
+    # data = res.json()
+    # if currency not in data["rates"]:
+    #   return jsonify({"success": False})
+
+    # # This happens if everything is ok
+    # return jsonify({"success": True, "rate": data["rates"][currency]})
 
     context = {
       # "form_data": request.POST["Cheese"],

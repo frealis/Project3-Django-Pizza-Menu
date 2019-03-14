@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
 
+  // Reloads page if user hits the "Back" button
+  // https://stackoverflow.com/questions/20899274/how-to-refresh-page-on-back-button-click
+  if(!!window.performance && window.performance.navigation.type === 2) {
+    console.log('Reloading');
+    window.location.reload();
+  }
+
   // Retrieve extras and toppings items data from <div> located within <thead>
   // on index.html, which gets serialized in views.py before retrieval here
   storage = document.querySelector('#storage');
@@ -39,12 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Built-in anonymous onclick function for each checkbox
     checkbox.onclick = function() {
-      // console.log('tr_id: ', tr_id);
-      // console.log('name', name);
-      // console.log('limit', limit);
-      // console.log('price', price);
-      // console.log('size', size);
-
       let count = 0;
       list = document.getElementsByClassName(tr_id);
 
@@ -151,8 +152,6 @@ document.addEventListener('DOMContentLoaded', function() {
     size = obj.getAttribute('data-size');
     td_id = obj.getAttribute('data-td_id');
     tr_id = obj.getAttribute('data-tr_id');
-
-    console.log(size);
 
     // HANDLE EXTRAS ---------------------------------
     if (data_extras === 'true') {
@@ -388,7 +387,6 @@ document.addEventListener('DOMContentLoaded', function() {
       const li = document.createElement('li');
 
       size = selected_menu_items[j].dataset.size;
-      console.log(selected_menu_items[j]);
       li.append(selected_menu_items[j].dataset.group, ': ', selected_menu_items[j].name, ', ', size);
 
       // Append selected extras or toppings to their respective menu item
@@ -403,7 +401,6 @@ document.addEventListener('DOMContentLoaded', function() {
           // Add price if it exists (extras have a price, toppings don't)
           if (selected_extras_toppings[k].dataset.price !== 'undefined') {
             const extras_price = parseFloat(selected_extras_toppings[k].dataset.price)
-            // console.log(selected_extras_toppings[k].dataset.price);
             total_extras_price += extras_price;
           };
         };
@@ -413,9 +410,6 @@ document.addEventListener('DOMContentLoaded', function() {
       // the total price
       const br = document.createElement('br');
       const total_price_individual = parseFloat(selected_menu_items[j].value) + total_extras_price
-      
-      // console.log(parseFloat(selected_menu_items[j].value));
-      
       li.append(br, '$', total_price_individual.toFixed(2));
       ul.append(li);
       total_price += total_price_individual;
@@ -425,4 +419,44 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('#current_selections').appendChild(ul);
     document.querySelector('#total_price').append(total_price.toFixed(2));
   };
+
+  // --------------------- SEND DATA ---------------------
+
+  // Attach an *.onsubmit event handler
+  document.querySelector('#form').onclick = () => {
+
+    // Initialize POST request, extract the CSRF value from the index.html DOM,
+    // and put that into the header of the POST request
+    const request = new XMLHttpRequest();
+    const csrf_token = document.querySelector('#csrf').childNodes[1]['value'];
+    request.open('POST', '/test');
+    request.setRequestHeader("X-CSRFToken", csrf_token);
+
+    // Callback function for when request completes
+    request.onload = () => {
+      // console.log('request loaded');
+
+      // Extract JSON data from request
+      // const data = JSON.parse(request.responseText);
+      const data = request.responseText;
+      console.log(data);
+
+      // Update the result div
+      // if (data.success) {
+      //   document.querySelector('#result').innerHTML = 'Success.';
+      // } else {
+      //   document.querySelector('#result').innerHTML = 'There was an error.';
+      // };
+    };
+
+    // Add data to send with request
+    // const data = new FormData();
+    // data.append('currency', currency);
+
+    // Send request
+    request.send();
+    // return false;
+  };
+
 });
+
