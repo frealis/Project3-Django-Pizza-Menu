@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
       };
 
-      stage_items(size);
+      stage_items();
     };
     return checkbox;
   };
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
     td_id = obj.getAttribute('data-td_id');
     tr_id = obj.getAttribute('data-tr_id');
 
-    // console.log(size);
+    console.log(size);
 
     // HANDLE EXTRAS ---------------------------------
     if (data_extras === 'true') {
@@ -200,17 +200,17 @@ document.addEventListener('DOMContentLoaded', function() {
       if (name === '1 topping') {
         show_toppings(tr_id, size, 1);
       } else if (name === '2 toppings') {
-        show_toppings(tr_id, 2);
+        show_toppings(tr_id, size, 2);
       } else if (name === '3 toppings') {
-        show_toppings(tr_id, 3);
+        show_toppings(tr_id, size, 3);
       } if (name === '1 item') {
-        show_toppings(tr_id, 1);
+        show_toppings(tr_id, size, 1);
       } else if (name === '2 items') {
-        show_toppings(tr_id, 2);
+        show_toppings(tr_id, size, 2);
       } else if (name === '3 items') {
-        show_toppings(tr_id, 3);
+        show_toppings(tr_id, size, 3);
       } else if (name === 'Special') {
-        show_toppings(tr_id, 5);
+        show_toppings(tr_id, size, 5);
       };
 
       // Scenario 1: Handle a different checkbox being clicked, but on the same 
@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
       };
     };
 
-    stage_items(size);
+    stage_items();
   };
 
 
@@ -325,8 +325,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function show_toppings(tr_id, size, limit) {
 
-    // console.log(size);
-
     // Create a new row, <tr>, that includes list of toppings.
     const tr_toppings = document.createElement('tr');
     const td_toppings = document.createElement('td');
@@ -344,7 +342,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Create list of pizza toppings
       ul_toppings.append(create_list(topping));
 
-      // Create a checkbox, omitting the 'price' parameter
+      // Create a checkbox
       const br_extras = document.createElement('br');
       td_toppings_checkbox.append(create_checkbox(tr_id, topping, limit, price, size), br_extras);
     };
@@ -363,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Place currently selected items into a "staging area" that is visible on
   // index.html and updated everytime the select_item() function is called, or
   // everytime an extras or toppings checkbox is checked
-  function stage_items(size) {
+  function stage_items() {
     document.querySelector('#current_selections').innerHTML = '';
     document.querySelector('#total_price').innerHTML = '';
     x = document.querySelectorAll('[type="checkbox"]')
@@ -388,6 +386,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const ul = document.createElement('ul');
     for (let j = 0; j < selected_menu_items.length; j++) {
       const li = document.createElement('li');
+
+      size = selected_menu_items[j].dataset.size;
+      console.log(selected_menu_items[j]);
       li.append(selected_menu_items[j].dataset.group, ': ', selected_menu_items[j].name, ', ', size);
 
       // Append selected extras or toppings to their respective menu item

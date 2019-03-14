@@ -10,12 +10,13 @@
 </div>
 
 <div class="container">
-  <!-- <form action="{% url 'test' %}" method="post"> -->
 
-  <!-- MENU -->
+  <!-- <form action="{% url 'test' %}" method="post">
+  {% csrf_token %} -->
+
+  <!-- MENU ITEMS -->
   <div class="menu_items">
     <table id="table">
-      {% csrf_token %}
       <thead>
         <div id="storage" data-storage_toppings="{{ toppings }}" data-storage_extras="{{ extras }}"></div>
       </thead>
