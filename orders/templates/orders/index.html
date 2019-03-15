@@ -3,12 +3,15 @@
 {% block body %}
 <div id="result"></div>
 
-<div>
-  <h3>Hello, {{ user.first_name }}</h3>
-  <ul>
-      <li>Currently logged in as: {{ user.username }}</li>
-      <li><a href="{% url 'logout' %}">Logout</a></li>
-  </ul>
+<div class="padding10">
+  <div>
+      <h3>Hello, {{ user.first_name }}</h3>
+      <ul>
+          <li>Currently logged in as: {{ user.username }}</li>
+          <li><a href="{% url 'logout' %}">Logout</a></li>
+      </ul>
+      <button id="checkout">Checkout</button>
+  </div>
 </div>
 
 <div class="container">
@@ -134,21 +137,21 @@
     </table>
   </div>
 
-  <!-- STAGING AREA -->
+  <!-- SELECTIONS -->
   <div id="csrf">
     {% csrf_token %}
   </div>
-  <div class="staging_area">
-    <div class="header">
+  <div class="selections">
+    <div class="header width320">
       <div class="left">
         Selections:
       </div>
       <div class="right">
         <!-- <input type="submit" id="form" value="Add Selections to Order"> -->
-        <button id="form">Add to Order</button>
+        <button id="add_to_order">Add to Order</button>
       </div>
     </div>
-    <div class="staging_area_content">
+    <div>
       <p id="current_selections"></p>
       <p>Total: $<span id="total_price"></span></p>
     </div>

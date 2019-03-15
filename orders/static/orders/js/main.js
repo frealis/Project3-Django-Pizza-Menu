@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
       };
 
-      stage_items();
+      selections();
     };
     return checkbox;
   };
@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
       };
     };
 
-    stage_items();
+    selections();
   };
 
 
@@ -354,12 +354,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('tbody').insertBefore(tr_toppings, tbody.childNodes[index(tr_id) + 1]);
   };
 
-  // --------------------- STAGE ITEMS ---------------------
+  // --------------------- SELECTIONS ---------------------
 
   // Place currently selected items into a "staging area" that is visible on
   // index.html and updated everytime the select_item() function is called, or
   // everytime an extras or toppings checkbox is checked
-  function stage_items() {
+  function selections() {
     document.querySelector('#current_selections').innerHTML = '';
     document.querySelector('#total_price').innerHTML = '';
     x = document.querySelectorAll('[type="checkbox"]')
@@ -384,9 +384,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const ul = document.createElement('ul');
     for (let j = 0; j < selected_menu_items.length; j++) {
       const li = document.createElement('li');
-
-      size = selected_menu_items[j].dataset.size;
-      li.append(selected_menu_items[j].dataset.group, ': ', selected_menu_items[j].name, ', ', size);
+      if (selected_menu_items[j].dataset.size !== undefined) {
+        const size = selected_menu_items[j].dataset.size;
+        li.append(selected_menu_items[j].dataset.group, ': ', selected_menu_items[j].name, ', ', size);
+      } else if (selected_menu_items[j].dataset.size === undefined) {
+        console.log(size);
+        li.append(selected_menu_items[j].dataset.group, ': ', selected_menu_items[j].name);
+      };
 
       // Append selected extras or toppings to their respective menu item
       let total_extras_price = 0;
@@ -398,10 +402,8 @@ document.addEventListener('DOMContentLoaded', function() {
           li.append(br, '- ', selected_extras_toppings[k]['name']);
 
           // Add price if it exists (extras have a price, toppings don't)
-          if (selected_extras_toppings[k].dataset.price !== 'undefined') {
-            const extras_price = parseFloat(selected_extras_toppings[k].dataset.price)
-            total_extras_price += extras_price;
-          };
+          const extras_price = parseFloat(selected_extras_toppings[k].dataset.price)
+          total_extras_price += extras_price;
         };
       };
 
@@ -419,31 +421,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('#total_price').append(total_price.toFixed(2));
   };
 
-  // --------------------- SEND DATA ---------------------
+  // --------------------- ADD TO ORDER ---------------------
 
-  // Attach an *.onsubmit event handler
-  document.querySelector('#form').onclick = () => {
+  // Attach an *.onclick event handler
+  document.querySelector('#add_to_order').onclick = () => {
 
-    // Initialize POST request, extract the CSRF value from the index.html DOM,
-    // and put that into the header of the POST request
-    const request = new XMLHttpRequest();
-    const csrf_token = document.querySelector('#csrf').childNodes[1]['value'];
-    request.open('POST', '/test');
-    request.setRequestHeader("X-CSRFToken", csrf_token);
-
-    // Callback function for when request completes
-    request.onload = () => {
-      // console.log('request loaded');
-
-      // Extract responseText for fun
-      // const data = request.responseText;
-      // console.log(data);
-    };
-
-    // Add data to send with request
-    // const data = new FormData();
-
-    // Mimic what the stage_items() function does to gather data on selected
+    // Mimic what the selections() function does to gather data on selected
     // menu items, and any selected extras or toppings
     x = document.querySelectorAll('[type="checkbox"]')
     selected_menu_items = [];
@@ -466,7 +449,7 @@ document.addEventListener('DOMContentLoaded', function() {
       let value = selected_menu_items[j]['value'];
       let data_toppings = selected_menu_items[j].dataset.toppings;
       let data_size = selected_menu_items[j].dataset.size;
-      let dict = {
+      let attributes = {
         "data_group": data_group,
         "data_tr_id": data_tr_id,
         "data_td_id": data_td_id,
@@ -486,62 +469,61 @@ document.addEventListener('DOMContentLoaded', function() {
           // Handle pizza toppings
           if (selected_menu_items[j].dataset.group === 'Regular Pizza' || selected_menu_items[j].dataset.group === 'Sicilian Pizza') {
 
-            // Add toppings item to dict
+            // Add toppings item to attributes
             new_topping = selected_extras_toppings[k]['name'];
-            old_toppings = dict['toppings'];
+            old_toppings = attributes['toppings'];
             old_toppings.push(new_topping);
-            dict['toppings'] = old_toppings;
+            attributes['toppings'] = old_toppings;
           };
 
           // Handle sub extras
           if (selected_menu_items[j].dataset.group === 'Subs') {
 
-            // Add extras item to dict
+            // Add extras item to attributes
             new_extra = selected_extras_toppings[k]['name'];
-            old_extras = dict['extras'];
+            old_extras = attributes['extras'];
             old_extras.push(new_extra);
-            dict['extras'] = old_extras;
-            dict['extras_price'] += parseFloat(selected_extras_toppings[k].dataset.price)
+            attributes['extras'] = old_extras;
+            attributes['extras_price'] += parseFloat(selected_extras_toppings[k].dataset.price)
           };
-
-          console.log('dict', dict);
-
-
-
-          // Add price if it exists (extras have a price, toppings don't)
-          // if (selected_extras_toppings[k].dataset.price !== 'undefined') {
-          //   const extras_price = parseFloat(selected_extras_toppings[k].dataset.price)
-          // };
         };
       };
-
-
-
 
       // localStorage only stores strings, so you can convert dictionaries into 
       // strings when using *.setItem, and then back into dictionaries when
       // using *.getItem
-      localStorage.setItem(j, JSON.stringify(dict));
+      localStorage.setItem(j, JSON.stringify(attributes));
+    };
+    console.log(JSON.parse(localStorage.getItem(0)));
+  };
+
+  // --------------------- CHECKOUT ---------------------
+
+  // Attach an *.onclick event handler
+  document.querySelector('#checkout').onclick = () => {
+
+    // Initialize POST request, extract the CSRF value from the index.html DOM,
+    // and put that into the header of the POST request
+    const request = new XMLHttpRequest();
+    const csrf_token = document.querySelector('#csrf').childNodes[1]['value'];
+    request.open('POST', '/test');
+    request.setRequestHeader("X-CSRFToken", csrf_token);
+
+    // Callback function for when request completes
+    request.onload = () => {
+      // console.log('request loaded');
+
+      // Extract responseText for fun
+      // const data = request.responseText;
+      // console.log(data);
     };
 
-
-    // console.log(JSON.parse(localStorage.getItem(0)));
-
-
-
-
-    // z = localStorage.getItem("selected_menu_items");
-    // console.log(z);
-
-
-
-
-    // data.append('currency', currency);
+    // Add data to send with request
+    // const data = new FormData();
 
     // Send request
     request.send();
     // return false;
+
   };
-
 });
-

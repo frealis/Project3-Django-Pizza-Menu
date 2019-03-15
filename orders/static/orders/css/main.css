@@ -1,24 +1,31 @@
 .container {
-  background: #e2dac1;
-  border: 3px solid black;
+  /* background: #e2dac1; */
+  background: white;
+  /* border: 2px solid black; */
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   font-family: arial;
-  font-size: 18px;
-  margin: 0;
+  font-size: 16px;
+  margin: 0px;
   padding: 0;
   width: 720px;
 }
 
 .menu_items {
-  margin: 10px;
-  width: 400px;
+  background: rgb(240, 240, 240);
+  border: 2px solid green;
+  margin: 8px;
+  padding: 10px;
+  width: 320px;
 }
 
-.staging_area {
-  margin: 10px;
-  width: 280px;
+.selections {
+  background: rgb(240, 240, 240);
+  border: 2px solid green;
+  margin: 8px;
+  padding: 10px;
+  width: 320px;
 }
 
 .header {
@@ -26,7 +33,6 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
-  width: 270px;
 }
 
 .left{
@@ -35,6 +41,35 @@
 
 .right {
   justify-content: flex-end;
+}
+
+.blue {
+  background: blue;
+}
+
+.red {
+  background: red;
+}
+
+.padding10 {
+  padding: 10px;
+}
+
+.width320 {
+  width: 320px;
+}
+
+.width510 {
+  width: 510px;
+}
+
+.width1020 {
+  width: 1020px;
+}
+
+input[type='checkbox'] {
+  width: 10px;
+  margin: 0;
 }
 
 table {
