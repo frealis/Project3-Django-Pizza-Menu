@@ -380,7 +380,7 @@ document.addEventListener('DOMContentLoaded', function() {
       };
     };
   
-    // Append selected menu items to a list
+    // Append selected menu items to an unordered list <li>
     let total_price = 0;
     const ul = document.createElement('ul');
     for (let j = 0; j < selected_menu_items.length; j++) {
@@ -436,21 +436,90 @@ document.addEventListener('DOMContentLoaded', function() {
     request.onload = () => {
       // console.log('request loaded');
 
-      // Extract JSON data from request
-      // const data = JSON.parse(request.responseText);
-      const data = request.responseText;
-      console.log(data);
-
-      // Update the result div
-      // if (data.success) {
-      //   document.querySelector('#result').innerHTML = 'Success.';
-      // } else {
-      //   document.querySelector('#result').innerHTML = 'There was an error.';
-      // };
+      // Extract responseText for fun
+      // const data = request.responseText;
+      // console.log(data);
     };
 
     // Add data to send with request
     // const data = new FormData();
+
+    // Mimic what the stage_items() function does to gather data on selected
+    // menu items, and any selected extras or toppings
+    x = document.querySelectorAll('[type="checkbox"]')
+    selected_menu_items = [];
+    selected_extras_toppings = [];
+    for (let i = 0; i < x.length; i++) {
+      if (x[i].dataset.tr_id && x[i].checked) {
+        selected_menu_items.push(x[i]);
+      };
+      if (x[i]['className'] && x[i].checked) {
+        selected_extras_toppings.push(x[i]);
+      };
+    };
+
+    for (let j = 0; j < selected_menu_items.length; j++) {
+      let data_group = selected_menu_items[j].dataset.group;
+      let data_tr_id = selected_menu_items[j].dataset.tr_id;
+      let data_td_id = selected_menu_items[j].dataset.td_id;
+      let name = selected_menu_items[j]['name'];
+      let value = selected_menu_items[j]['value'];
+      let data_toppings = selected_menu_items[j].dataset.toppings;
+      let data_size = selected_menu_items[j].dataset.size;
+      let dict = {
+        "data_group": data_group,
+        "data_tr_id": data_tr_id,
+        "data_td_id": data_td_id,
+        "name": name,
+        "value": value,
+        "data_toppings": data_toppings,
+        "data_size": data_size,
+        "extras": [],
+        "toppings:": [],
+      }
+
+      // Associate selected extras or toppings to their respective menu item
+      for (let k = 0; k < selected_extras_toppings.length; k++) {
+        if (selected_menu_items[j].dataset.tr_id === selected_extras_toppings[k]['className']) {
+
+          // Add extras/toppings item to dict
+          new_extras_topping = selected_extras_toppings[k]['name'];
+          old_extras_toppings = dict['extras'];
+          old_extras_toppings.push(new_extras_topping);
+          dict['extras'] = old_extras_toppings;
+
+          // console.log('dict', dict);
+
+
+
+          // Add price if it exists (extras have a price, toppings don't)
+          // if (selected_extras_toppings[k].dataset.price !== 'undefined') {
+          //   const extras_price = parseFloat(selected_extras_toppings[k].dataset.price)
+          // };
+        };
+      };
+
+
+
+
+      // localStorage only stores strings, so you can convert dictionaries into 
+      // strings when using *.setItem, and then back into dictionaries when
+      // using *.getItem
+      localStorage.setItem(j, JSON.stringify(dict));
+    };
+
+
+    // console.log(JSON.parse(localStorage.getItem(0)));
+
+
+
+
+    // z = localStorage.getItem("selected_menu_items");
+    // console.log(z);
+
+
+
+
     // data.append('currency', currency);
 
     // Send request

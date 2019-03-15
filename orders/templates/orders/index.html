@@ -11,8 +11,6 @@
   </ul>
 </div>
 
-<!-- <form action="{% url 'test' %}" method="post">
-{% csrf_token %} -->
 <div class="container">
 
   <!-- MENU ITEMS -->
@@ -137,11 +135,9 @@
   </div>
 
   <!-- STAGING AREA -->
-  <!-- <form action="{% url 'test' %}" method="post"> -->
   <div id="csrf">
     {% csrf_token %}
   </div>
-
   <div class="staging_area">
     <div class="header">
       <div class="left">
@@ -152,15 +148,11 @@
         <button id="form">Add to Order</button>
       </div>
     </div>
-  
     <div class="staging_area_content">
       <p id="current_selections"></p>
       <p>Total: $<span id="total_price"></span></p>
     </div>
   </div>
 
-  <!-- </form> -->
-
 </div>
-<!-- </form> -->
 {% endblock %}
