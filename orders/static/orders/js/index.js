@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
 
+  // Reloads page if user hits the "Back" button
+  // https://stackoverflow.com/questions/20899274/how-to-refresh-page-on-back-button-click
+  if(!!window.performance && window.performance.navigation.type === 2) {
+    console.log('Reloading');
+    window.location.reload();
+  }
+
   // Retrieve extras and toppings items data from <div> located within <thead>
   // on index.html, which gets serialized in views.py before retrieval here
   storage = document.querySelector('#storage');
@@ -14,11 +21,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   };
 
-  // List of dictionaries used to keep track of active menu item selections and
-  // initialize total price & add it to the DOM on initial page load
+  // Create list to keep track of active menu item selections, initialize total 
+  // price, count number of items ordered from previous sessions that are saved
+  // in localStorage, & add to the DOM on initial page load
   active_selections = []
   let total_price = 0;
   document.querySelector('#total_price').append(total_price.toFixed(2));
+  document.querySelector('#number_of_items_ordered').innerHTML = localStorage.length  
 
   // --------------------- CREATE CHECKBOX ---------------------
 
@@ -39,12 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Built-in anonymous onclick function for each checkbox
     checkbox.onclick = function() {
-      // console.log('tr_id: ', tr_id);
-      // console.log('name', name);
-      // console.log('limit', limit);
-      // console.log('price', price);
-      // console.log('size', size);
-
       let count = 0;
       list = document.getElementsByClassName(tr_id);
 
@@ -68,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
       };
 
-      stage_items(size);
+      selections();
     };
     return checkbox;
   };
@@ -152,8 +155,6 @@ document.addEventListener('DOMContentLoaded', function() {
     td_id = obj.getAttribute('data-td_id');
     tr_id = obj.getAttribute('data-tr_id');
 
-    // console.log(size);
-
     // HANDLE EXTRAS ---------------------------------
     if (data_extras === 'true') {
 
@@ -200,17 +201,17 @@ document.addEventListener('DOMContentLoaded', function() {
       if (name === '1 topping') {
         show_toppings(tr_id, size, 1);
       } else if (name === '2 toppings') {
-        show_toppings(tr_id, 2);
+        show_toppings(tr_id, size, 2);
       } else if (name === '3 toppings') {
-        show_toppings(tr_id, 3);
+        show_toppings(tr_id, size, 3);
       } if (name === '1 item') {
-        show_toppings(tr_id, 1);
+        show_toppings(tr_id, size, 1);
       } else if (name === '2 items') {
-        show_toppings(tr_id, 2);
+        show_toppings(tr_id, size, 2);
       } else if (name === '3 items') {
-        show_toppings(tr_id, 3);
+        show_toppings(tr_id, size, 3);
       } else if (name === 'Special') {
-        show_toppings(tr_id, 5);
+        show_toppings(tr_id, size, 5);
       };
 
       // Scenario 1: Handle a different checkbox being clicked, but on the same 
@@ -241,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
       };
     };
 
-    stage_items(size);
+    selections();
   };
 
 
@@ -276,10 +277,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Display extras' prices
         const br_price = document.createElement('br');
-        if (size === 'small') {
+        if (size === 'Small') {
           td_extras_price.append('+ ', extra_price_sm, br_price);
           price = extra_price_sm;
-        } else if (size === 'large') {
+        } else if (size === 'Large') {
           td_extras_price.append('+ ', extra_price_lg, br_price);
           price = extra_price_lg;
         };
@@ -297,16 +298,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
           // Display 'Extra Cheese' price for all subs
           const br_extras_prices = document.createElement('br');
-          if (size === 'small') {
+          if (size === 'Small') {
             td_extras_price.append('+ ', extra_price_sm, br_extras_prices);
             price = extra_price_sm;
-          } else if (size === 'large') {
+          } else if (size === 'Large') {
             td_extras_price.append('+ ', extra_price_lg, br_extras_prices);
             price = extra_price_lg;
           };
 
           // Create a checkbox
-
           td_extras_checkbox.append(create_checkbox(tr_id, extra, limit, price, size));
         };
       };
@@ -325,8 +325,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function show_toppings(tr_id, size, limit) {
 
-    // console.log(size);
-
     // Create a new row, <tr>, that includes list of toppings.
     const tr_toppings = document.createElement('tr');
     const td_toppings = document.createElement('td');
@@ -344,7 +342,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Create list of pizza toppings
       ul_toppings.append(create_list(topping));
 
-      // Create a checkbox, omitting the 'price' parameter
+      // Create a checkbox
       const br_extras = document.createElement('br');
       td_toppings_checkbox.append(create_checkbox(tr_id, topping, limit, price, size), br_extras);
     };
@@ -358,12 +356,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('tbody').insertBefore(tr_toppings, tbody.childNodes[index(tr_id) + 1]);
   };
 
-  // --------------------- STAGE ITEMS ---------------------
+  // --------------------- SELECTIONS ---------------------
 
   // Place currently selected items into a "staging area" that is visible on
   // index.html and updated everytime the select_item() function is called, or
   // everytime an extras or toppings checkbox is checked
-  function stage_items(size) {
+  function selections() {
     document.querySelector('#current_selections').innerHTML = '';
     document.querySelector('#total_price').innerHTML = '';
     x = document.querySelectorAll('[type="checkbox"]')
@@ -383,12 +381,17 @@ document.addEventListener('DOMContentLoaded', function() {
       };
     };
   
-    // Append selected menu items to a list
+    // Append selected menu items to an unordered list <li>
     let total_price = 0;
     const ul = document.createElement('ul');
     for (let j = 0; j < selected_menu_items.length; j++) {
       const li = document.createElement('li');
-      li.append(selected_menu_items[j].dataset.group, ': ', selected_menu_items[j].name, ', ', size);
+      if (selected_menu_items[j].dataset.size !== undefined) {
+        const size = selected_menu_items[j].dataset.size;
+        li.append(selected_menu_items[j].dataset.group, ': ', selected_menu_items[j].name, ', ', size);
+      } else if (selected_menu_items[j].dataset.size === undefined) {
+        li.append(selected_menu_items[j].dataset.group, ': ', selected_menu_items[j].name);
+      };
 
       // Append selected extras or toppings to their respective menu item
       let total_extras_price = 0;
@@ -400,11 +403,8 @@ document.addEventListener('DOMContentLoaded', function() {
           li.append(br, '- ', selected_extras_toppings[k]['name']);
 
           // Add price if it exists (extras have a price, toppings don't)
-          if (selected_extras_toppings[k].dataset.price !== 'undefined') {
-            const extras_price = parseFloat(selected_extras_toppings[k].dataset.price)
-            // console.log(selected_extras_toppings[k].dataset.price);
-            total_extras_price += extras_price;
-          };
+          const extras_price = parseFloat(selected_extras_toppings[k].dataset.price)
+          total_extras_price += extras_price;
         };
       };
 
@@ -412,9 +412,6 @@ document.addEventListener('DOMContentLoaded', function() {
       // the total price
       const br = document.createElement('br');
       const total_price_individual = parseFloat(selected_menu_items[j].value) + total_extras_price
-      
-      // console.log(parseFloat(selected_menu_items[j].value));
-      
       li.append(br, '$', total_price_individual.toFixed(2));
       ul.append(li);
       total_price += total_price_individual;
@@ -423,5 +420,84 @@ document.addEventListener('DOMContentLoaded', function() {
     // Place selected items and total price into the DOM
     document.querySelector('#current_selections').appendChild(ul);
     document.querySelector('#total_price').append(total_price.toFixed(2));
+  };
+
+  // --------------------- ADD TO ORDER ---------------------
+
+  // Attach an *.onclick event handler
+  document.querySelector('#add_to_order').onclick = () => {
+
+    // Mimic what the selections() function does to gather data on selected
+    // menu items, and any selected extras or toppings
+    x = document.querySelectorAll('[type="checkbox"]')
+    selected_menu_items = [];
+    selected_extras_toppings = [];
+    for (let i = 0; i < x.length; i++) {
+      if (x[i].dataset.tr_id && x[i].checked) {
+        selected_menu_items.push(x[i]);
+      };
+      if (x[i]['className'] && x[i].checked) {
+        selected_extras_toppings.push(x[i]);
+      };
+    };
+
+    // Store every attribute from any selected checkboxes as key:value pairs
+    let previous_localStorage_length = localStorage.length;
+    for (let j = 0; j < selected_menu_items.length; j++) {
+      let data_group = selected_menu_items[j].dataset.group;
+      let data_tr_id = selected_menu_items[j].dataset.tr_id;
+      let data_td_id = selected_menu_items[j].dataset.td_id;
+      let name = selected_menu_items[j]['name'];
+      let value = selected_menu_items[j]['value'];
+      let data_toppings = selected_menu_items[j].dataset.toppings;
+      let data_size = selected_menu_items[j].dataset.size;
+      let attributes = {
+        "data_group": data_group,
+        "data_tr_id": data_tr_id,
+        "data_td_id": data_td_id,
+        "name": name,
+        "value": value,
+        "data_toppings": data_toppings,
+        "data_size": data_size,
+        "extras": [],
+        "extras_price": 0,
+        "toppings": [],
+      }
+
+      // Associate selected extras or toppings with their respective menu item
+      for (let k = 0; k < selected_extras_toppings.length; k++) {
+        if (selected_menu_items[j].dataset.tr_id === selected_extras_toppings[k]['className']) {
+
+          // Handle pizza toppings
+          if (selected_menu_items[j].dataset.group === 'Regular Pizza' || selected_menu_items[j].dataset.group === 'Sicilian Pizza') {
+
+            // Add toppings item to attributes
+            new_topping = selected_extras_toppings[k]['name'];
+            old_toppings = attributes['toppings'];
+            old_toppings.push(new_topping);
+            attributes['toppings'] = old_toppings;
+          };
+
+          // Handle sub extras
+          if (selected_menu_items[j].dataset.group === 'Subs') {
+
+            // Add extras item to attributes
+            new_extra = selected_extras_toppings[k]['name'];
+            old_extras = attributes['extras'];
+            old_extras.push(new_extra);
+            attributes['extras'] = old_extras;
+            attributes['extras_price'] += parseFloat(selected_extras_toppings[k].dataset.price)
+          };
+        };
+      };
+
+      // localStorage only stores strings, so you can convert dictionaries into 
+      // strings when using *.setItem, and then back into dictionaries when
+      // using *.getItem
+      localStorage.setItem(j + previous_localStorage_length, JSON.stringify(attributes));
+    };
+
+    // Update number of items ordered displayed in DOM
+    document.querySelector('#number_of_items_ordered').innerHTML = localStorage.length  
   };
 });

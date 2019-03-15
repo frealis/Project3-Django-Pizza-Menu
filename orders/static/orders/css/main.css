@@ -1,39 +1,101 @@
+.arial {
+  font-family: Arial;
+}
+
+.blue {
+  background: blue;
+}
+
 .container {
-  background: #e2dac1;
-  border: 3px solid black;
+  /* background: #e2dac1; */
+  background: white;
+  /* border: 2px solid black; */
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  font-family: arial;
-  font-size: 18px;
-  margin: 0;
+  font-family: Arial;
+  font-size: 16px;
+  margin: auto;
   padding: 0;
   width: 720px;
 }
 
 .menu_items {
-  margin: 10px;
-  width: 400px;
+  background: rgb(240, 240, 240);
+  border: 2px solid green;
+  margin: 8px;
+  padding: 10px;
+  width: 320px;
 }
 
-.staging_area {
-  margin: 10px;
-  width: 280px;
-}
-
-.staging_area_header {
+.header {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: space-between;
 }
 
-.staging_area_header_left{
-  flex: 1;
+.left{
+  justify-content: flex-start;
 }
 
-.staging_area_header_right {
-  margin-left: auto;
+.right {
   justify-content: flex-end;
+}
+
+.selections {
+  background: rgb(240, 240, 240);
+  border: 2px solid green;
+  margin: 8px;
+  padding: 10px;
+  width: 320px;
+}
+
+.orders {
+  background: rgb(240, 240, 240);
+  border: 2px solid green;
+  margin: auto;
+  padding: 10px;
+  width: 320px;
+}
+
+.padding10 {
+  padding: 10px;
+}
+
+.red {
+  background: red;
+}
+
+.width320 {
+  width: 320px;
+}
+
+.width510 {
+  width: 510px;
+}
+
+.width1020 {
+  width: 1020px;
+}
+
+/* https://www.w3schools.com/w3css/4/w3.css */
+
+.w3-badge,.w3-tag {
+  background-color:#000;
+  color:#fff;
+  display:inline-block;
+  margin-top: 10px;
+  padding-left:8px;
+  padding-right:8px;
+  text-align:center
+}
+
+.w3-badge{border-radius:50%}
+
+input[type='checkbox'] {
+  width: 10px;
+  margin: 0;
 }
 
 table {

@@ -1,21 +1,34 @@
 {% extends "orders/base.html" %}
+{% load static %}
 
+<!-- Title -->
+{% block title %} Menu {% endblock %}
+
+<!-- JavaScript -->
+{% block js %} <script src="{% static 'js/index.js' %}"></script> {% endblock %}
+
+<!-- Body -->
 {% block body %}
-<div>
-  <h3>Hello, {{ user.first_name }}</h3>
-  <ul>
-      <li>Currently logged in as: {{ user.username }}</li>
-      <li><a href="{% url 'logout' %}">Logout</a></li>
-  </ul>
+
+<div class="arial padding10">
+  <div>
+      <h3>Hello, {{ user.first_name }}</h3>
+      <ul>
+          <li>Currently logged in as: {{ user.username }}</li>
+          <li><a href="{% url 'logout' %}">Logout</a></li>
+      </ul>
+      <form action="{% url 'orders' %}" method="get">
+        <button>View Orders</button>
+      </form>
+      <span id="number_of_items_ordered" class="w3-badge">0</span> items ordered
+  </div>
 </div>
 
 <div class="container">
-  <!-- <form action="{% url 'test' %}" method="post"> -->
 
-  <!-- MENU -->
+  <!-- MENU ITEMS -->
   <div class="menu_items">
     <table id="table">
-      {% csrf_token %}
       <thead>
         <div id="storage" data-storage_toppings="{{ toppings }}" data-storage_extras="{{ extras }}"></div>
       </thead>
@@ -134,23 +147,23 @@
     </table>
   </div>
 
-  <!-- STAGING AREA -->
-  <div class="staging_area">
-    <div class="staging_area_header">
-      <div class="staging_area_header_left">
+  <!-- SELECTIONS -->
+  <div class="selections">
+    <div class="header width320">
+      <div class="left">
         Selections:
       </div>
-      <div class="staging_area_header_right">
-        <input type="submit" value="Add Selections to Order">
+      <div class="right">
+        <!-- <input type="submit" id="form" value="Add Selections to Order"> -->
+        <button id="add_to_order">Add to Order</button>
       </div>
     </div>
-  
-    <div class="staging_area_content">
+    <div>
       <p id="current_selections"></p>
       <p>Total: $<span id="total_price"></span></p>
     </div>
   </div>
 
-  <!-- </form> -->
 </div>
+
 {% endblock %}
