@@ -1,3 +1,11 @@
+.arial {
+  font-family: Arial;
+}
+
+.blue {
+  background: blue;
+}
+
 .container {
   /* background: #e2dac1; */
   background: white;
@@ -5,22 +13,14 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  font-family: arial;
+  font-family: Arial;
   font-size: 16px;
-  margin: 0px;
+  margin: auto;
   padding: 0;
   width: 720px;
 }
 
 .menu_items {
-  background: rgb(240, 240, 240);
-  border: 2px solid green;
-  margin: 8px;
-  padding: 10px;
-  width: 320px;
-}
-
-.selections {
   background: rgb(240, 240, 240);
   border: 2px solid green;
   margin: 8px;
@@ -43,16 +43,28 @@
   justify-content: flex-end;
 }
 
-.blue {
-  background: blue;
+.selections {
+  background: rgb(240, 240, 240);
+  border: 2px solid green;
+  margin: 8px;
+  padding: 10px;
+  width: 320px;
 }
 
-.red {
-  background: red;
+.orders {
+  background: rgb(240, 240, 240);
+  border: 2px solid green;
+  margin: auto;
+  padding: 10px;
+  width: 320px;
 }
 
 .padding10 {
   padding: 10px;
+}
+
+.red {
+  background: red;
 }
 
 .width320 {
@@ -66,6 +78,20 @@
 .width1020 {
   width: 1020px;
 }
+
+/* https://www.w3schools.com/w3css/4/w3.css */
+
+.w3-badge,.w3-tag {
+  background-color:#000;
+  color:#fff;
+  display:inline-block;
+  margin-top: 10px;
+  padding-left:8px;
+  padding-right:8px;
+  text-align:center
+}
+
+.w3-badge{border-radius:50%}
 
 input[type='checkbox'] {
   width: 10px;

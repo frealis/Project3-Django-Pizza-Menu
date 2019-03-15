@@ -1,16 +1,26 @@
 {% extends "orders/base.html" %}
+{% load static %}
 
+<!-- Title -->
+{% block title %} Menu {% endblock %}
+
+<!-- JavaScript -->
+{% block js %} <script src="{% static 'js/index.js' %}"></script> {% endblock %}
+
+<!-- Body -->
 {% block body %}
-<div id="result"></div>
 
-<div class="padding10">
+<div class="arial padding10">
   <div>
       <h3>Hello, {{ user.first_name }}</h3>
       <ul>
           <li>Currently logged in as: {{ user.username }}</li>
           <li><a href="{% url 'logout' %}">Logout</a></li>
       </ul>
-      <button id="checkout">Checkout</button>
+      <form action="{% url 'orders' %}" method="get">
+        <button>View Orders</button>
+      </form>
+      <span id="number_of_items_ordered" class="w3-badge">0</span> items ordered
   </div>
 </div>
 
@@ -138,9 +148,6 @@
   </div>
 
   <!-- SELECTIONS -->
-  <div id="csrf">
-    {% csrf_token %}
-  </div>
   <div class="selections">
     <div class="header width320">
       <div class="left">
@@ -158,4 +165,5 @@
   </div>
 
 </div>
+
 {% endblock %}
