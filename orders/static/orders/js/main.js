@@ -475,6 +475,7 @@ document.addEventListener('DOMContentLoaded', function() {
         "data_toppings": data_toppings,
         "data_size": data_size,
         "extras": [],
+        "extras_price": 0,
         "toppings": [],
       }
 
@@ -500,6 +501,7 @@ document.addEventListener('DOMContentLoaded', function() {
             old_extras = dict['extras'];
             old_extras.push(new_extra);
             dict['extras'] = old_extras;
+            dict['extras_price'] += parseFloat(selected_extras_toppings[k].dataset.price)
           };
 
           console.log('dict', dict);
