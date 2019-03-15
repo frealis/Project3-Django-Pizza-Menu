@@ -458,6 +458,7 @@ document.addEventListener('DOMContentLoaded', function() {
       };
     };
 
+    // Store every attribute from any selected checkboxes as key:value pairs
     for (let j = 0; j < selected_menu_items.length; j++) {
       let data_group = selected_menu_items[j].dataset.group;
       let data_tr_id = selected_menu_items[j].dataset.tr_id;
@@ -475,20 +476,34 @@ document.addEventListener('DOMContentLoaded', function() {
         "data_toppings": data_toppings,
         "data_size": data_size,
         "extras": [],
-        "toppings:": [],
+        "toppings": [],
       }
 
       // Associate selected extras or toppings to their respective menu item
       for (let k = 0; k < selected_extras_toppings.length; k++) {
         if (selected_menu_items[j].dataset.tr_id === selected_extras_toppings[k]['className']) {
 
-          // Add extras/toppings item to dict
-          new_extras_topping = selected_extras_toppings[k]['name'];
-          old_extras_toppings = dict['extras'];
-          old_extras_toppings.push(new_extras_topping);
-          dict['extras'] = old_extras_toppings;
+          // Handle pizza toppings
+          if (selected_menu_items[j].dataset.group === 'Regular Pizza' || selected_menu_items[j].dataset.group === 'Sicilian Pizza') {
 
-          // console.log('dict', dict);
+            // Add toppings item to dict
+            new_topping = selected_extras_toppings[k]['name'];
+            old_toppings = dict['toppings'];
+            old_toppings.push(new_topping);
+            dict['toppings'] = old_toppings;
+          };
+
+          // Handle sub extras
+          if (selected_menu_items[j].dataset.group === 'Subs') {
+
+            // Add extras item to dict
+            new_extra = selected_extras_toppings[k]['name'];
+            old_extras = dict['extras'];
+            old_extras.push(new_extra);
+            dict['extras'] = old_extras;
+          };
+
+          console.log('dict', dict);
 
 
 
