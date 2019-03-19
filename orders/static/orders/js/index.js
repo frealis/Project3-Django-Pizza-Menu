@@ -383,8 +383,8 @@ document.addEventListener('DOMContentLoaded', function() {
   
     // Append selected menu items to an unordered list <li>
     let total_price = 0;
-    const ul = document.createElement('ul');
     for (let j = 0; j < selected_menu_items.length; j++) {
+      const ul = document.createElement('ul');
       const li = document.createElement('li');
       if (selected_menu_items[j].dataset.size !== undefined) {
         const size = selected_menu_items[j].dataset.size;
@@ -415,10 +415,12 @@ document.addEventListener('DOMContentLoaded', function() {
       li.append(br, '$', total_price_individual.toFixed(2));
       ul.append(li);
       total_price += total_price_individual;
+
+      // Place selected items and total price into the DOM
+      document.querySelector('#current_selections').appendChild(ul);
     };
 
-    // Place selected items and total price into the DOM
-    document.querySelector('#current_selections').appendChild(ul);
+    // Append total price to the DOM
     document.querySelector('#total_price').append(total_price.toFixed(2));
   };
 

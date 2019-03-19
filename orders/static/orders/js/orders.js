@@ -73,5 +73,5 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 
   // Append the total price to the DOM
-  document.querySelector('#total_price').append(total_price);
+  document.querySelector('#total_price').append(total_price.toFixed(2));
 });
