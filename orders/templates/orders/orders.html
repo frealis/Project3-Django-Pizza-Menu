@@ -23,13 +23,22 @@
   </div>
 </div>
   
-  <div class="container">
-  
-    <!-- ORDERS -->
-    <div class="orders">
-      Orders:
+<!-- Display Order -->
+<div class="container">
+  <div class="orders">
+    <div class="header width320">
+      <div class="left">
+        Order:
+      </div>
+      <div class="right">
+        <button id="checkout">Checkout</button>
+      </div>
     </div>
-  
+    <div>
+      <div id="display_orders"></div>
+      <div>Total: $<span id="total_price"></span></div>
+    </div>
   </div>
+</div>
 
 {% endblock %}
