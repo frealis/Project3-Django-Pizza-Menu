@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
         hide(obj, del_scenario_2, del_scenario_2.length);
       };
     };
-
+    
     selections();
   };
 
@@ -496,6 +496,9 @@ document.addEventListener('DOMContentLoaded', function() {
       // using *.getItem
       localStorage.setItem(j + previous_localStorage_length, JSON.stringify(attributes));
     };
+
+    // Reload in order to clear all checkboxes and displayed selections
+    window.location.reload();
 
     // Update number of items ordered displayed in DOM
     document.querySelector('#number_of_items_ordered').innerHTML = localStorage.length  
