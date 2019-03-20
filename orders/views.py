@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from orders.models import MenuItem, Topping, Extra, OrderHistory
 
+
 # Create your views here.
 
 # Index
@@ -70,9 +71,32 @@ def orders_view(request):
   
   if request.method == 'POST':
 
-    print(request.POST)
+    print('request.POST: ', request.POST)
 
-    return render(request, "orders/success.html")
+    # from orders.models import OrderHistory
+
+    # f = Flight.objects.get(pk=5)
+    # p = Passenger(first="Alice", last="Adams")
+    # p.save()
+
+    # add = OrderHistory(
+    #         data_group=request.POST['data_group'],
+    #         data_size=request.POST['data_size'],
+    #         extras=request.POST['extras'],
+    #         extras_price=request.POST['extras_price'],
+    #         name=request.POST['name'],
+    #         price=request.POST['price'],
+    #         toppings=request.POST['toppings'],
+    #         user=request.POST['user'],
+    #       )
+    # add.save()
+
+    # print('add: ', add)
+    # print('OrderHistory: ', OrderHistory.data_group)
+
+    # print('OrderHistory.objects.all(): ', OrderHistory.objects.all())
+
+  return HttpResponse('Success!')
 
 # Success
 def success_view(request):
