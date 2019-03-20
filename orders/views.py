@@ -4,7 +4,7 @@ from django.core import serializers
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from orders.models import MenuItem, Topping, Extra
+from orders.models import MenuItem, Topping, Extra, OrderHistory
 
 # Create your views here.
 
@@ -65,6 +65,15 @@ def register_view(request):
 
 # Orders
 def orders_view(request):
-  print('============= orders_view() called =============')
+  if request.method == 'GET':
+    return render(request, "orders/orders.html")
+  
+  if request.method == 'POST':
 
-  return render(request, "orders/orders.html")
+    print(request.POST)
+
+    return render(request, "orders/success.html")
+
+# Success
+def success_view(request):
+  return render(request, "orders/success.html")

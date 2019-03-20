@@ -6,6 +6,11 @@
   background: blue;
 }
 
+.center {
+  display: flex;
+  justify-content: center;
+}
+
 .container {
   /* background: #e2dac1; */
   background: white;
@@ -36,10 +41,12 @@
 }
 
 .left{
+  display: flex;
   justify-content: flex-start;
 }
 
 .right {
+  display: flex;
   justify-content: flex-end;
 }
 
@@ -65,6 +72,18 @@
 
 .red {
   background: red;
+}
+
+.success {
+  background: rgb(240, 240, 240);
+  border: 2px solid green;
+  margin: auto;
+  padding: 10px;
+  width: 320px;
+}
+
+.text_center {
+  text-align: center;
 }
 
 .width320 {
