@@ -89,13 +89,18 @@ def orders_view(request):
       import stripe
       stripe.api_key = "sk_test_1xe9xL3ilJwRXLABHF1JfPhL00QFOSOlPx"
 
+      # Stripe requires the amount to be in the smallest unit of currency, ie.
+      # pennies in the US
+      price = int(float(request.POST['price'] + request.POST['extras_price']) * 100)
+
       charge = stripe.Charge.create(
-      amount=2000,
+      amount=price,
       currency="usd",
       source="tok_visa", # obtained with Stripe.js
-      metadata={'order_id': '6735'}
+      description=("Charge for " + request.POST['user']),
       )
       pass
+
     except stripe.error.CardError as e:
       # Since it's a decline, stripe.error.CardError will be caught
       body = e.json_body
@@ -129,7 +134,6 @@ def orders_view(request):
       pass
 
     print(charge)
-
 
   return HttpResponse('Success!')
 
