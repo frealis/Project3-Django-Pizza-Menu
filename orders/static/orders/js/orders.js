@@ -22,6 +22,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // --------------------- DISPLAY ORDER ---------------------
 
+  // Enable the "Place Order" button if at least 1 order item exists
+  document.querySelector('#place_order').disabled = true;
+  for (let i = 0; i < localStorage.length; i++) {
+    if (JSON.parse(localStorage.getItem(i))['user'] === user) {
+      document.querySelector('#place_order').disabled = false;
+    };
+  };
+
   // Retrieve and display items from localStorage
   for (let i = 0; i < localStorage.length; i++) {
     if (JSON.parse(localStorage.getItem(i))['user'] === user) {
@@ -69,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // into the DOM
       const ul = document.createElement('ul');
       ul.append(li);
-      document.querySelector('#display_orders').append(ul);
+      document.querySelector('#display_orders').append(ul);``
 
       // Add the price of each item, plus any extras from subs, to the total price
       total_price += price + total_extras_price;
@@ -112,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage_data.append('price',         price);
         localStorage_data.append('user',          user);
 
-        console.log(JSON.parse(localStorage.getItem(i)));
+        // console.log(JSON.parse(localStorage.getItem(i)));
       };
     };
 
@@ -130,6 +138,5 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.removeItem(i);
       };
     };
-
   };
 });

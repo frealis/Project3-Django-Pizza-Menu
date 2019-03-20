@@ -24,9 +24,9 @@ class Extra(models.Model):
     return f"{self.item}"
 
 class OrderHistory(models.Model):
+  created       = models.DateTimeField(auto_now_add=True)
   data_group    = models.CharField(max_length=64, default=None)
   data_size     = models.CharField(max_length=64, default=None)
-  date_ordered  = models.DateTimeField(auto_now_add=True)
   extras        = models.CharField(max_length=64, default=None)
   extras_price  = models.DecimalField(max_digits=5, decimal_places=2, default=None)
   name          = models.CharField(max_length=64, default=None)
@@ -34,4 +34,4 @@ class OrderHistory(models.Model):
   toppings      = models.CharField(max_length=64, default=None)
   user          = models.CharField(max_length=64, default=None)
   def __str__(self):
-    return f"data_group: {self.data_group} | data_size: {self.data_size} | date_ordered: {self.date_ordered} | extras: {self.extras} | extras_price: {self.extras_price} | name: {self.name} | price: {self.price} | toppings: {self.toppings} | user: {self.user}"
+    return f"created: {self.created} | data_group: {self.data_group} | data_size: {self.data_size} | extras: {self.extras} | extras_price: {self.extras_price} | name: {self.name} | price: {self.price} | toppings: {self.toppings} | user: {self.user}"
