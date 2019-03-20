@@ -26,22 +26,12 @@ class Extra(models.Model):
 class OrderHistory(models.Model):
   data_group    = models.CharField(max_length=64, default=None)
   data_size     = models.CharField(max_length=64, default=None)
+  date_ordered  = models.DateTimeField(auto_now_add=True)
   extras        = models.CharField(max_length=64, default=None)
   extras_price  = models.DecimalField(max_digits=5, decimal_places=2, default=None)
   name          = models.CharField(max_length=64, default=None)
-  toppings      = models.CharField(max_length=64, default=None)
   price         = models.DecimalField(max_digits=5, decimal_places=2, default=None)
+  toppings      = models.CharField(max_length=64, default=None)
   user          = models.CharField(max_length=64, default=None)
   def __str__(self):
-    return f"User: {self.user}"
-
-# class ShoppingCart(models.Model):
-#   user          = models.CharField(max_length=64)
-#   menu_item_id  = models.IntegerField()
-#   menu_item     = models.ManyToManyField(
-#                     MenuItem, 
-#                     blank=True, 
-#                     related_name="order_history",
-#                   )
-#   def __str__(self):
-#     return f"User: {self.user} | MenuItem ID: {self.menu_item_id} | MenuItem: {self.menu_item}"
+    return f"data_group: {self.data_group} | data_size: {self.data_size} | date_ordered: {self.date_ordered} | extras: {self.extras} | extras_price: {self.extras_price} | name: {self.name} | price: {self.price} | toppings: {self.toppings} | user: {self.user}"
