@@ -69,17 +69,17 @@ def orders_view(request):
   if request.method == 'POST':
 
     # Save order data to the database
-    add = OrderHistory(
-            data_group=request.POST['data_group'],
-            data_size=request.POST['data_size'],
-            extras=request.POST['extras'],
-            extras_price=request.POST['extras_price'],
-            name=request.POST['name'],
-            price=request.POST['price'],
-            toppings=request.POST['toppings'],
-            user=request.POST['user'],
-          )
-    add.save()
+    # add = OrderHistory(
+    #         data_group=request.POST['data_group'],
+    #         data_size=request.POST['data_size'],
+    #         extras=request.POST['extras'],
+    #         extras_price=request.POST['extras_price'],
+    #         name=request.POST['name'],
+    #         price=request.POST['price'],
+    #         toppings=request.POST['toppings'],
+    #         user=request.POST['user'],
+    #       )
+    # add.save()
 
     # Make API request to Stripe to create a charge
     # Set your secret key: remember to change this to your live secret key in production
