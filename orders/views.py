@@ -6,9 +6,6 @@ from django.shortcuts import render
 from django.urls import reverse
 from orders.models import MenuItem, Topping, Extra, OrderHistory
 
-
-# Create your views here.
-
 # Index
 def index(request):
   if not request.user.is_authenticated:
@@ -71,30 +68,68 @@ def orders_view(request):
   
   if request.method == 'POST':
 
-    print('request.POST: ', request.POST)
+    # Save order data to the database
+    add = OrderHistory(
+            data_group=request.POST['data_group'],
+            data_size=request.POST['data_size'],
+            extras=request.POST['extras'],
+            extras_price=request.POST['extras_price'],
+            name=request.POST['name'],
+            price=request.POST['price'],
+            toppings=request.POST['toppings'],
+            user=request.POST['user'],
+          )
+    add.save()
 
-    # from orders.models import OrderHistory
+    # Make API request to Stripe to create a charge
+    # Set your secret key: remember to change this to your live secret key in production
+    # See your keys here: https://dashboard.stripe.com/account/apikeys    
+    try:
+      # Use Stripe's library to make requests...
+      import stripe
+      stripe.api_key = "sk_test_1xe9xL3ilJwRXLABHF1JfPhL00QFOSOlPx"
 
-    # f = Flight.objects.get(pk=5)
-    # p = Passenger(first="Alice", last="Adams")
-    # p.save()
+      charge = stripe.Charge.create(
+      amount=2000,
+      currency="usd",
+      source="tok_visa", # obtained with Stripe.js
+      metadata={'order_id': '6735'}
+      )
+      pass
+    except stripe.error.CardError as e:
+      # Since it's a decline, stripe.error.CardError will be caught
+      body = e.json_body
+      err  = body.get('error', {})
 
-    # add = OrderHistory(
-    #         data_group=request.POST['data_group'],
-    #         data_size=request.POST['data_size'],
-    #         extras=request.POST['extras'],
-    #         extras_price=request.POST['extras_price'],
-    #         name=request.POST['name'],
-    #         price=request.POST['price'],
-    #         toppings=request.POST['toppings'],
-    #         user=request.POST['user'],
-    #       )
-    # add.save()
+      print("Status is: %s" % e.http_status)
+      print("Type is: %s" % err.get('type'))
+      print("Code is: %s" % err.get('code'))
+      # param is '' in this case
+      print("Param is: %s" % err.get('param'))
+      print("Message is: %s" % err.get('message'))
+    except stripe.error.RateLimitError as e:
+      # Too many requests made to the API too quickly
+      pass
+    except stripe.error.InvalidRequestError as e:
+      # Invalid parameters were supplied to Stripe's API
+      pass
+    except stripe.error.AuthenticationError as e:
+      # Authentication with Stripe's API failed
+      # (maybe you changed API keys recently)
+      pass
+    except stripe.error.APIConnectionError as e:
+      # Network communication with Stripe failed
+      pass
+    except stripe.error.StripeError as e:
+      # Display a very generic error to the user, and maybe send
+      # yourself an email
+      pass
+    except Exception as e:
+      # Something else happened, completely unrelated to Stripe
+      pass
 
-    # print('add: ', add)
-    # print('OrderHistory: ', OrderHistory.data_group)
+    print(charge)
 
-    # print('OrderHistory.objects.all(): ', OrderHistory.objects.all())
 
   return HttpResponse('Success!')
 
