@@ -22,12 +22,23 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 
   // Create list to keep track of active menu item selections, initialize total 
-  // price, count number of items ordered from previous sessions that are saved
-  // in localStorage, & add to the DOM on initial page load
+  // price, initialize the total number of items that have been ordered (ie. the
+  // number of items in the shopping cart), go through localStorage and actually
+  // count the number of items that are associated with the currently logged in
+  // user (which is obtained from the DOM) & add that number to the DOM on intial 
+  // page load, set the total price of current selections (which should be 0) to 
+  // $0 on initial page load
   active_selections = []
   let total_price = 0;
+  let items_ordered_count = 0;
+  let user = document.querySelector('#user').innerHTML;
+  for (let j = 0; j < localStorage.length; j++) {
+    if (JSON.parse(localStorage.getItem(j))['user'] === user) {
+      items_ordered_count++;
+    };
+  };
   document.querySelector('#total_price').append(total_price.toFixed(2));
-  document.querySelector('#number_of_items_ordered').innerHTML = localStorage.length  
+  document.querySelector('#number_of_items_ordered').innerHTML = items_ordered_count;  
 
   // --------------------- CREATE CHECKBOX ---------------------
 
@@ -447,24 +458,25 @@ document.addEventListener('DOMContentLoaded', function() {
     let previous_localStorage_length = localStorage.length;
     for (let j = 0; j < selected_menu_items.length; j++) {
       let data_group = selected_menu_items[j].dataset.group;
-      let data_tr_id = selected_menu_items[j].dataset.tr_id;
+      let data_size = selected_menu_items[j].dataset.size;
       let data_td_id = selected_menu_items[j].dataset.td_id;
+      let data_toppings = selected_menu_items[j].dataset.toppings;
+      let data_tr_id = selected_menu_items[j].dataset.tr_id;
       let name = selected_menu_items[j]['name'];
       let value = selected_menu_items[j]['value'];
-      let data_toppings = selected_menu_items[j].dataset.toppings;
-      let data_size = selected_menu_items[j].dataset.size;
       let attributes = {
         "data_group": data_group,
-        "data_tr_id": data_tr_id,
-        "data_td_id": data_td_id,
-        "name": name,
-        "value": value,
-        "data_toppings": data_toppings,
         "data_size": data_size,
-        "extras": [],
+        "data_td_id": data_td_id,
+        "data_toppings": data_toppings,
+        "data_tr_id": data_tr_id,
         "extras_price": 0,
+        "extras": [],
+        "name": name,
         "toppings": [],
-      }
+        "user": user,
+        "value": value,
+      };
 
       // Associate selected extras or toppings with their respective menu item
       for (let k = 0; k < selected_extras_toppings.length; k++) {
@@ -501,8 +513,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Reload in order to clear all checkboxes and displayed selections
     window.location.reload();
-
-    // Update number of items ordered displayed in DOM
-    document.querySelector('#number_of_items_ordered').innerHTML = localStorage.length  
   };
 });

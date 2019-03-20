@@ -14,7 +14,7 @@
   <div>
     <h3>Hello, {{ user.first_name }}</h3>
     <ul>
-        <li>Currently logged in as: {{ user.username }}</li>
+        <li>Currently logged in as: <span id="user">{{ user.username }}</span></li>
         <li><a href="{% url 'logout' %}">Logout</a></li>
     </ul>
     <form action="{% url 'index' %}" method="get">
@@ -31,7 +31,10 @@
         Order:
       </div>
       <div class="right">
-        <button id="checkout">Checkout</button>
+        <span id="csrf">{% csrf_token %}</span>
+        <form action="/success" method="get">
+          <button id="place_order">Place Order</button>
+        </form>
       </div>
     </div>
     <div>
