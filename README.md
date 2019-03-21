@@ -6,13 +6,44 @@
 
 - Additionally, a test request is made to the Stripe API which is a service used to process online payments. This project is in the development phase and not yet suitable for production -- you'd probably want to use an external database and use a Stripe production API key in order to actually process customer transactions.
 
-# Configuration
+# Configuration, Structure
 
 - Navigate to the ~/project3 folder and run pip3 install -r requirements.txt to make sure that Django is installed -- requirements.txt lists Django==2.0.3
 
 - Start the Django pizza application from within ~/project3 by running:
 
   $ python manage.py runserver
+
+- The structure of this Django project follows something like this: the project itself, project3, is named "pizza", and the app that handles orders is called "orders". So within the project3/ folder there is a project3/pizza/ folder and a project3/orders/ folder, and the confusing thing they both contain a urls.py file. 
+
+  > Within the pizza/ folder:
+  
+    1. settings.py -- the only thing which has been added to it are some settings involving the static/ folder. 
+
+    2. urls.py
+      - links "" to orders/urls.py 
+      - links "admin/" to a built-in Django app which allows a GUI to interact with and modify the sqlite3 database
+
+  > Within the orders/ folder:
+  
+    1. urls.py -- establishes all of the URL syntax for the orders app (which has been linked from the urls.py file within the pizza/ folder), and links these URL routes to functions within the views.py file 
+
+    2. views.py -- controls what happens when a user visits a URL route (acts like app.py, or application.py, in a FLASK application)
+
+    3. models.py -- create the structure of tables to be used with the sqlite3 database
+      - to create the SQL commands to reflect the changes to any tables within models.py, you create a "migration" file, which is stored in ~/orders/migrations/, by running:
+
+        $ python manage.py makemigrations
+
+      - to apply the SQL located within migration files and alter the database, run:
+
+        $ python.manage.py migrate
+
+    4. admin.py -- add models from ~/orders/models.py to admin.py in order to track them using the built-in Django admin GUI
+
+- To open the Django shell where you can run Python commands, including commands that can manipulate the sqlite3 database, navigate to ~/project3 and run:
+  
+    $ python manage.py shell
 
 # What's contained in the files
 
