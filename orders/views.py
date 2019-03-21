@@ -6,7 +6,8 @@ from django.shortcuts import render
 from django.urls import reverse
 from orders.models import MenuItem, Topping, Extra, OrderHistory
 
-# Index
+# ============== INDEX ==============
+
 def index(request):
   if not request.user.is_authenticated:
     return render(request, "orders/login.html", {"message": None})
@@ -18,26 +19,31 @@ def index(request):
   }
   return render(request, "orders/index.html", context)
 
-# Login
+# ============== LOGIN ==============
+
 def login_view(request):
   # Grab username & password submitted via POST request
   username = request.POST["username"]
   password = request.POST["password"]
+
   # Django built-in username & password authentication
   user = authenticate(request, username=username, password=password)
   if user is not None:
+
     # Django built-in login
     login(request, user)
     return HttpResponseRedirect(reverse("index"))
   else:
-    return render(request, "orders/login.html", {"message": "Invalid credentials."})
+    return render(request, "orders/login.html", {"login_error_message": "Invalid credentials."})
 
-# Logout
+# ============== LOGOUT ==============
+
 def logout_view(request):
   logout(request)
   return render(request, "orders/logout.html", {"message": "Logged out."})
 
-# Register
+# ============== REGISTER ==============
+
 def register_view(request):
   # Grab username & password submitted via POST request
   username = request.POST["username"]
@@ -59,9 +65,10 @@ def register_view(request):
     login(request, user)
     return HttpResponseRedirect(reverse("index"))
   else:
-    return render(request, "orders/login.html", {"message": "Invalid credentials."})
+    return render(request, "orders/login.html", {"login_error_message": "Invalid credentials."})
 
-# Orders
+# ============== ORDERS ==============
+
 def orders_view(request):
   if request.method == 'GET':
     return render(request, "orders/orders.html")
