@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from orders.models import MenuItem, Topping, Extra, OrderHistory
 
-# ============== INDEX ==============
+# ============================ INDEX ============================
 
 def index(request):
   if not request.user.is_authenticated:
@@ -19,7 +19,7 @@ def index(request):
   }
   return render(request, "orders/index.html", context)
 
-# ============== LOGIN ==============
+# ============================ LOGIN ============================
 
 def login_view(request):
   # Grab username & password submitted via POST request
@@ -34,17 +34,18 @@ def login_view(request):
     login(request, user)
     return HttpResponseRedirect(reverse("index"))
   else:
-    return render(request, "orders/login.html", {"login_error_message": "Invalid credentials."})
+    return render(request, "orders/login.html", {"login_error_message": "Invalid username and/or password."})
 
-# ============== LOGOUT ==============
+# ============================ LOGOUT ============================
 
 def logout_view(request):
   logout(request)
   return render(request, "orders/logout.html", {"message": "Logged out."})
 
-# ============== REGISTER ==============
+# ============================ REGISTER ============================
 
 def register_view(request):
+
   # Grab username & password submitted via POST request
   username = request.POST["username"]
   password = request.POST["password"]
@@ -52,8 +53,11 @@ def register_view(request):
   last_name = request.POST["last_name"]
   email = request.POST["email"]
 
-  # Create a User object which is part of Django's authentication system --
-  # I'm not sure where exactly these User objects are stored
+  # Make sure all required fields are not empty
+  if username == '' or password == '' or first_name == '' or last_name == '' or email == '':
+    return render(request, "orders/login.html", {"register_error_message": "Must fill all required fields."})
+
+  # Create a User object which is part of Django's authentication system
   user = User.objects.create_user(username, email, password)
   user.first_name = first_name
   user.last_name = last_name
@@ -65,9 +69,9 @@ def register_view(request):
     login(request, user)
     return HttpResponseRedirect(reverse("index"))
   else:
-    return render(request, "orders/login.html", {"login_error_message": "Invalid credentials."})
+    return render(request, "orders/login.html", {"login_error_message": "Invalid username and/or password."})
 
-# ============== ORDERS ==============
+# ============================ ORDERS ============================
 
 def orders_view(request):
   if request.method == 'GET':

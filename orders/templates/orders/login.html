@@ -28,11 +28,11 @@
 {% endif %}
 <form action="{% url 'register' %}" method="post">
   {% csrf_token %}
-  <input name="username" type="text" placeholder="Username" />*<br>
-  <input name="password" type="password" placeholder="Password" />*<br>
-  <input name="first_name" type="text" placeholder="First name" />*<br>
-  <input name="last_name" type="text" placeholder="Last name" />*<br>
-  <input name="email" type="text" placeholder="Email" />*<br>
+  <input name="username" type="text" placeholder="Username" /> *<br>
+  <input name="password" type="password" placeholder="Password" /> *<br>
+  <input name="first_name" type="text" placeholder="First name" /> *<br>
+  <input name="last_name" type="text" placeholder="Last name" /> *<br>
+  <input name="email" type="text" placeholder="Email" /> *<br>
   <input id="submit_register" type="submit" value="Register" />
 </form>
 * indicates a required field
