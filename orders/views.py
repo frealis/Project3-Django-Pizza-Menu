@@ -136,7 +136,3 @@ def orders_view(request):
     print(charge)
 
   return HttpResponse('Success!')
-
-# Success
-def success_view(request):
-  return render(request, "orders/success.html")
