@@ -12,15 +12,14 @@
 
 <div class="arial padding10">
   <div>
-      <h3>Hello, {{ user.first_name }}</h3>
-      <ul>
-          <li>Currently logged in as: <span id="user">{{ user.username }}</span></li>
-          <li><a href="{% url 'logout' %}">Logout</a></li>
-      </ul>
-      <form action="{% url 'orders' %}" method="get">
-        <button>View Orders</button>
-      </form>
-      <span id="number_of_items_ordered" class="w3-badge">0</span> items ordered
+    <ul>
+      <li>Currently logged in as: <span id="user">{{ user.username }}</span></li>
+      <li><a href="{% url 'logout' %}">Logout</a></li>
+    </ul>
+    <form action="{% url 'orders' %}" method="get">
+      <button>View Orders</button>
+    </form>
+    <span id="number_of_items_ordered" class="w3-badge">0</span> items ordered
   </div>
 </div>
 

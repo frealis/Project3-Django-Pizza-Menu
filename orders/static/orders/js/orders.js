@@ -22,6 +22,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // --------------------- DISPLAY ORDER ---------------------
 
+  // Create .header.width320 <div> element
+  div_header_width320 = document.createElement('div');
+  div_header_width320.className = "header width320";
+  orders_div = document.querySelector('.orders')
+  orders_div.insertBefore(div_header_width320, orders_div.childNodes[0]);
+
+  // Create .left and .right <div> elements
+  div_left = document.createElement('div');
+  div_left.className = "left"
+  document.querySelector('.header.width320').append(div_left);
+
+  div_right = document.createElement('div');
+  div_right.className = "right"
+  document.querySelector('.header.width320').append(div_right);
+
+  // Create "Order:" heading
+  document.querySelector('.left').innerHTML = "Order:";
+
+  // Create "Place Order" button
+  button = document.createElement('button');
+  button.id = "place_order";
+  button.innerHTML = "Place Order";
+  document.querySelector('.right').append(button);
+
   // Enable the "Place Order" button if at least 1 order item exists
   document.querySelector('#place_order').disabled = true;
   for (let i = 0; i < localStorage.length; i++) {
@@ -91,6 +115,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.querySelector('#place_order').onclick = () => {
 
+    // Clear out the orders header and replace it with a simple "Your order has
+    // been placed!" message
+    header_width320 = document.querySelector('.header.width320')
+    header_width320.parentNode.removeChild(header_width320)
+
+    div_text_center = document.createElement('div');
+    div_text_center.className = "text_center width320" 
+    orders_div = document.querySelector('.orders')
+    orders_div.insertBefore(div_text_center, orders_div.childNodes[0]);
+    document.querySelector('.text_center.width320').innerHTML = "Your order has been placed!";
+
     // Initialize POST request, extract the CSRF value from the index.html DOM,
     // and put that into the header of the POST request
     const request = new XMLHttpRequest();
@@ -98,7 +133,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const csrf_token = document.querySelector('#csrf').childNodes[0]['value'];
     request.setRequestHeader("X-CSRFToken", csrf_token);
 
-    // Retrieve items from localStorage and append them to localStorage_data
+    // Retrieve items from localStorage and append them to localStorage_data, 
+    // which is a FormData() object that can be used to transmit the data to the
+    // server (ie. views.py).
     const localStorage_data = new FormData();
     for (let i = 0; i < localStorage.length; i++) {
       if (JSON.parse(localStorage.getItem(i))['user'] === user) {
@@ -110,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let toppings      = JSON.parse(localStorage.getItem(i))['toppings'];
         let price         = parseFloat(JSON.parse(localStorage.getItem(i))['value']);
 
-        // Append data to localStorage_data
+        // Append data to localStorage_data (the FormData() object)
         localStorage_data.append('data_group',    data_group);
         localStorage_data.append('data_size',     data_size);
         localStorage_data.append('extras',        extras);
@@ -119,8 +156,6 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage_data.append('toppings',      toppings);
         localStorage_data.append('price',         price);
         localStorage_data.append('user',          user);
-
-        // console.log(JSON.parse(localStorage.getItem(i)));
       };
     };
 

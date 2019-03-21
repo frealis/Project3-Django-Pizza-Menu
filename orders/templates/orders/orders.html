@@ -12,35 +12,23 @@
 
 <div class="arial padding10">
   <div>
-    <h3>Hello, {{ user.first_name }}</h3>
     <ul>
-        <li>Currently logged in as: <span id="user">{{ user.username }}</span></li>
-        <li><a href="{% url 'logout' %}">Logout</a></li>
+      <li>Currently logged in as: <span id="user">{{ user.username }}</span></li>
+      <li><a href="{% url 'logout' %}">Logout</a></li>
     </ul>
     <form action="{% url 'index' %}" method="get">
       <button>Back to Menu</button>
     </form>  
   </div>
 </div>
+
+<span id="csrf">{% csrf_token %}</span>
   
 <!-- Display Order -->
 <div class="container">
   <div class="orders">
-    <div class="header width320">
-      <div class="left">
-        Order:
-      </div>
-      <div class="right">
-        <span id="csrf">{% csrf_token %}</span>
-        <form action="/success" method="get">
-          <button id="place_order">Place Order</button>
-        </form>
-      </div>
-    </div>
-    <div>
-      <div id="display_orders"></div>
-      <p>Total: $<span id="total_price"></span></p>
-    </div>
+    <div id="display_orders"></div>
+    <p>Total: $<span id="total_price"></span></p>
   </div>
 </div>
 
