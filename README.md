@@ -45,6 +45,8 @@
   
     $ python manage.py shell
 
+- If using git for version control, be sure to add *.pyc, __pycache__/, and *.sqlite3 to .gitignore.
+
 # What's contained in the files
 
 _login.html, views.py_
