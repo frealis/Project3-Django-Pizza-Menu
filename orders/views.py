@@ -9,15 +9,19 @@ from orders.models import MenuItem, Topping, Extra, OrderHistory
 # ============================ INDEX =============================================
 
 def index(request):
-  if not request.user.is_authenticated:
-    return render(request, "orders/login.html", {"message": None})
-  context = {
-    "user": request.user,
-    "menu": MenuItem.objects.all(),
-    "toppings": serializers.serialize('json', Topping.objects.all()),
-    "extras": serializers.serialize('json', Extra.objects.all()),
-  }
-  return render(request, "orders/index.html", context)
+  print(' ===== request.user.is_authenticated: ', request.user.is_authenticated)
+  if request.user.is_authenticated == True:
+    context = {
+      "user": request.user,
+      "menu": MenuItem.objects.all(),
+      "toppings": serializers.serialize('json', Topping.objects.all()),
+      "extras": serializers.serialize('json', Extra.objects.all()),
+    }
+    # print('===== INDEX ===== context: ', context)
+    return render(request, "orders/index.html", context)
+  elif request.user.is_authenticated == False:
+    # return render(request, "orders/login.html", {"message": None})
+    return HttpResponseRedirect(reverse('login'))
 
 # ============================ LOGIN =============================================
 
@@ -45,7 +49,13 @@ def login_view(request):
 
   # GET
   else:
-    return render(request, "orders/login.html")
+    context = {
+      "menu": MenuItem.objects.all(),
+      "toppings": serializers.serialize('json', Topping.objects.all()),
+      "extras": serializers.serialize('json', Extra.objects.all()),
+    }
+    # print('===== LOGIN ===== context: ', context)
+    return render(request, "orders/login.html", context)
 
 
 # ============================ LOGOUT ============================================

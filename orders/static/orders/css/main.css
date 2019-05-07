@@ -33,6 +33,15 @@ body {
   display: flex;
 }
 
+.green {
+  background-color: green;
+}
+
+#heading-intro {
+  color: #4d3a14;
+  text-align: center;
+}
+
 input[type='checkbox'] {
   width: 10px;
   margin: 0;
@@ -48,7 +57,7 @@ input[type='checkbox'] {
 
 #navbarHeader button, .navbar button {
   background-color: #437738;
-  border: 2px solid #a51d21;
+  border: 2px solid #faf9db;
   border-radius: 5px;
   color: #faf9db;
   font-weight: bold;
@@ -66,12 +75,40 @@ input[type='checkbox'] {
 }
 
 #navbarHeader {
-  background-color: #437738;
-  color: #4d3a14;
+  background-color: #faf9db;
+  color: #faf9db;
 }
 
 #navbarHeader input {
-  margin-bottom: 5px;
+  border-color: #a7cc38;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  width: 60%;
+}
+
+#navbarHeader input::-webkit-input-placeholder {
+  color: #437738;
+  font-style: italic;
+}
+
+#navbarHeader input:-ms-input-placeholder {
+  color: #437738;
+  font-style: italic;
+}
+
+#navbarHeader input::-ms-input-placeholder {
+  color: #437738;
+  font-style: italic;
+}
+
+#navbarHeader input::placeholder {
+  color: #437738;
+  font-style: italic;
+}
+
+#navbarHeader input:focus {
+  outline: #a51d21;
 }
 
 .navbar {
@@ -81,6 +118,20 @@ input[type='checkbox'] {
 
 .navbar .container {
   background-color: #437738;
+}
+
+#nav-login {
+  background-color: #437738;
+  border: 2px solid #a7cc38;
+  border-radius: 10px;
+  margin: 20px;
+}
+
+#nav-register {
+  background-color: #a51d21;
+  border: 2px solid #a7cc38;
+  border-radius: 10px;
+  margin: 20px;
 }
 
 .no-gutters {
@@ -197,14 +248,15 @@ table {
 }
 
 .jumbotron {
+  margin-bottom: 0;
   padding-top: var(--jumbotron-padding-y);
   padding-bottom: var(--jumbotron-padding-y);
-  margin-bottom: 0;
-  background-color: #437738;
+  background: url("/static/orders/img/pizza-03.jpg") 50% 0 no-repeat fixed;
 }
 
 @media (min-width: 768px) {
   .jumbotron {
+    background-size: 100%;
     padding-top: calc(var(--jumbotron-padding-y) * 2);
     padding-bottom: calc(var(--jumbotron-padding-y) * 2);
   }

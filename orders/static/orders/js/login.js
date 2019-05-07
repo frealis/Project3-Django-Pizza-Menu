@@ -31,9 +31,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const error_message = JSON.parse(response)['message'];
 
         // If views.py returns a JSON response where success = true, then
-        // the page is reloaded in order to redirect the user to index.html.
+        // the page is redirected to index.html.
         if (success === true) {
-          location.reload();
+          window.location.href = '/';
         } else {
           document.querySelector('.error-login').innerHTML = error_message;
         }
