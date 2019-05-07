@@ -5,3 +5,4 @@ staticfiles/
 venv/
 *.scss
 *.css.map
+*.exe

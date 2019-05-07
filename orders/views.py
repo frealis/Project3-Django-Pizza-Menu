@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from orders.models import MenuItem, Topping, Extra, OrderHistory
 
-# ============================ INDEX ============================
+# ============================ INDEX =============================================
 
 def index(request):
   if not request.user.is_authenticated:
@@ -19,24 +19,24 @@ def index(request):
   }
   return render(request, "orders/index.html", context)
 
-# ============================ LOGIN ============================
+# ============================ LOGIN =============================================
 
 def login_view(request):
 
   # POST
   if request.method == 'POST':
 
-    # Grab username & password submitted via POST request
+    # Grab username & password submitted via POST request & make sure that both
+    # fields are not empty
     username = request.POST["username"]
     password = request.POST["password"]
+    if username == '' or password == '':
+      return HttpResponse('{"success": false, "message": "Both username and password are required."}')
 
-    # Django built-in username & password authentication
+    # Django built-in username & password authentication + login session
     user = authenticate(request, username=username, password=password)
     if user is not None:
-
-      # Django built-in login
       login(request, user)
-      # return HttpResponseRedirect(reverse("index"))
       return HttpResponse('{"success": true, "message": ""}')
     else:
       return HttpResponse('{"success": false, "message": "Invalid username and/or password."}')
@@ -46,26 +46,25 @@ def login_view(request):
     return render(request, "orders/login.html")
 
 
-# ============================ LOGOUT ============================
+# ============================ LOGOUT ============================================
 
 def logout_view(request):
   logout(request)
   return render(request, "orders/logout.html", {"message": "Logged out."})
 
-# ============================ REGISTER ============================
+# ============================ REGISTER ==========================================
 
 def register_view(request):
 
-  # Grab username & password submitted via POST request
+  # Grab username & password submitted via POST request and make sure that no
+  # fields are empty.
   username = request.POST["username"]
   password = request.POST["password"]
   first_name = request.POST["first_name"]
   last_name = request.POST["last_name"]
   email = request.POST["email"]
-
-  # Make sure all required fields are not empty
   if username == '' or password == '' or first_name == '' or last_name == '' or email == '':
-    return render(request, "orders/login.html", {"register_error_message": "Must fill all required fields."})
+    return HttpResponse('{"success": false, "message": "All fields must be completed."}')
 
   # Create a User object which is part of Django's authentication system
   user = User.objects.create_user(username, email, password)
@@ -75,13 +74,10 @@ def register_view(request):
 
   # Log user in after registration
   user = authenticate(request, username=username, password=password)
-  if user is not None:
-    login(request, user)
-    return HttpResponseRedirect(reverse("index"))
-  else:
-    return render(request, "orders/login.html", {"login_error_message": "Invalid username and/or password."})
+  login(request, user)
+  return HttpResponseRedirect(reverse("index"))
 
-# ============================ ORDERS ============================
+# ============================ ORDERS ============================================
 
 def orders_view(request):
   if request.method == 'GET':
