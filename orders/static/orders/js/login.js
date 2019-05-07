@@ -29,6 +29,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const response = request.responseText;
         const success = JSON.parse(response)['success'];
         const error_message = JSON.parse(response)['message'];
+
+        // If views.py returns a JSON response where success = true, then
+        // the page is reloaded in order to redirect the user to index.html.
         if (success === true) {
           location.reload();
         } else {
@@ -38,6 +41,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Disable the default page reload after a POST request.
       return false;
+
+    // Return an error message if any of the fields were left blank.
     } else {
       document.querySelector('.error-login').innerHTML = 'Both username and password are required.'
     };
@@ -65,11 +70,11 @@ document.addEventListener('DOMContentLoaded', function() {
       // The FormData() object can be used to transmit data to the server (ie. 
       // transmit data to views.py).
       const register_data = new FormData();
-      register_data.append('username', register_username);
-      register_data.append('password', register_password);
-      register_data.append('first_name', register_first_name);
-      register_data.append('last_name', register_last_name);
-      register_data.append('email', register_email);
+      register_data.append('username', username);
+      register_data.append('password', password);
+      register_data.append('first_name', first_name);
+      register_data.append('last_name', last_name);
+      register_data.append('email', email);
 
       // Send register_data (aka FormData()) to views.py, followed by a callback
       // function that executes once a response is received from views.py.
@@ -79,6 +84,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const success = JSON.parse(response)['success'];
         const error_message = JSON.parse(response)['message'];
 
+        // If views.py returns a JSON response where success = true, then
+        // the page is reloaded in order to redirect the user to index.html.
         if (success === true) {
           location.reload();
         } else {
@@ -88,6 +95,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Disable the default page reload after a POST request.
       return false;
+
+    // Return an error message if any of the fields were left blank.
     } else {
       document.querySelector('.error-register').innerHTML = 'All fields are required.'
     };

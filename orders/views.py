@@ -33,7 +33,9 @@ def login_view(request):
     if username == '' or password == '':
       return HttpResponse('{"success": false, "message": "Both username and password are required."}')
 
-    # Django built-in username & password authentication + login session
+    # Django built-in username & password authentication + login session -- by
+    # logging the user in, request.user.is_authenticated == True in the 
+    # def index(request): route.
     user = authenticate(request, username=username, password=password)
     if user is not None:
       login(request, user)
@@ -66,16 +68,26 @@ def register_view(request):
   if username == '' or password == '' or first_name == '' or last_name == '' or email == '':
     return HttpResponse('{"success": false, "message": "All fields must be completed."}')
 
-  # Create a User object which is part of Django's authentication system
-  user = User.objects.create_user(username, email, password)
-  user.first_name = first_name
-  user.last_name = last_name
-  user.save()
+  # Try to see if the username already exists in the database; if not, register
+  # a new user.
+  try:
+    existing_username = User.objects.get(username=username)
+    return HttpResponse('{"success": false, "message": "Username already exists."}')
+  except:
 
-  # Log user in after registration
-  user = authenticate(request, username=username, password=password)
-  login(request, user)
-  return HttpResponseRedirect(reverse("index"))
+    # Create a User instance/object which is used with Django's authentication 
+    # system. 
+    user = User.objects.create_user(username, email, password)
+    user.first_name = first_name
+    user.last_name = last_name
+    user.save()
+
+    # Django built-in username & password authentication + login session -- by
+    # logging the user in, request.user.is_authenticated == True in the 
+    # def index(request): route.
+    user = authenticate(request, username=username, password=password)
+    login(request, user)
+    return HttpResponse('{"success": true, "message": ""}')
 
 # ============================ ORDERS ============================================
 
