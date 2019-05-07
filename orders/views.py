@@ -22,19 +22,29 @@ def index(request):
 # ============================ LOGIN ============================
 
 def login_view(request):
-  # Grab username & password submitted via POST request
-  username = request.POST["username"]
-  password = request.POST["password"]
 
-  # Django built-in username & password authentication
-  user = authenticate(request, username=username, password=password)
-  if user is not None:
+  # POST
+  if request.method == 'POST':
 
-    # Django built-in login
-    login(request, user)
-    return HttpResponseRedirect(reverse("index"))
+    # Grab username & password submitted via POST request
+    username = request.POST["username"]
+    password = request.POST["password"]
+
+    # Django built-in username & password authentication
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+
+      # Django built-in login
+      login(request, user)
+      # return HttpResponseRedirect(reverse("index"))
+      return HttpResponse('{"success": true, "message": ""}')
+    else:
+      return HttpResponse('{"success": false, "message": "Invalid username and/or password."}')
+
+  # GET
   else:
-    return render(request, "orders/login.html", {"login_error_message": "Invalid username and/or password."})
+    return render(request, "orders/login.html")
+
 
 # ============================ LOGOUT ============================
 
