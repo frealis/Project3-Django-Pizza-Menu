@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from orders.models import MenuItem, Topping, Extra, OrderHistory
 
-# ============================ INDEX ============================
+# ============================ INDEX =============================================
 
 def index(request):
   if not request.user.is_authenticated:
@@ -19,59 +19,77 @@ def index(request):
   }
   return render(request, "orders/index.html", context)
 
-# ============================ LOGIN ============================
+# ============================ LOGIN =============================================
 
 def login_view(request):
-  # Grab username & password submitted via POST request
-  username = request.POST["username"]
-  password = request.POST["password"]
 
-  # Django built-in username & password authentication
-  user = authenticate(request, username=username, password=password)
-  if user is not None:
+  # POST
+  if request.method == 'POST':
 
-    # Django built-in login
-    login(request, user)
-    return HttpResponseRedirect(reverse("index"))
+    # Grab username & password submitted via POST request & make sure that both
+    # fields are not empty
+    username = request.POST["username"]
+    password = request.POST["password"]
+    if username == '' or password == '':
+      return HttpResponse('{"success": false, "message": "Both username and password are required."}')
+
+    # Django built-in username & password authentication + login session -- by
+    # logging the user in, request.user.is_authenticated == True in the 
+    # def index(request): route.
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+      login(request, user)
+      return HttpResponse('{"success": true, "message": ""}')
+    else:
+      return HttpResponse('{"success": false, "message": "Invalid username and/or password."}')
+
+  # GET
   else:
-    return render(request, "orders/login.html", {"login_error_message": "Invalid username and/or password."})
+    return render(request, "orders/login.html")
 
-# ============================ LOGOUT ============================
+
+# ============================ LOGOUT ============================================
 
 def logout_view(request):
   logout(request)
   return render(request, "orders/logout.html", {"message": "Logged out."})
 
-# ============================ REGISTER ============================
+# ============================ REGISTER ==========================================
 
 def register_view(request):
 
-  # Grab username & password submitted via POST request
+  # Grab username & password submitted via POST request and make sure that no
+  # fields are empty.
   username = request.POST["username"]
   password = request.POST["password"]
   first_name = request.POST["first_name"]
   last_name = request.POST["last_name"]
   email = request.POST["email"]
-
-  # Make sure all required fields are not empty
   if username == '' or password == '' or first_name == '' or last_name == '' or email == '':
-    return render(request, "orders/login.html", {"register_error_message": "Must fill all required fields."})
+    return HttpResponse('{"success": false, "message": "All fields must be completed."}')
 
-  # Create a User object which is part of Django's authentication system
-  user = User.objects.create_user(username, email, password)
-  user.first_name = first_name
-  user.last_name = last_name
-  user.save()
+  # Try to see if the username already exists in the database; if not, register
+  # a new user.
+  try:
+    existing_username = User.objects.get(username=username)
+    return HttpResponse('{"success": false, "message": "Username already exists."}')
+  except:
 
-  # Log user in after registration
-  user = authenticate(request, username=username, password=password)
-  if user is not None:
+    # Create a User instance/object which is used with Django's authentication 
+    # system. 
+    user = User.objects.create_user(username, email, password)
+    user.first_name = first_name
+    user.last_name = last_name
+    user.save()
+
+    # Django built-in username & password authentication + login session -- by
+    # logging the user in, request.user.is_authenticated == True in the 
+    # def index(request): route.
+    user = authenticate(request, username=username, password=password)
     login(request, user)
-    return HttpResponseRedirect(reverse("index"))
-  else:
-    return render(request, "orders/login.html", {"login_error_message": "Invalid username and/or password."})
+    return HttpResponse('{"success": true, "message": ""}')
 
-# ============================ ORDERS ============================
+# ============================ ORDERS ============================================
 
 def orders_view(request):
   if request.method == 'GET':
