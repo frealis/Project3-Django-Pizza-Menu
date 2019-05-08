@@ -6,6 +6,17 @@
   color: #a51d21;
 }
 
+a {
+  color: #a51d21;
+  font-weight: bold;
+}
+
+a:hover {
+  color: #a7cc38;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
 .arial {
   font-family: Arial;
 }
@@ -57,9 +68,33 @@ body {
   text-align: center;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 input[type='checkbox'] {
   width: 10px;
   margin: 0;
+}
+
+.login-cs50-background {
+  background-color: #faf9db;
+  border-radius: 10px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.login-toppings-background {
+  border: 6px double #437738;
+  border-radius: 18px;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+@media (min-width: 767px) {
+  .login-toppings-background {
+    margin-top: 20px;
+  }
 }
 
 @media (min-width: 767px) {
@@ -81,6 +116,8 @@ input[type='checkbox'] {
   background-color: #a51d21;
   color: white;
   cursor: pointer;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
 }
 
 #navbarHeader button:focus, .navbar button:focus {

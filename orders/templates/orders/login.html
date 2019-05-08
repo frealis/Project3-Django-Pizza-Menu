@@ -70,25 +70,27 @@
 <!-- Storage for Toppings/Extras -->
 <div id="storage" data-storage_toppings="{{ toppings }}" data-storage_extras="{{ extras }}"></div>
 
-<!-- Menu -->
-<div class="container mt-5">
+<div class="container mt-6">
   <div class="row">
-    <div class="col-md-6">
+
+    <!-- CS50 Introduction -->
+    <div class="col-md-5 login-cs50-background">
       <h5>CS50 - Web Development with Python and JavaScript</h5>
       <h6>Project 3</h6>
       <p>
-        This website is a redesign project for <a href="https://www.pinocchiospizza.net/">Pinocchio's Pizza & Subs</a>, a local pizza shop near Harvard University. It uses the Django 2.0.3 framework along with a stock db.sqlite3 database and is stylized using Bootstrap 4's <a href="https://getbootstrap.com/docs/4.0/examples/album/">albumn template</a>. 
+        This website is a redesign project for <a href="https://www.pinocchiospizza.net/">Pinocchio's Pizza & Subs</a>, a local pizza shop in Cambridge, MA. It uses the Django 2.0.3 framework along with a stock db.sqlite3 database and is stylized using Bootstrap 4's <a href="https://getbootstrap.com/docs/4.0/examples/album/">albumn template</a>. 
       </p>
     </div>
 
-    <div class="col-md-6 ">
+    <!-- Toppings -->
+    <div class="col-md-5 ml-md-auto login-toppings-background">
       <strong>Toppings</strong>
       <div class="login-toppings"></div>
       <div class="login-extras"></div>
     </div>
   </div>
-  <div class="row">
 
+  <div class="row">
     <div class="col-md-6 menu-login">
       <table>
 
@@ -128,6 +130,44 @@
 
         <tr><td colspan=3><hr></td></tr>
 
+        <!-- Pasta -->
+        <tr>
+          <td><strong>Pasta</strong></td>
+          <td></td>
+        </tr>
+        {% for item in menu %}
+          {% if item.group == 'Pasta' %}
+            <tr>
+              <td>{{ item.item }}</td>
+              <td>{{ item.price }}</td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+
+        <tr><td colspan=3><hr></td></tr>
+
+        <!-- Salads -->
+        <tr>
+          <td><strong>Salads</strong></td>
+          <td></td>
+        </tr>
+        {% for item in menu %}
+          {% if item.group == 'Salads' %}
+          <tr>
+            <td>{{ item.item }}</td>
+            <td>{{ item.price }}</td>  
+          </tr>
+          {% endif %}
+        {% endfor %}
+
+        <tr><td colspan=3><hr></td></tr>
+
+      </table>
+    </div>
+
+    <div class="col-md-6 menu-login">
+      <table>
+
         <!-- Subs -->
         <tr>
           <td><strong>Subs</strong></td>
@@ -151,44 +191,6 @@
         {% endfor %}
 
         <tr><td colspan=3><hr></td></tr>
-
-      </table>
-    </div>
-
-    <div class="col-md-6 menu-login">
-      <table>
-
-        <!-- Pasta -->
-        <tr>
-          <td><strong>Pasta</strong></td>
-          <td></td>
-        </tr>
-        {% for item in menu %}
-          {% if item.group == 'Pasta' %}
-            <tr>
-              <td>{{ item.item }}</td>
-              <td>{{ item.price }}</td>
-            </tr>
-          {% endif %}
-        {% endfor %}
-
-        <tr><td colspan=3><hr></td></tr>
-  
-        <!-- Salads -->
-        <tr>
-          <td><strong>Salads</strong></td>
-          <td></td>
-        </tr>
-        {% for item in menu %}
-          {% if item.group == 'Salads' %}
-          <tr>
-            <td>{{ item.item }}</td>
-            <td>{{ item.price }}</td>  
-          </tr>
-          {% endif %}
-        {% endfor %}
-  
-          <tr><td colspan=3><hr></td></tr>
   
         <!-- Dinner Platters -->
         <tr>
@@ -205,6 +207,8 @@
           </tr>
           {% endif %}
         {% endfor %}
+
+        <tr><td colspan=3><hr></td></tr>
 
       </table>
     </div>
