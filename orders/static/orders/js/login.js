@@ -101,4 +101,27 @@ document.addEventListener('DOMContentLoaded', function() {
       document.querySelector('.error-register').innerHTML = 'All fields are required.'
     };
   };
+
+  // ==================== EXTRAS & TOPPINGS =====================================
+
+  // Retrieve extras and toppings items data from the storage <div>, which holds
+  // the data in the form of strings.
+  const storage = document.querySelector('#storage');
+  const storage_extras = storage.getAttribute('data-storage_extras');
+  const storage_toppings = storage.getAttribute('data-storage_toppings');
+
+  // Parse the storage_extras & storage_toppings strings and grab the names of 
+  // the individual extras & toppings, then insert them into the DOM as csv
+  // strings (0 is falsey).
+  extras = JSON.parse(storage_extras);
+  extras.forEach(i => {
+    extra = i['fields']['item'];
+    document.querySelector('.login-extras').innerHTML += (extras.indexOf(i) ? ', ' : '') + extra;
+  })
+  toppings = JSON.parse(storage_toppings);
+  toppings.forEach(i => {
+    topping = i['fields']['item'];
+    document.querySelector('.login-toppings').innerHTML += (toppings.indexOf(i) ? ', ' : '') + topping;
+  })
+
 });

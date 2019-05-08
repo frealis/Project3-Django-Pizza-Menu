@@ -17,11 +17,9 @@ def index(request):
       "toppings": serializers.serialize('json', Topping.objects.all()),
       "extras": serializers.serialize('json', Extra.objects.all()),
     }
-    # print('===== INDEX ===== context: ', context)
     return render(request, "orders/index.html", context)
   elif request.user.is_authenticated == False:
     print('===== request.user.is_authenticated: ', request.user.is_authenticated)
-    # return render(request, "orders/login.html", {"message": None})
     return HttpResponseRedirect(reverse('login'))
 
 # ============================ LOGIN =============================================

@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#total_price').append(total_price.toFixed(2));
   document.querySelector('#number_of_items_ordered').innerHTML = items_ordered_count;  
 
-  // --------------------- CREATE CHECKBOX ---------------------
+  // --------------------- CREATE CHECKBOX ---------------------------------------
 
   // This function is only called when extras for subs, or toppings for pizzas
   // are displayed, to make checkboxes for those items. These are different from
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return checkbox;
   };
 
-  // --------------------- CREATE LIST ---------------------
+  // --------------------- CREATE LIST -------------------------------------------
 
   function create_list(name) {
     const li = document.createElement('li');
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return li;
   }
 
-  // --------------------- HIDE ---------------------
+  // --------------------- HIDE --------------------------------------------------
 
   // Hide toppings and extras
   function hide(obj, delete_index, scenario) {
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
   };
 
-  // --------------------- INDEX ---------------------
+  // --------------------- INDEX -------------------------------------------------
 
   // Figure out the index of the HTML child objects of <tbody>, namely topping and
   // extra rows, <tr>'s, within the DOM.
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return index;
   };
 
-  // --------------------- SELECT ITEM ---------------------
+  // --------------------- SELECT ITEM -------------------------------------------
 
   // Handle when a user clicks a checkbox on the menu
   function select_item(obj) {
@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
     td_id = obj.getAttribute('data-td_id');
     tr_id = obj.getAttribute('data-tr_id');
 
-    // HANDLE EXTRAS ---------------------------------
+    // HANDLE EXTRAS -------------------------------------------------------------
     if (data_extras === 'true') {
 
       // Update active selections
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
       };
     };
     
-    // HANDLE TOPPINGS ---------------------------------
+    // HANDLE TOPPINGS -----------------------------------------------------------
     if (data_toppings === 'true') {
 
       // Update active selections
@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 
 
-  // --------------------- SHOW EXTRAS ---------------------
+  // --------------------- SHOW EXTRAS -------------------------------------------
 
   function show_extras(tr_id, size) {
 
@@ -332,7 +332,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('tbody').insertBefore(tr_extras, tbody.childNodes[index(tr_id) + 1]);
   };
 
-  // --------------------- SHOW TOPPINGS ---------------------
+  // --------------------- SHOW TOPPINGS -----------------------------------------
 
   function show_toppings(tr_id, size, limit) {
 
@@ -367,7 +367,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('tbody').insertBefore(tr_toppings, tbody.childNodes[index(tr_id) + 1]);
   };
 
-  // --------------------- SELECTIONS ---------------------
+  // --------------------- SELECTIONS --------------------------------------------
 
   // Place currently selected items into a "staging area" that is visible on
   // index.html and updated everytime the select_item() function is called, or
@@ -435,7 +435,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('#total_price').append(total_price.toFixed(2));
   };
 
-  // --------------------- ADD TO ORDER ---------------------
+  // --------------------- ADD TO ORDER ------------------------------------------
 
   // Attach an *.onclick event handler
   document.querySelector('#add_to_order').onclick = () => {
