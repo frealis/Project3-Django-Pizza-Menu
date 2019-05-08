@@ -37,6 +37,21 @@ body {
   background-color: green;
 }
 
+.header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
 #heading-intro {
   color: #4d3a14;
   text-align: center;
@@ -47,12 +62,10 @@ input[type='checkbox'] {
   margin: 0;
 }
 
-.menu_items {
-  background: #f0f0f0;
-  border: 2px solid #4d3a14;
-  margin: 8px;
-  padding: 10px;
-  width: 320px;
+@media (min-width: 767px) {
+  .menu-login {
+    padding: 0 10%;
+  }
 }
 
 #navbarHeader button, .navbar button {
@@ -141,21 +154,6 @@ input[type='checkbox'] {
   padding-right: 0px;
 }
 
-.header {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-}
-
 .left {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -209,6 +207,7 @@ input[type='checkbox'] {
 table {
   border-spacing: 0;
   border-collapse: collapse;
+  width: 100%;
 }
 
 .text-align-center {
