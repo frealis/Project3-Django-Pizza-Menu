@@ -11,11 +11,11 @@
 {% block body %}
 
 <!-- Heading -->
-<div class="container">
+<div class="container index-header">
 
   <div class="row my-3">
     <div class="col-6">
-      Welcome, <span id="user">{{ user.username }}</span>!
+      <strong>Welcome, <span id="user">{{ user.username }}</span>!</strong>
     </div>
     <div class="col-6 text-right">
       <a href="{% url 'logout' %}">Logout</a>
@@ -24,10 +24,13 @@
 
   <div class="row mb-3">
     <div class="col-6">
+      <button id="add_to_order">+</button>
+    </div>
+    <div class="col-6 text-right">
       <form action="{% url 'orders' %}" method="get">
-        <button>View Orders</button>
+        <button>S</button>
       </form>
-      <span id="number_of_items_ordered" class="w3-badge">0</span> items ordered    
+      <span id="number_of_items_ordered" class="w3-badge">0</span> items
     </div>
   </div>
 
@@ -38,16 +41,8 @@
 
 <!-- Current Selections, HIDDEN -->
 <div class="col-md-6 green" hidden>
-  <div class="header width320">
-    <div class="left">Selections:</div>
-    <div class="right">
-      <button id="add_to_order">Add to Order</button>
-    </div>
-  </div>
-  <div>
-    <div id="current_selections"></div>
-    <p>Total: $<span id="total_price"></span></p>
-  </div>
+  <div id="current_selections"></div>
+  <span id="total_price"></span>
 </div>
 
 <div class="container">
@@ -65,7 +60,7 @@
     <!-- LEFT/FIRST Menu Column -->
     <div class="col-md-6">
       <table>
-        <tbody id="tbody" class="blue">
+        <tbody id="tbody">
 
           <!-- Regular Pizza -->
           <tr>
@@ -155,7 +150,7 @@
     <!-- RIGHT/SECOND Menu Column -->
     <div class="col-md-6">
       <table>
-        <tbody id="tbody_extra" class="red">
+        <tbody id="tbody_extra">
 
           <!-- Subs -->
           <tr>

@@ -48,21 +48,6 @@ body {
   background-color: green;
 }
 
-.header {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-}
-
 #heading-intro {
   color: #4d3a14;
   text-align: center;
@@ -70,6 +55,35 @@ body {
 
 html {
   scroll-behavior: smooth;
+}
+
+.index-header {
+  border-bottom: 6px double #437738;
+  color: #4d3a14;
+  margin-top: 20px;
+}
+
+.index-header button {
+  background-color: #437738;
+  border: 0;
+  border-radius: 50px;
+  color: #faf9db;
+  font-weight: bold;
+  height: 50px;
+  padding: 5px 15px;
+  width: 50px;
+}
+
+.index-header button:hover {
+  background-color: #a51d21;
+  color: white;
+  cursor: pointer;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.index-header button:focus {
+  outline: none;
 }
 
 input[type='checkbox'] {
