@@ -7,8 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
     window.location.reload();
   }
 
-  // Retrieve extras and toppings items data from <div> located within <thead>
-  // on index.html, which gets serialized in views.py before retrieval here
+  // Retrieve extras and toppings items data from 'storage' <div> (just some
+  // random <div> with id='storage') within index.html's DOM. The data is stored
+  // as strings that get serialized in views.py before ending up in the DOM.
   storage = document.querySelector('#storage');
   storage_extras = storage.getAttribute('data-storage_extras');
   storage_toppings = storage.getAttribute('data-storage_toppings');
@@ -32,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let total_price = 0;
   let items_ordered_count = 0;
   let user = document.querySelector('#user').innerHTML;
+
   for (let j = 0; j < localStorage.length; j++) {
     if (JSON.parse(localStorage.getItem(j))['user'] === user) {
       items_ordered_count++;
@@ -57,19 +59,18 @@ document.addEventListener('DOMContentLoaded', function() {
     checkbox.setAttribute("data-price", price);
     checkbox.type = 'checkbox';
 
-    // Built-in anonymous onclick function for each checkbox
+    // The onclick function for each checkbox updates the count for the total 
+    // number of checkboxes selected.
     checkbox.onclick = function() {
       let count = 0;
       list = document.getElementsByClassName(tr_id);
-
-      // Update the count for the total number of checkboxes selected
       for (let i = 0; i < list.length; i++) {
         if (list[i].checked === true) {
           count++;
         };
       };
 
-      // Disable all other checkboxes if a limit argument exists (3rd argument)
+      // Disable all other checkboxes if a limit exists (3rd parameter)
       if (count === limit) {
         for (let i = 0; i < list.length; i++) {
           if (list[i].checked !== true) {
@@ -82,6 +83,9 @@ document.addEventListener('DOMContentLoaded', function() {
         };
       };
 
+      // Add the currently selected item to the 'selections' <div> in the DOM
+      // (the 'selections' <div> acts as a sort of staging area for currently 
+      // selected items).
       selections();
     };
     return checkbox;
@@ -139,16 +143,31 @@ document.addEventListener('DOMContentLoaded', function() {
   // --------------------- INDEX -------------------------------------------------
 
   // Figure out the index of the HTML child objects of <tbody>, namely topping and
-  // extra rows, <tr>'s, within the DOM.
-  function index (tr_id) {
-    var array = [];
-    var index = 0;
-    for (let i = 0; i < tbody.childNodes.length; i++) {
-      array[i] = tbody.childNodes[i];
-      if (array[i].id === tr_id) {
-        index = i;
+  // extra rows, <tr>'s, within the DOM. Pizza toppings go in a separate column
+  // from sub extras in the index.html DOM, so an attribute called 'category'
+  // was created to correcty determine the index of sub extras which is used to
+  // place them correctly on the webpage -- basically, pizzas and their toppings
+  // are in the left column, subs and their extras are in the right. If for some
+  // reason you want to scale up to 3 or more columns, you'll have to come up with
+  // a new system or create new categories.
+  function index(tr_id, category) {
+    let index = 0;
+    if (category === 'extra') {
+      for (let i = 0; i < tbody_extra.childNodes.length; i++) {
+        if (tbody_extra.childNodes[i].id === tr_id) {
+          index = i;
+        };
+      };
+    } else {
+      for (let i = 0; i < tbody.childNodes.length; i++) {
+        if (tbody.childNodes[i].id === tr_id) {
+          index = i;
+        };
       };
     };
+
+    console.log('index: ', index)
+
     return index;
   };
 
@@ -171,6 +190,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Update active selections
       active_selections.push({'td_id': td_id, 'tr_id': tr_id});
+
+      // Determine which overall DOM menu column the extras are in
 
       // Show extras items
       show_extras(tr_id, size);
@@ -253,6 +274,8 @@ document.addEventListener('DOMContentLoaded', function() {
       };
     };
     
+    // Add the currently selected item to the 'selections' <div> in the DOM (this
+    // section acts as a sort of staging area for currently selected items).
     selections();
   };
 
@@ -326,10 +349,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Stitch together the extras row, <tr>, that will be inserted into the DOM
     td_extras.append(ul_extras);
     tr_extras.className = tr_id;
+    tr_extras.dataset.category = 'extra';
     tr_extras.append(td_extras, td_extras_price, td_extras_checkbox);
 
-    // Add extras row, <tr>, to DOM. 
-    document.querySelector('tbody').insertBefore(tr_extras, tbody.childNodes[index(tr_id) + 1]);
+    // Add extras row, <tr>, to DOM. These go in the right overall menu column 
+    // (the menu is basically divided into two vertical columns) with a <tbody> 
+    // tag that has id="tbody_extras".
+    document.querySelector('#tbody_extra').insertBefore(tr_extras, tbody_extra.childNodes[index(tr_id, tr_extras.dataset.category) + 1]);
   };
 
   // --------------------- SHOW TOPPINGS -----------------------------------------
@@ -381,7 +407,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Gather a list of every currently selected item on the menu. Menu item 
     // selections have data-tr_id attributes, and toppings and extras items have 
-    // their class attribute = to the tr_id value of the menu item that they are 
+    // their class attribute === to the tr_id value of the menu item that they are 
     // associated with
     for (let i = 0; i < x.length; i++) {
       if (x[i].dataset.tr_id && x[i].checked) {
