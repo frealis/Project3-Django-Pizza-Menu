@@ -463,8 +463,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // --------------------- ADD TO ORDER ------------------------------------------
 
+  z = document.querySelectorAll('.add_to_order');
+
+  for (let i = 0; z.length; i++) {
+    console.log(z);
+  }
+
+  // console.log(z);
+
   // Attach an *.onclick event handler
-  document.querySelector('#add_to_order').onclick = () => {
+  document.querySelector('.add_to_order').onclick = () => {
 
     // Mimic what the selections() function does to gather data on selected
     // menu items, and any selected extras or toppings

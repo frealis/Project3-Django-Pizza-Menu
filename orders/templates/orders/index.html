@@ -13,6 +13,7 @@
 <!-- Heading -->
 <div class="container index-header">
 
+  <!-- Heading - Greeting, Logout -->
   <div class="row my-3">
     <div class="col-6">
       <strong>Welcome, <span id="user">{{ user.username }}</span>!</strong>
@@ -22,27 +23,19 @@
     </div>
   </div>
 
-  <div class="row mb-3">
+  <!-- Heading - Add Items to Order, Shopping Cart, Display Items in Shopping Cart -->
+  <div class="row mb-4">
     <div class="col-6">
-      <button id="add_to_order">+</button>
+      <button class="add_to_order">+</button> Add to Order
     </div>
     <div class="col-6 text-right">
       <form action="{% url 'orders' %}" method="get">
-        <button>S</button>
+        <button><span id="number_of_items_ordered"></span></button> Checkout
       </form>
-      <span id="number_of_items_ordered" class="w3-badge">0</span> items
+      <!-- <span id="number_of_items_ordered" class="w3-badge">0</span> -->
     </div>
   </div>
 
-</div>
-
-<!-- Storage for Toppings & Extras -->
-<div id="storage" data-storage_toppings="{{ toppings }}" data-storage_extras="{{ extras }}"></div>
-
-<!-- Current Selections, HIDDEN -->
-<div class="col-md-6 green" hidden>
-  <div id="current_selections"></div>
-  <span id="total_price"></span>
 </div>
 
 <div class="container">
@@ -198,5 +191,14 @@
       </table>
     </div>
   </div>
+
+<!-- Storage for Toppings & Extras -->
+<div id="storage" data-storage_toppings="{{ toppings }}" data-storage_extras="{{ extras }}"></div>
+
+<!-- Current Selections, HIDDEN -->
+<div class="col-md-6 green" hidden>
+  <div id="current_selections"></div>
+  <span id="total_price"></span>
+</div>
 
 {% endblock %}
