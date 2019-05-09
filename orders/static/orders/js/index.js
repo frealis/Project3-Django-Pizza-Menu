@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
   };
   document.querySelector('#total_price').append(total_price.toFixed(2));
-  document.querySelector('#number_of_items_ordered').innerHTML = items_ordered_count;  
+  document.querySelector('#number-of-items-ordered').innerHTML = items_ordered_count;  
 
   // --------------------- CREATE CHECKBOX ---------------------------------------
 
@@ -463,16 +463,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // --------------------- ADD TO ORDER ------------------------------------------
 
-  z = document.querySelectorAll('.add_to_order');
-
-  for (let i = 0; z.length; i++) {
-    console.log(z);
-  }
-
-  // console.log(z);
-
   // Attach an *.onclick event handler
-  document.querySelector('.add_to_order').onclick = () => {
+  document.querySelector('.index-add-to-order').onclick = () => {
 
     // Mimic what the selections() function does to gather data on selected
     // menu items, and any selected extras or toppings

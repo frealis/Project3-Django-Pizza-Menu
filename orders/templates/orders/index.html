@@ -13,7 +13,7 @@
 <!-- Heading -->
 <div class="container index-header">
 
-  <!-- Heading - Greeting, Logout -->
+  <!-- Heading - Welcome <username>, Logout -->
   <div class="row my-3">
     <div class="col-6">
       <strong>Welcome, <span id="user">{{ user.username }}</span>!</strong>
@@ -26,13 +26,20 @@
   <!-- Heading - Add Items to Order, Shopping Cart, Display Items in Shopping Cart -->
   <div class="row mb-4">
     <div class="col-6">
-      <button class="add_to_order">+</button> Add to Order
+      <div class="index-order-links">
+        <button class="index-button">+</button> 
+        <span class="index-text">Add to Order</span>
+      </div>
     </div>
     <div class="col-6 text-right">
-      <form action="{% url 'orders' %}" method="get">
-        <button><span id="number_of_items_ordered"></span></button> Checkout
+      <form class="index-order-links" action="{% url 'orders' %}" method="get">
+        <button class="index-button">
+          <span id="number-of-items-ordered">
+            &nbsp; <!-- The &nbsp; is a placeholder for aesthetic reasons -->
+          </span>
+        </button>
+        <span class="index-text">Checkout</span>
       </form>
-      <!-- <span id="number_of_items_ordered" class="w3-badge">0</span> -->
     </div>
   </div>
 

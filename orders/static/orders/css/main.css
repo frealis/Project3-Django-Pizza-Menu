@@ -57,34 +57,40 @@ html {
   scroll-behavior: smooth;
 }
 
-.index-header {
-  border-bottom: 6px double #437738;
-  color: #4d3a14;
-  font-weight: bold;
-  margin-top: 20px;
-}
-
-.index-header button {
+.index-order-links > .index-button {
   background-color: #437738;
   border: 0;
   border-radius: 30px;
   color: #faf9db;
-  font-weight: bold;
   height: 30px;
   padding: 0;
   width: 30px;
 }
 
-.index-header button:hover {
+.index-order-links > .index-text {
+  color: #437738;
+}
+
+.index-order-links {
+  display: inline-block;
+}
+
+.index-order-links:hover .index-text {
+  color: #a51d21;
+  cursor: pointer;
+}
+
+.index-order-links:hover .index-button {
   background-color: #a51d21;
   color: white;
   cursor: pointer;
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
 }
 
-.index-header button:focus {
-  outline: none;
+.index-header {
+  border-bottom: 6px double #437738;
+  color: #4d3a14;
+  font-weight: bold;
+  margin-top: 20px;
 }
 
 input[type='checkbox'] {
