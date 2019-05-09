@@ -26,7 +26,7 @@
   <!-- Heading - Add Items to Order, Shopping Cart, Display Items in Shopping Cart -->
   <div class="row mb-4">
     <div class="col-6">
-      <div class="index-order-links">
+      <div id="modal-button" class="index-order-links">
         <button class="index-button">+</button> 
         <span class="index-text">Add to Order</span>
       </div>
@@ -45,11 +45,12 @@
 
 </div>
 
+<!-- Wrap the menu in a standard Bootstrap container w/side margins -->
 <div class="container">
 
   <!-- Logo -->
   <div class="row no-gutters">
-    <div class="col-md-12 center my-3">
+    <div class="col-md-12 center my-4">
       <img src="{% static 'img/logo-01a-outline.svg' %}">  
     </div>
   </div>
@@ -199,13 +200,28 @@
     </div>
   </div>
 
-<!-- Storage for Toppings & Extras -->
+<!-- HIDDEN: Storage for Toppings & Extras -->
 <div id="storage" data-storage_toppings="{{ toppings }}" data-storage_extras="{{ extras }}"></div>
 
-<!-- Current Selections, HIDDEN -->
-<div class="col-md-6 green" hidden>
-  <div id="current_selections"></div>
-  <span id="total_price"></span>
+<!-- MODAL -->
+<!-- https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal2 -->
+
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4>Items Added to Order</h4>
+      <span class="close">&times;</span>
+    </div>
+    <div class="modal-body">
+
+      <!-- Display items added to order & price here -->
+      <div id="current_selections"></div>
+      <span id="total_price"></span>
+    </div>
+    <div class="modal-footer">
+    </div>
+  </div>
+
 </div>
 
 {% endblock %}

@@ -464,7 +464,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // --------------------- ADD TO ORDER ------------------------------------------
 
   // Attach an *.onclick event handler
-  document.querySelector('.index-add-to-order').onclick = () => {
+  document.querySelector('.index-order-links').onclick = () => {
 
     // Mimic what the selections() function does to gather data on selected
     // menu items, and any selected extras or toppings
@@ -537,7 +537,27 @@ document.addEventListener('DOMContentLoaded', function() {
       localStorage.setItem(j + previous_localStorage_length, JSON.stringify(attributes));
     };
 
-    // Reload in order to clear all checkboxes and displayed selections
-    window.location.reload();
+    // Display the modal
+    let modal = document.getElementById('modal');
+    modal.style.display = "block";
   };
+
+  // --------------------- MODAL ------------------------------------------------
+  // https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal2
+
+  // When the user clicks on <span> (x), close the modal & refresh the page.
+  let close = document.getElementsByClassName("close")[0];
+  close.onclick = function() {
+    modal.style.display = "none";
+    window.location.reload();
+  }
+
+  // When the user clicks anywhere outside of the modal, close it & refresh the
+  // page.
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+      window.location.reload();
+    }
+  }
 });
