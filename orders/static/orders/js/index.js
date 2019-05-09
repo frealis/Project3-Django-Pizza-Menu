@@ -480,6 +480,14 @@ document.addEventListener('DOMContentLoaded', function() {
       };
     };
 
+    console.log(selected_menu_items.length)
+    document.querySelector('.error-no-selections').innerHTML = ''
+    if (selected_menu_items.length === 0) {
+      document.querySelector('.error-no-selections').innerHTML = "No menu items are currently selected."
+      return;
+    };
+
+
     // Store every attribute from any selected checkboxes as key:value pairs
     let previous_localStorage_length = localStorage.length;
     for (let j = 0; j < selected_menu_items.length; j++) {

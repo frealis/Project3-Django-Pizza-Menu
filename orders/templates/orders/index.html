@@ -30,6 +30,7 @@
         <button class="index-button">+</button> 
         <span class="index-text">Add to Order</span>
       </div>
+      <div class="error-no-selections"></div>
     </div>
     <div class="col-6 text-right">
       <form class="index-order-links" action="{% url 'orders' %}" method="get">
@@ -216,9 +217,7 @@
 
       <!-- Display items added to order & price here -->
       <div id="current_selections"></div>
-      <span id="total_price"></span>
-    </div>
-    <div class="modal-footer">
+      Total: <span id="total_price"></span>
     </div>
   </div>
 

@@ -78,16 +78,16 @@ html {
 .index-order-links:hover .index-text {
   color: #a7cc38;
   cursor: pointer;
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
 }
 
 .index-order-links:hover .index-button {
   background-color: #a7cc38;
   color: white;
   cursor: pointer;
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
 }
 
 .index-header {
@@ -319,41 +319,28 @@ footer p {
 
 .modal {
   display: none;
-  /* Hidden by default */
-  position: fixed;
-  /* Stay in place */
-  z-index: 1;
-  /* Sit on top */
-  padding-top: 100px;
-  /* Location of the box */
+  height: 100%;
   left: 0;
+  overflow: auto;
+  padding-top: 80px;
+  position: fixed;
   top: 0;
   width: 100%;
-  /* Full width */
-  height: 100%;
-  /* Full height */
-  overflow: auto;
-  /* Enable scroll if needed */
-  background-color: black;
-  /* Fallback color */
+  z-index: 1;
   background-color: rgba(0, 0, 0, 0.4);
-  /* Black w/ opacity */
 }
 
 .modal-content {
   background-color: #faf9db;
-  border: 1px solid #4d3a14;
-  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   color: #437738;
   margin: auto;
   padding: 0;
   position: relative;
   width: 80%;
   -webkit-animation-name: animatetop;
-  -webkit-animation-duration: 0.3s;
+  -webkit-animation-duration: 0.2s;
   animation-name: animatetop;
-  animation-duration: 0.3s;
+  animation-duration: 0.2s;
 }
 
 .modal-header {
@@ -363,7 +350,7 @@ footer p {
 }
 
 .modal-body {
-  padding: 2px 16px;
+  padding: 20px;
 }
 
 .modal-footer {
