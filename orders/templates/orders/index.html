@@ -74,14 +74,38 @@
             {% if item.group == 'Regular Pizza' and item.item != 'Cheese' %}
               <tr id="{{ item.group }} + {{ item.item }}">
                 <td>{{ item.item }}</td>
-                <td>{{ item.price_sm }} <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_sm }}" name="{{ item.item }}" value="{{ item.price_sm }}" data-toppings="true" data-size="Small" /></td>  
-                <td>{{ item.price_lg }} <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_lg }}" name="{{ item.item }}" value="{{ item.price_lg }}" data-toppings="true" data-size="Large" /></td>  
+                <td>
+                  {{ item.price_sm }} 
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_sm }}" name="{{ item.item }}" value="{{ item.price_sm }}" data-toppings="true" data-size="Small" />
+                    <span class="checkmark"></span>
+                  </label>
+                </td>  
+                <td>
+                  {{ item.price_lg }} 
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_lg }}" name="{{ item.item }}" value="{{ item.price_lg }}" data-toppings="true" data-size="Large" /> 
+                    <span class="checkmark"></span>
+                  </label>
+                </td> 
               </tr>
             {% elif item.group == 'Regular Pizza' and item.item == 'Cheese' %}
               <tr id="{{ item.group }} + {{ item.item }}">
                 <td>{{ item.item }}</td>
-                <td>{{ item.price_sm }} <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_sm }}" name="{{ item.item }}" value="{{ item.price_sm }}" data-size="Small"/></td>  
-                <td>{{ item.price_lg }} <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_lg }}" name="{{ item.item }}" value="{{ item.price_lg }}" data-size="Large"/></td>  
+                <td>
+                  {{ item.price_sm }} 
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_sm }}" name="{{ item.item }}" value="{{ item.price_sm }}" data-size="Small"/>
+                    <span class="checkmark"></span>
+                  </label>
+                </td>  
+                <td>
+                  {{ item.price_lg }} 
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_lg }}" name="{{ item.item }}" value="{{ item.price_lg }}" data-size="Large"/>
+                    <span class="checkmark"></span>
+                  </label>
+                </td>  
               </tr>
             {% endif %}
           {% endfor %}
@@ -98,14 +122,38 @@
             {% if item.group == 'Sicilian Pizza' and item.item != 'Cheese' %}
             <tr id="{{ item.group }} + {{ item.item }}">
               <td>{{ item.item }}</td>
-              <td>{{ item.price_sm }} <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_sm }}" name="{{ item.item }}" value="{{ item.price_sm }}" data-toppings="true" data-size="Small"/></td>  
-              <td>{{ item.price_lg }} <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_lg }}" name="{{ item.item }}" value="{{ item.price_lg }}" data-toppings="true" data-size="Large"/></td>  
+              <td>
+                {{ item.price_sm }} 
+                <label class="checkbox-container">
+                  <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_sm }}" name="{{ item.item }}" value="{{ item.price_sm }}" data-toppings="true" data-size="Small"/>
+                  <span class="checkmark"></span>
+                </label>
+              </td>  
+              <td>
+                {{ item.price_lg }} 
+                <label for="" class="checkbox-container">
+                  <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_lg }}" name="{{ item.item }}" value="{{ item.price_lg }}" data-toppings="true" data-size="Large"/>
+                  <span class="checkmark"></span>
+                </label>
+              </td>  
             </tr>
             {% elif item.group == 'Sicilian Pizza' and item.item == 'Cheese' %}
               <tr id="{{ item.group }} + {{ item.item }}">
                 <td>{{ item.item }}</td>
-                <td>{{ item.price_sm }} <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_sm }}" name="{{ item.item }}" value="{{ item.price_sm }}" data-size="Small"/></td>  
-                <td>{{ item.price_lg }} <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_lg }}" name="{{ item.item }}" value="{{ item.price_lg }}" data-size="Large"/></td>  
+                <td>
+                  {{ item.price_sm }} 
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_sm }}" name="{{ item.item }}" value="{{ item.price_sm }}" data-size="Small"/>
+                    <span class="checkmark"></span>
+                  </label>
+                </td>  
+                <td>
+                  {{ item.price_lg }} 
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_lg }}" name="{{ item.item }}" value="{{ item.price_lg }}" data-size="Large"/>
+                    <span class="checkmark"></span>
+                  </label>
+                </td>  
               </tr>
             {% endif %}
           {% endfor %}
@@ -121,7 +169,13 @@
             {% if item.group == 'Pasta' %}
               <tr>
                 <td>{{ item.item }}</td>
-                <td>{{ item.price }} <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price }}" name="{{ item.item }}" value="{{ item.price }}" data-toppings="false" /></td>  
+                <td>
+                  {{ item.price }} 
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price }}" name="{{ item.item }}" value="{{ item.price }}" data-toppings="false" />
+                    <span class="checkmark"></span>
+                  </label>
+                </td>  
               </tr>
             {% endif %}
           {% endfor %}
@@ -137,7 +191,13 @@
             {% if item.group == 'Salads' %}
             <tr>
               <td>{{ item.item }}</td>
-              <td>{{ item.price }} <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price }}" name="{{ item.item }}" value="{{ item.price }}" data-toppings="false" /></td>  
+              <td>
+                {{ item.price }} 
+                <label class="checkbox-container">
+                  <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price }}" name="{{ item.item }}" value="{{ item.price }}" data-toppings="false" />
+                  <span class="checkmark"></span>
+                </label>
+              </td>  
             </tr>
             {% endif %}
           {% endfor %}
@@ -164,14 +224,32 @@
             {% if item.group == 'Subs' and item.item != 'Sausage, Peppers & Onions' %}
             <tr id="{{ item.group }} + {{ item.item }}">
                 <td>{{ item.item }}</td>
-                <td>{{ item.price_sm }} <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_sm }}" name="{{ item.item }}" value="{{ item.price_sm }}" data-extras="true" data-size="Small" /></td>  
-                <td>{{ item.price_lg }} <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_lg }}" name="{{ item.item }}" value="{{ item.price_lg }}" data-extras="true" data-size="Large" /></td>  
+                <td>
+                  {{ item.price_sm }} 
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_sm }}" name="{{ item.item }}" value="{{ item.price_sm }}" data-extras="true" data-size="Small" />
+                    <span class="checkmark"></span>
+                  </label>
+                </td>  
+                <td>
+                  {{ item.price_lg }} 
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_lg }}" name="{{ item.item }}" value="{{ item.price_lg }}" data-extras="true" data-size="Large" />
+                    <span class="checkmark"></span>
+                  </label>
+                </td>  
               </tr>
             {% elif item.group == 'Subs' and item.item == 'Sausage, Peppers & Onions' %}
               <tr id="{{ item.group }} + {{ item.item }}">
                 <td>{{ item.item }}</td>
                 <td></td>
-                <td>{{ item.price_lg }} <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_lg }}" name="{{ item.item }}" value="{{ item.price_lg }}" data-extras="true" data-size="Large" /></td>  
+                <td>
+                  {{ item.price_lg }} 
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_lg }}" name="{{ item.item }}" value="{{ item.price_lg }}" data-extras="true" data-size="Large" />
+                    <span class="checkmark"></span>
+                  </label>
+                </td>  
               </tr>  
             {% endif %}
           {% endfor %}
@@ -188,8 +266,20 @@
             {% if item.group == 'Dinner Platters' %}
             <tr>
               <td>{{ item.item }}</td>
-              <td>{{ item.price_sm }} <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_sm }}" name="{{ item.item }}" value="{{ item.price_sm }}" data-toppings="false" data-size="Small"/></td>  
-              <td>{{ item.price_lg }} <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_lg }}" name="{{ item.item }}" value="{{ item.price_lg }}" data-toppings="false" data-size="Large"/></td>  
+              <td>
+                {{ item.price_sm }} 
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_sm }}" name="{{ item.item }}" value="{{ item.price_sm }}" data-toppings="false" data-size="Small"/>
+                    <span class="checkmark"></span>
+                  </label>
+              </td>  
+              <td>
+                {{ item.price_lg }} 
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_lg }}" name="{{ item.item }}" value="{{ item.price_lg }}" data-toppings="false" data-size="Large"/>
+                    <span class="checkmark"></span>
+                  </label>
+              </td>  
             </tr>
             {% endif %}
           {% endfor %}
@@ -210,7 +300,7 @@
 <div id="modal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
-      <h4>Items Added to Order</h4>
+      <h4>Added to Order:</h4>
       <span class="close">&times;</span>
     </div>
     <div class="modal-body">

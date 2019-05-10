@@ -98,8 +98,10 @@ html {
 }
 
 input[type='checkbox'] {
-  width: 10px;
+  background-color: green;
+  color: blue;
   margin: 0;
+  padding: 0;
 }
 
 .login-cs50-background {
@@ -393,5 +395,61 @@ footer p {
   color: white;
   cursor: pointer;
   text-decoration: none;
+}
+
+.checkbox-container {
+  cursor: pointer;
+  display: inline;
+  position: relative;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.checkbox-container:hover input ~ .checkmark {
+  background-color: #a7cc38;
+}
+
+.checkbox-container input {
+  cursor: pointer;
+  height: 0;
+  opacity: 0;
+  position: absolute;
+  width: 0;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background-color: #a7cc38;
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkmark {
+  background-color: white;
+  border: 2px solid #437738;
+  border-radius: 8px;
+  font-family: arial;
+  height: 16px;
+  left: 0;
+  position: absolute;
+  top: 4px;
+  width: 16px;
+}
+
+.checkmark:after {
+  border: solid #437738;
+  border-width: 0 3px 3px 0;
+  content: "";
+  display: none;
+  height: 12px;
+  left: 6px;
+  position: absolute;
+  top: -3px;
+  width: 5px;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 /*# sourceMappingURL=main.css.map */

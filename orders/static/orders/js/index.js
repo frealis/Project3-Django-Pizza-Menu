@@ -312,10 +312,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Display extras' prices
         const br_price = document.createElement('br');
         if (size === 'Small') {
-          td_extras_price.append('+ ', extra_price_sm, br_price);
+          td_extras_price.append(extra_price_sm, br_price);
           price = extra_price_sm;
         } else if (size === 'Large') {
-          td_extras_price.append('+ ', extra_price_lg, br_price);
+          td_extras_price.append(extra_price_lg, br_price);
           price = extra_price_lg;
         };
 
@@ -333,10 +333,10 @@ document.addEventListener('DOMContentLoaded', function() {
           // Display 'Extra Cheese' price for all subs
           const br_extras_prices = document.createElement('br');
           if (size === 'Small') {
-            td_extras_price.append('+ ', extra_price_sm, br_extras_prices);
+            td_extras_price.append(extra_price_sm, br_extras_prices);
             price = extra_price_sm;
           } else if (size === 'Large') {
-            td_extras_price.append('+ ', extra_price_lg, br_extras_prices);
+            td_extras_price.append(extra_price_lg, br_extras_prices);
             price = extra_price_lg;
           };
 
