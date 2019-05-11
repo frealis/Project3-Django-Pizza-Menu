@@ -113,15 +113,20 @@ document.addEventListener('DOMContentLoaded', function() {
             // (assuming any remain) after removing a menu item.
             localStorageIndexUpdate();
 
+            // Remove deleted menu item from the DOM.
             remove_from_dom = document.querySelector(`ul[data-user="${user}"][data-tr-id="${data_tr_id}"][data-size="${data_size}"]`);
             remove_from_dom.remove();
+
+            // Update total price.
+            total_price -= price - total_extras_price;
+            document.querySelector('#total_price').innerHTML = total_price.toFixed(2);
             return;
           };
         };
       });
 
       // Stitch together the <li> element within a <ul> element and then insert it
-      // into the DOM
+      // into the DOM.
       const ul = document.createElement('ul');
       ul.setAttribute('data-user', user);
       ul.setAttribute('data-tr-id', data_tr_id);
@@ -129,12 +134,12 @@ document.addEventListener('DOMContentLoaded', function() {
       ul.append(li);
       document.querySelector('#display_orders').append(ul);
 
-      // Add the price of each item, plus any extras from subs, to the total price
+      // Add the price of each item, plus any extras from subs, to the total price.
       total_price += price + total_extras_price;
     };
   };
 
-  // Append the total price to the DOM
+  // Append the total price to the DOM.
   document.querySelector('#total_price').append(total_price.toFixed(2));
 
   // --------------------- SEND LOCALSTORAGE DATA TO SERVER ---------=------------
