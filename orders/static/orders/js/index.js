@@ -561,9 +561,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // contents of localStorage into a temporary array. 
     // 
     // The purpose is to assign each attribute{} object a unique index number, and
-    // putting each object into an array is one way to accomplish this. Once each 
-    // menu item & its associated attributes has a unique index number, they are 
-    // and then transfered -back- into localStorage.
+    // putting each object into an array is one way to accomplish this. This
+    // makes it easy to iterate over localStorage using a simple FOR loop, as if
+    // it were an array instead of an object. You could accomplish this (or
+    // something similar) using Object.entries(), which is used to iterate over
+    // objects, but the orders.js script has already been written in a way that
+    // requires it to interact with the data in localStorage as if it were an 
+    // array.
+    //
+    // Once each menu item & its associated attributes has a unique index number, 
+    // they are and then transfered -back- into localStorage.
     temp_array = []
     for (let [key, value] of Object.entries(localStorage)) {
       temp_array.push(value);
