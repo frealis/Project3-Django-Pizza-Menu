@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
   for (let i = 0; i < localStorage.length; i++) {
     if (JSON.parse(localStorage.getItem(i))['user'] === user) {
 
-      // 'Place Order' button
+      // 'Place Order' button 
       button_po = document.createElement('button');
       button_po.id = "place-order";
       button_po.innerHTML = "Place Order";
@@ -61,16 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
       break;
     };
   };
-
-  
-  // The 'Clear Order'link both clears all ordered menu items from the DOM
-  // and also resets the total price to $0.
-  // document.querySelector('.clear-order').addEventListener('click', () => {
-  //   document.querySelectorAll('ul').forEach(ul => {
-  //     ul.remove();
-  //   }); 
-  //   document.querySelector('#total_price').innerHTML = 0;
-  // });
 
   // Retrieve and display items from localStorage
 
@@ -183,7 +173,6 @@ document.addEventListener('DOMContentLoaded', function() {
     div.innerHTML = "Your order has been placed!";
     div_orders = document.querySelector('.orders');
     div_orders.insertBefore(div, div_orders.childNodes[0]);
-    // document.querySelector('.width320').innerHTML = "Your order has been placed!";
 
     // Initialize POST request, extract the CSRF value from the index.html DOM,
     // and put that into the header of the POST request
@@ -228,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // storage from client-side localStorage, and remove any 'Clear Order' or 
     // 'Remove Item' links from the DOM.
     localStorageClear(user);
-    removeRemoveItems();
+    clearOrderLinks();
 
     // Re-assign index numbers to any remaining items left in localStorage.
     localStorageIndexUpdate();
@@ -262,11 +251,14 @@ function localStorageClear(user) {
   };
 }
 
-// Remove the 'Clear Order' and all 'Remove Item' links from the DOM.
-function removeRemoveItems() {
+function removeItem() {
+
+}
+
+function clearOrderLinks () {
+  document.querySelector('#place-order').remove();
   document.querySelector('.clear-order').remove();
-  remove_item = document.querySelectorAll('.remove-item');
-  remove_item.forEach(item => {
+  document.querySelectorAll('.remove-item').forEach(item => {
     item.remove();
   });
 }
