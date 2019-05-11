@@ -66,13 +66,13 @@
 
           <!-- Regular Pizza -->
           <tr>
-            <td><strong>Regular Pizza</strong></td>
+            <td><strong>Regular Pizza <span id="count">{{ count }}</span></strong></td>
             <td>Small</td>
             <td>Large</td>
           </tr>
           {% for item in menu %}
             {% if item.group == 'Regular Pizza' and item.item != 'Cheese' %}
-              <tr id="{{ item.group }} + {{ item.item }}">
+              <tr id="{{ item.group }} + {{ item.item }}" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_sm }}" name="{{ item.item }}" value="{{ item.price_sm }}" data-toppings="true" data-size="Small">
                 <td>{{ item.item }}</td>
                 <td>
                   {{ item.price_sm }} 
@@ -310,7 +310,15 @@
       Total: <span id="total_price"></span>
     </div>
   </div>
-
 </div>
+
+<!-- Footer -->
+<footer class="text-muted">
+  <div class="container">
+    <p class="float-right">
+      <a href="#">Back to top</a>
+    </p>
+  </div>
+</footer>
 
 {% endblock %}

@@ -4,10 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
   td_all = document.querySelectorAll('td');
   td_all.forEach(td => {
     if (td.innerHTML === 'Small') {
-      td.className = 'blue';
       td.style.width = '100px'
     } else if (td.innerHTML === 'Large') {
-      td.className = 'red';
       td.style.width = '100px'
     }
   })
