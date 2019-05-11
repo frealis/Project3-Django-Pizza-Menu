@@ -555,30 +555,7 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log(localStorage);
     };
 
-    // Use Object.entries() to iterate over the localStorage object, which stores
-    // all of menu items that have been added to the order (menu items + their 
-    // attributes are stored in the attributes{} object), in order to transfer the
-    // contents of localStorage into a temporary array. 
-    // 
-    // The purpose is to assign each attribute{} object a unique index number, and
-    // putting each object into an array is one way to accomplish this. This
-    // makes it easy to iterate over localStorage using a simple FOR loop, as if
-    // it were an array instead of an object. You could accomplish this (or
-    // something similar) using Object.entries(), which is used to iterate over
-    // objects, but the orders.js script has already been written in a way that
-    // requires it to interact with the data in localStorage as if it were an 
-    // array.
-    //
-    // Once each menu item & its associated attributes has a unique index number, 
-    // they are and then transfered -back- into localStorage.
-    temp_array = []
-    for (let [key, value] of Object.entries(localStorage)) {
-      temp_array.push(value);
-    }
-    localStorage.clear();
-    for (let i = 0; i < temp_array.length; i++) {
-      localStorage.setItem(i, temp_array[i]);
-    }
+    localStorageIndexUpdate();
 
     // Display the modal
     let modal = document.getElementById('modal');
@@ -604,3 +581,32 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
+
+// --------------------- UPDATE LOCALSTORAGE INDICES -----------------------------
+
+// Use Object.entries() to iterate over the localStorage object, which stores
+// all of menu items that have been added to the order (menu items + their 
+// attributes are stored in the attributes{} object), in order to transfer the
+// contents of localStorage into a temporary array. 
+// 
+// The purpose is to assign each attribute{} object a unique index number, and
+// putting each object into an array is one way to accomplish this. This
+// makes it easy to iterate over localStorage using a simple FOR loop, as if
+// it were an array instead of an object. You could accomplish this (or
+// something similar) using Object.entries(), which is used to iterate over
+// objects, but the orders.js script has already been written in a way that
+// requires it to interact with the data in localStorage as if it were an 
+// array.
+//
+// Once each menu item & its associated attributes has a unique index number, 
+// they are and then transfered -back- into localStorage.
+function localStorageIndexUpdate() {
+  temp_array = []
+  for (let [key, value] of Object.entries(localStorage)) {
+    temp_array.push(value);
+  }
+  localStorage.clear();
+  for (let i = 0; i < temp_array.length; i++) {
+    localStorage.setItem(i, temp_array[i]);
+  }
+}

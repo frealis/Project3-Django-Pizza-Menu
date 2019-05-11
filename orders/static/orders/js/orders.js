@@ -28,14 +28,10 @@ document.addEventListener('DOMContentLoaded', function() {
   orders_div = document.querySelector('.orders')
   orders_div.insertBefore(div_header_width320, orders_div.childNodes[0]);
 
-  // Create .left and .right <div> elements
+  // Create .left <div> element.
   div_left = document.createElement('div');
   div_left.className = "left"
   document.querySelector('.header.width320').append(div_left);
-
-  div_right = document.createElement('div');
-  div_right.className = "right"
-  document.querySelector('.header.width320').append(div_right);
 
   // Create "Order:" heading
   document.querySelector('.left').innerHTML = "Order:";
@@ -103,14 +99,23 @@ document.addEventListener('DOMContentLoaded', function() {
       span.append(br2, 'X Remove Item');
       span.style.fontWeight = 'bold';
       span.style.cursor = 'pointer';
+
+      // Add a link to remove a specific item from the order.
       span.addEventListener('click', function() {
         localStorage_length = localStorage.length;
         for (let i = 0; i < localStorage_length; i++) {
           if (JSON.parse(localStorage.getItem(i))['user'] === user &&
               JSON.parse(localStorage.getItem(i))['data_tr_id'] === data_tr_id &&
               JSON.parse(localStorage.getItem(i))['data_size'] === data_size) {
-                console.log(i)
             localStorage.removeItem(i);
+
+            // Re-assign keys to the remaining menu items stored in localStorage 
+            // (assuming any remain) after removing a menu item.
+            localStorageIndexUpdate();
+
+            remove_from_dom = document.querySelector(`ul[data-user="${user}"][data-tr-id="${data_tr_id}"][data-size="${data_size}"]`);
+            remove_from_dom.remove();
+            return;
           };
         };
       });
@@ -118,8 +123,11 @@ document.addEventListener('DOMContentLoaded', function() {
       // Stitch together the <li> element within a <ul> element and then insert it
       // into the DOM
       const ul = document.createElement('ul');
+      ul.setAttribute('data-user', user);
+      ul.setAttribute('data-tr-id', data_tr_id);
+      ul.setAttribute('data-size', data_size);
       ul.append(li);
-      document.querySelector('#display_orders').append(ul);``
+      document.querySelector('#display_orders').append(ul);
 
       // Add the price of each item, plus any extras from subs, to the total price
       total_price += price + total_extras_price;
@@ -191,5 +199,24 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.removeItem(i);
       };
     };
+
+    // Re-assign index numbers to any remaining items left in localStorage.
+    localStorageIndexUpdate()
   };
 });
+
+// --------------------- UPDATE LOCALSTORAGE INDICES -----------------------------
+
+// This function assigns array-like indices to each menu item in localStorage. A
+// more complete description can be found in index.js under the same function
+// name.
+function localStorageIndexUpdate() {
+  temp_array = []
+  for (let [key, value] of Object.entries(localStorage)) {
+    temp_array.push(value);
+  }
+  localStorage.clear();
+  for (let i = 0; i < temp_array.length; i++) {
+    localStorage.setItem(i, temp_array[i]);
+  }
+}

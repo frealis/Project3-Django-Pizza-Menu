@@ -237,15 +237,6 @@ input[type='checkbox'] {
   padding-right: 0px;
 }
 
-.left {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: flex-start;
-}
-
 .orders {
   background: #faf9db;
   border: 2px solid #437738;
