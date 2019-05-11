@@ -38,9 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
       button_co.className = "button-transparent nav-text clear-order";
       button_co.innerHTML = "Clear Order";
       button_co.addEventListener('click', () => {
-        document.querySelector('#place-order').remove();
-        document.querySelector('.clear-order').remove();
-        document.querySelector('#total_price').innerHTML = 0;
+          noOrders();
         document.querySelectorAll('ul').forEach(ul => {
           ul.remove();
         }); 
@@ -127,8 +125,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Update total price.
             total_price -= price - total_extras_price;
-            document.querySelector('#total_price').innerHTML = total_price.toFixed(2);
+            if (total_price === 0) {
+              noOrders();
+            } else {
+            document.querySelector('#total_price').innerHTML = `Total: ${total_price.toFixed(2)}`;
             return;
+            };
           };
         };
       });
@@ -148,7 +150,11 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 
   // Append the total price to the DOM.
-  document.querySelector('#total_price').append(total_price.toFixed(2));
+  if (total_price === 0) {
+    noOrders();
+  } else {
+    document.querySelector('#total_price').append(`Total: ${total_price.toFixed(2)}`);
+  };
 
   // --------------------- SEND LOCALSTORAGE DATA TO SERVER ---------=------------
 
@@ -245,9 +251,16 @@ function localStorageClear(user) {
 
 // Remove all order-related links from the DOM.
 function clearOrderLinks () {
-  document.querySelector('#place-order').remove();
-  document.querySelector('.clear-order').remove();
+  document.querySelector('.place-order-div').remove();
+  document.querySelector('.clear-order-div').remove();
   document.querySelectorAll('.remove-item').forEach(item => {
     item.remove();
   });
+}
+
+// Run this when there are no orders to display on onrders.html.
+function noOrders() {
+  document.querySelector('.clear-order-div').style.display = 'none';
+  document.querySelector('.place-order-div').style.display = 'none';
+  document.querySelector('#total_price').innerHTML = "No orders.";
 }
