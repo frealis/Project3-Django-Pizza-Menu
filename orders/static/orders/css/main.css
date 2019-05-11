@@ -57,6 +57,11 @@ body {
           justify-content: center;
 }
 
+.clear-order-div {
+  border-top: 2px solid green;
+  padding-top: 10px;
+}
+
 .flex {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -256,6 +261,31 @@ input[type='checkbox'] {
 
 .red {
   background: red;
+}
+
+.remove-item-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.remove-item {
+  background-color: #a51d21;
+  border-radius: 10px;
+  color: #faf9db;
+  display: block;
+  height: 20px;
+  line-height: 14px;
+  margin-left: auto;
+  margin-top: 3px;
+  padding-left: 6px;
+  width: 20px;
+}
+
+.remove-item:hover {
+  background-color: #a7cc38;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
 }
 
 .right {

@@ -22,40 +22,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // --------------------- DISPLAY ORDER -----------------------------------------
 
-  // Create .header.width320 <div> element
-  div_header_width320 = document.createElement('div');
-  div_header_width320.className = "header width320";
-  orders_div = document.querySelector('.orders')
-  orders_div.insertBefore(div_header_width320, orders_div.childNodes[0]);
-
-  // Create .left <div> element.
-  div_left = document.createElement('div');
-  div_left.className = "left"
-  document.querySelector('.header.width320').append(div_left);
-
-  // Create "Order:" heading
-  document.querySelector('.left').innerHTML = "Order:";
-
   // Create the "Place Order" button if at least 1 order item exists, along with
   // a corresponding "Clear Order" link.
   for (let i = 0; i < localStorage.length; i++) {
     if (JSON.parse(localStorage.getItem(i))['user'] === user) {
 
-      // 'Place Order' button 
+      // Create 'Place Order' button & place in DOM.
       button_po = document.createElement('button');
       button_po.id = "place-order";
       button_po.innerHTML = "Place Order";
       document.querySelector('.place-order-div').append(button_po);
 
-      // 'Clear Order' button
+      // Create 'Clear Order' button & place in DOM.
       button_co = document.createElement('button');
       button_co.className = "button-transparent nav-text clear-order";
       button_co.innerHTML = "Clear Order";
       button_co.addEventListener('click', () => {
+        document.querySelector('#place-order').remove();
+        document.querySelector('.clear-order').remove();
+        document.querySelector('#total_price').innerHTML = 0;
         document.querySelectorAll('ul').forEach(ul => {
           ul.remove();
         }); 
-        document.querySelector('#total_price').innerHTML = 0;
+        localStorageClear(user);
       });
       document.querySelector('.clear-order-div').append(button_co);
       break;
@@ -63,7 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 
   // Retrieve and display items from localStorage
-
   for (let i = 0; i < localStorage.length; i++) {
     if (JSON.parse(localStorage.getItem(i))['user'] === user) {
       const data_group  = JSON.parse(localStorage.getItem(i))['data_group'];
@@ -101,21 +89,27 @@ document.addEventListener('DOMContentLoaded', function() {
         };
       };
 
-      // Append the price of the individual item and any extras to the list of 
-      // orders
-      br = document.createElement('br');
-      br2 = document.createElement('br');
-      span = document.createElement('span');
+      // Create the price <span>.
+      span_price = document.createElement('span');
       total_individual_price = price + total_extras_price;
-      li.append(br, '$', total_individual_price.toFixed(2));
-      li.append(br2, span);
-      span.append(br2, 'X Remove Item');
-      span.className = "remove-item"
-      span.style.fontWeight = 'bold';
-      span.style.cursor = 'pointer';
+      span_price.innerHTML = 'Total: $' + total_individual_price.toFixed(2);
+
+      // Create the 'remove item' <span>, aka 'x'.
+      span_remove_item = document.createElement('span');
+      span_remove_item.append('x');
+      span_remove_item.className = "remove-item";
+      span_remove_item.style.fontWeight = 'bold';
+      span_remove_item.style.cursor = 'pointer';
+
+      // Stitch together the price and 'remove item' button (aka 'x') and add it
+      // to the menu item <li> element.
+      div = document.createElement('div');
+      div.className = "remove-item-container";
+      div.append(span_price, span_remove_item)
+      li.append(div);
 
       // Add a link to remove a specific item from the order.
-      span.addEventListener('click', function() {
+      span_remove_item.addEventListener('click', function() {
         localStorage_length = localStorage.length;
         for (let i = 0; i < localStorage_length; i++) {
           if (JSON.parse(localStorage.getItem(i))['user'] === user &&
@@ -158,73 +152,71 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // --------------------- SEND LOCALSTORAGE DATA TO SERVER ---------=------------
 
-  document.querySelector('#place-order').onclick = () => {
+  if (document.querySelector('#place-order')) {
+    document.querySelector('#place-order').onclick = () => {
 
-    // Clear out the orders header and replace it with a simple "Your order has
-    // been placed!" message
-    header_width320 = document.querySelector('.header.width320')
-    header_width320.parentNode.removeChild(header_width320)
+      // Create a success message & insert it into the DOM when order is placed.
+      div = document.createElement('div');
+      div.className = "alert alert-success";
+      div.style.border = "2px solid";
+      div.style.fontWeight = "bold";
+      div.style.textAlign = "center";
+      div.innerHTML = "Your order has been placed!";
+      div_orders = document.querySelector('.orders');
+      div_orders.insertBefore(div, div_orders.childNodes[0]);
 
-    div = document.createElement('div');
-    div.className = "alert alert-success";
-    div.style.border = "2px solid";
-    div.style.fontWeight = "bold";
-    div.style.textAlign = "center";
-    div.innerHTML = "Your order has been placed!";
-    div_orders = document.querySelector('.orders');
-    div_orders.insertBefore(div, div_orders.childNodes[0]);
+      // Initialize POST request, extract the CSRF value from the index.html DOM,
+      // and put that into the header of the POST request.
+      const request = new XMLHttpRequest();
+      request.open('POST', '/orders');
+      const csrf_token = document.querySelector('#csrf').childNodes[0]['value'];
+      request.setRequestHeader("X-CSRFToken", csrf_token);
 
-    // Initialize POST request, extract the CSRF value from the index.html DOM,
-    // and put that into the header of the POST request
-    const request = new XMLHttpRequest();
-    request.open('POST', '/orders');
-    const csrf_token = document.querySelector('#csrf').childNodes[0]['value'];
-    request.setRequestHeader("X-CSRFToken", csrf_token);
+      // Retrieve items from localStorage and append them to localStorage_data, 
+      // which is a FormData() object that can be used to transmit the data to the
+      // server (ie. views.py).
+      const localStorage_data = new FormData();
+      for (let i = 0; i < localStorage.length; i++) {
+        if (JSON.parse(localStorage.getItem(i))['user'] === user) {
+          let data_group    = JSON.parse(localStorage.getItem(i))['data_group'];
+          let data_size     = JSON.parse(localStorage.getItem(i))['data_size'];
+          let extras        = JSON.parse(localStorage.getItem(i))['extras'];
+          let extras_price  = JSON.parse(localStorage.getItem(i))['extras_price'];
+          let name          = JSON.parse(localStorage.getItem(i))['name'];
+          let toppings      = JSON.parse(localStorage.getItem(i))['toppings'];
+          let price         = parseFloat(JSON.parse(localStorage.getItem(i))['value']);
 
-    // Retrieve items from localStorage and append them to localStorage_data, 
-    // which is a FormData() object that can be used to transmit the data to the
-    // server (ie. views.py).
-    const localStorage_data = new FormData();
-    for (let i = 0; i < localStorage.length; i++) {
-      if (JSON.parse(localStorage.getItem(i))['user'] === user) {
-        let data_group    = JSON.parse(localStorage.getItem(i))['data_group'];
-        let data_size     = JSON.parse(localStorage.getItem(i))['data_size'];
-        let extras        = JSON.parse(localStorage.getItem(i))['extras'];
-        let extras_price  = JSON.parse(localStorage.getItem(i))['extras_price'];
-        let name          = JSON.parse(localStorage.getItem(i))['name'];
-        let toppings      = JSON.parse(localStorage.getItem(i))['toppings'];
-        let price         = parseFloat(JSON.parse(localStorage.getItem(i))['value']);
-
-        // Append data to localStorage_data (the FormData() object)
-        localStorage_data.append('data_group',    data_group);
-        localStorage_data.append('data_size',     data_size);
-        localStorage_data.append('extras',        extras);
-        localStorage_data.append('extras_price',  extras_price);
-        localStorage_data.append('name',          name);
-        localStorage_data.append('toppings',      toppings);
-        localStorage_data.append('price',         price);
-        localStorage_data.append('user',          user);
+          // Append data to localStorage_data (the FormData() object)
+          localStorage_data.append('data_group',    data_group);
+          localStorage_data.append('data_size',     data_size);
+          localStorage_data.append('extras',        extras);
+          localStorage_data.append('extras_price',  extras_price);
+          localStorage_data.append('name',          name);
+          localStorage_data.append('toppings',      toppings);
+          localStorage_data.append('price',         price);
+          localStorage_data.append('user',          user);
+        };
       };
+
+      // Send localStorage_data to views.py so that it can store all of the order
+      // information in the database. Note -- this AJAX-type request sends the
+      // order data to the server for storage, but the button on orders.html, when 
+      // clicked, submits a GET request to redirect to success.html.
+      request.send(localStorage_data);
+
+      // Clear out the ordered items that were just sent to the server for database
+      // storage from client-side localStorage, and remove any 'Clear Order' or 
+      // 'Remove Item' links from the DOM.
+      localStorageClear(user);
+      clearOrderLinks();
+
+      // Re-assign index numbers to any remaining items left in localStorage.
+      localStorageIndexUpdate();
     };
-
-    // Send localStorage_data to views.py so that it can store all of the order
-    // information in the database. Note -- this AJAX-type request sends the
-    // order data to the server for storage, but the button on orders.html, when 
-    // clicked, submits a GET request to redirect to success.html.
-    request.send(localStorage_data);
-
-    // Clear out the ordered items that were just sent to the server for database
-    // storage from client-side localStorage, and remove any 'Clear Order' or 
-    // 'Remove Item' links from the DOM.
-    localStorageClear(user);
-    clearOrderLinks();
-
-    // Re-assign index numbers to any remaining items left in localStorage.
-    localStorageIndexUpdate();
   };
 });
 
-// --------------------- UPDATE LOCALSTORAGE INDICES -----------------------------
+// --------------------- DOM & LOCALSTORAGE MAINTENANCE FUNCTIONS ----------------
 
 // This function assigns array-like indices to each menu item in localStorage. A
 // more complete description can be found in index.js under the same function
@@ -251,10 +243,7 @@ function localStorageClear(user) {
   };
 }
 
-function removeItem() {
-
-}
-
+// Remove all order-related links from the DOM.
 function clearOrderLinks () {
   document.querySelector('#place-order').remove();
   document.querySelector('.clear-order').remove();
