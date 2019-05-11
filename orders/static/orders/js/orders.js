@@ -36,21 +36,44 @@ document.addEventListener('DOMContentLoaded', function() {
   // Create "Order:" heading
   document.querySelector('.left').innerHTML = "Order:";
 
-  // Create "Place Order" button
-  button = document.createElement('button');
-  button.id = "place-order";
-  button.innerHTML = "Place Order";
-  document.querySelector('.place-order-div').append(button);
-
-  // Enable the "Place Order" button if at least 1 order item exists
-  document.querySelector('#place-order').disabled = true;
+  // Create the "Place Order" button if at least 1 order item exists, along with
+  // a corresponding "Clear Order" link.
   for (let i = 0; i < localStorage.length; i++) {
     if (JSON.parse(localStorage.getItem(i))['user'] === user) {
-      document.querySelector('#place-order').disabled = false;
+
+      // 'Place Order' button
+      button_po = document.createElement('button');
+      button_po.id = "place-order";
+      button_po.innerHTML = "Place Order";
+      document.querySelector('.place-order-div').append(button_po);
+
+      // 'Clear Order' button
+      button_co = document.createElement('button');
+      button_co.className = "button-transparent nav-text clear-order";
+      button_co.innerHTML = "Clear Order";
+      button_co.addEventListener('click', () => {
+        document.querySelectorAll('ul').forEach(ul => {
+          ul.remove();
+        }); 
+        document.querySelector('#total_price').innerHTML = 0;
+      });
+      document.querySelector('.clear-order-div').append(button_co);
+      break;
     };
   };
 
+  
+  // The 'Clear Order'link both clears all ordered menu items from the DOM
+  // and also resets the total price to $0.
+  // document.querySelector('.clear-order').addEventListener('click', () => {
+  //   document.querySelectorAll('ul').forEach(ul => {
+  //     ul.remove();
+  //   }); 
+  //   document.querySelector('#total_price').innerHTML = 0;
+  // });
+
   // Retrieve and display items from localStorage
+
   for (let i = 0; i < localStorage.length; i++) {
     if (JSON.parse(localStorage.getItem(i))['user'] === user) {
       const data_group  = JSON.parse(localStorage.getItem(i))['data_group'];
@@ -58,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const data_tr_id  = JSON.parse(localStorage.getItem(i))['data_tr_id'];
       const name        = JSON.parse(localStorage.getItem(i))['name'];
       const price       = parseFloat(JSON.parse(localStorage.getItem(i))['value']);
-
+    
       // Enclose each ordered item within an <li> element
       var item = '';
       if (data_size === undefined) {
@@ -97,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
       li.append(br, '$', total_individual_price.toFixed(2));
       li.append(br2, span);
       span.append(br2, 'X Remove Item');
+      span.className = "remove-item"
       span.style.fontWeight = 'bold';
       span.style.cursor = 'pointer';
 
@@ -114,8 +138,8 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorageIndexUpdate();
 
             // Remove deleted menu item from the DOM.
-            remove_from_dom = document.querySelector(`ul[data-user="${user}"][data-tr-id="${data_tr_id}"][data-size="${data_size}"]`);
-            remove_from_dom.remove();
+            remove_ul = document.querySelector(`ul[data-user="${user}"][data-tr-id="${data_tr_id}"][data-size="${data_size}"]`);
+            remove_ul.remove();
 
             // Update total price.
             total_price -= price - total_extras_price;
@@ -151,11 +175,15 @@ document.addEventListener('DOMContentLoaded', function() {
     header_width320 = document.querySelector('.header.width320')
     header_width320.parentNode.removeChild(header_width320)
 
-    div_text_center = document.createElement('div');
-    div_text_center.className = "text_center width320" 
-    orders_div = document.querySelector('.orders')
-    orders_div.insertBefore(div_text_center, orders_div.childNodes[0]);
-    document.querySelector('.text_center.width320').innerHTML = "Your order has been placed!";
+    div = document.createElement('div');
+    div.className = "alert alert-success";
+    div.style.border = "2px solid";
+    div.style.fontWeight = "bold";
+    div.style.textAlign = "center";
+    div.innerHTML = "Your order has been placed!";
+    div_orders = document.querySelector('.orders');
+    div_orders.insertBefore(div, div_orders.childNodes[0]);
+    // document.querySelector('.width320').innerHTML = "Your order has been placed!";
 
     // Initialize POST request, extract the CSRF value from the index.html DOM,
     // and put that into the header of the POST request
@@ -197,16 +225,13 @@ document.addEventListener('DOMContentLoaded', function() {
     request.send(localStorage_data);
 
     // Clear out the ordered items that were just sent to the server for database
-    // storage from client-side localStorage
-    localStorage_length = localStorage.length
-    for (let i = 0; i < localStorage_length; i++) {
-      if (JSON.parse(localStorage.getItem(i))['user'] === user) {
-        localStorage.removeItem(i);
-      };
-    };
+    // storage from client-side localStorage, and remove any 'Clear Order' or 
+    // 'Remove Item' links from the DOM.
+    localStorageClear(user);
+    removeRemoveItems();
 
     // Re-assign index numbers to any remaining items left in localStorage.
-    localStorageIndexUpdate()
+    localStorageIndexUpdate();
   };
 });
 
@@ -224,4 +249,24 @@ function localStorageIndexUpdate() {
   for (let i = 0; i < temp_array.length; i++) {
     localStorage.setItem(i, temp_array[i]);
   }
+}
+
+// Clear all menu items that are part of the current order from localStorage that
+// are associated with a particular user.
+function localStorageClear(user) {
+  localStorage_length = localStorage.length;
+  for (let i = 0; i < localStorage_length; i++) {
+    if (JSON.parse(localStorage.getItem(i))['user'] === user) {
+      localStorage.removeItem(i);
+    };
+  };
+}
+
+// Remove the 'Clear Order' and all 'Remove Item' links from the DOM.
+function removeRemoveItems() {
+  document.querySelector('.clear-order').remove();
+  remove_item = document.querySelectorAll('.remove-item');
+  remove_item.forEach(item => {
+    item.remove();
+  });
 }
