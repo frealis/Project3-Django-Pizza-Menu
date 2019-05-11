@@ -21,12 +21,31 @@ a:hover {
   font-family: Arial;
 }
 
+.back-to-menu {
+  background-color: blue;
+  color: #a51d21;
+}
+
+.back-to-menu:hover {
+  color: #a7cc38;
+  cursor: pointer;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
 .blue {
   background: blue;
 }
 
 body {
   background-color: #faf9db;
+}
+
+.button-transparent {
+  background-color: #faf9db;
+  border: 0;
+  font-weight: bold;
+  padding: 0;
 }
 
 .center {
@@ -63,19 +82,12 @@ html {
   border-radius: 30px;
   color: #faf9db;
   height: 30px;
-  padding: 0;
+  padding: 0 0 3px 0;
   width: 30px;
 }
 
 .index-order-links > .index-text {
   color: #a51d21;
-}
-
-.index-button-invisible {
-  background-color: #faf9db;
-  border: 0;
-  font-weight: bold;
-  padding: 0;
 }
 
 .index-order-links {
@@ -137,7 +149,7 @@ input[type='checkbox'] {
   }
 }
 
-#navbarHeader button, .navbar button {
+#navbarHeader button, .navbar button, #place-order {
   background-color: #437738;
   border: 2px solid #faf9db;
   border-radius: 5px;
@@ -146,7 +158,7 @@ input[type='checkbox'] {
   padding: 5px 15px;
 }
 
-#navbarHeader button:hover, .navbar button:hover {
+#navbarHeader button:hover, .navbar button:hover, #place-order:hover {
   background-color: #a51d21;
   color: white;
   cursor: pointer;
@@ -154,7 +166,7 @@ input[type='checkbox'] {
   transition: 0.3s;
 }
 
-#navbarHeader button:focus, .navbar button:focus {
+#navbarHeader button:focus, .navbar button:focus, #place-order:focus {
   outline: none;
 }
 
@@ -244,6 +256,10 @@ input[type='checkbox'] {
 
 .padding10 {
   padding: 10px;
+}
+
+#place-order {
+  border-color: #a7cc38;
 }
 
 .red {

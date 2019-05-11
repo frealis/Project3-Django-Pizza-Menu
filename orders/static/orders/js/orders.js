@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let total_price = 0;
   let user = document.querySelector('#user').innerHTML;
 
-  // --------------------- CREATE LIST ---------------------
+  // --------------------- CREATE LIST -------------------------------------------
 
   function create_list(name) {
     const li = document.createElement('li');
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return li;
   }
 
-  // --------------------- DISPLAY ORDER ---------------------
+  // --------------------- DISPLAY ORDER -----------------------------------------
 
   // Create .header.width320 <div> element
   div_header_width320 = document.createElement('div');
@@ -42,15 +42,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Create "Place Order" button
   button = document.createElement('button');
-  button.id = "place_order";
+  button.id = "place-order";
   button.innerHTML = "Place Order";
-  document.querySelector('.right').append(button);
+  document.querySelector('.place-order-div').append(button);
 
   // Enable the "Place Order" button if at least 1 order item exists
-  document.querySelector('#place_order').disabled = true;
+  document.querySelector('#place-order').disabled = true;
   for (let i = 0; i < localStorage.length; i++) {
     if (JSON.parse(localStorage.getItem(i))['user'] === user) {
-      document.querySelector('#place_order').disabled = false;
+      document.querySelector('#place-order').disabled = false;
     };
   };
 
@@ -111,9 +111,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // Append the total price to the DOM
   document.querySelector('#total_price').append(total_price.toFixed(2));
 
-  // --------------------- SEND LOCALSTORAGE DATA TO SERVER ---------------------
+  // --------------------- SEND LOCALSTORAGE DATA TO SERVER ---------=------------
 
-  document.querySelector('#place_order').onclick = () => {
+  document.querySelector('#place-order').onclick = () => {
 
     // Clear out the orders header and replace it with a simple "Your order has
     // been placed!" message

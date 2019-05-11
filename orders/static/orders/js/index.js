@@ -44,6 +44,8 @@ document.addEventListener('DOMContentLoaded', function() {
   let items_ordered_count = 0;
   let user = document.querySelector('#user').innerHTML;
 
+  console.log(localStorage)
+
   for (let j = 0; j < localStorage.length; j++) {
     if (JSON.parse(localStorage.getItem(j))['user'] === user) {
       items_ordered_count++;
