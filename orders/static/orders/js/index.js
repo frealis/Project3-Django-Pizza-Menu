@@ -476,7 +476,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // --------------------- ADD TO ORDER ------------------------------------------
 
   // Attach an *.onclick event handler
-  document.querySelector('.index-order-links').onclick = () => {
+  document.querySelector('.nav-order-links').onclick = () => {
 
     // Mimic what the selections() function does to gather data on selected
     // menu items, and any selected extras or toppings

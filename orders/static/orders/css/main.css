@@ -76,46 +76,6 @@ html {
   scroll-behavior: smooth;
 }
 
-.index-order-links > .index-button {
-  background-color: #a51d21;
-  border: 0;
-  border-radius: 30px;
-  color: #faf9db;
-  height: 30px;
-  padding: 0 0 3px 0;
-  width: 30px;
-}
-
-.index-order-links > .index-text {
-  color: #a51d21;
-}
-
-.index-order-links {
-  display: inline-block;
-}
-
-.index-order-links:hover .index-text {
-  color: #a7cc38;
-  cursor: pointer;
-  -webkit-transition: 0.2s;
-  transition: 0.2s;
-}
-
-.index-order-links:hover .index-button {
-  background-color: #a7cc38;
-  color: white;
-  cursor: pointer;
-  -webkit-transition: 0.2s;
-  transition: 0.2s;
-}
-
-.index-header {
-  border-bottom: 6px double #437738;
-  color: #4d3a14;
-  font-weight: bold;
-  margin-top: 20px;
-}
-
 input[type='checkbox'] {
   background-color: green;
   color: blue;
@@ -214,6 +174,46 @@ input[type='checkbox'] {
 
 .navbar .container {
   background-color: #437738;
+}
+
+.nav-order-links > .nav-button {
+  background-color: #a51d21;
+  border: 0;
+  border-radius: 30px;
+  color: #faf9db;
+  height: 30px;
+  padding: 0 0 3px 0;
+  width: 30px;
+}
+
+.nav-order-links > .nav-text {
+  color: #a51d21;
+}
+
+.nav-order-links {
+  display: inline-block;
+}
+
+.nav-order-links:hover .nav-text {
+  color: #a7cc38;
+  cursor: pointer;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.nav-order-links:hover .nav-button {
+  background-color: #a7cc38;
+  color: white;
+  cursor: pointer;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.nav-header {
+  border-bottom: 6px double #437738;
+  color: #4d3a14;
+  font-weight: bold;
+  margin-top: 20px;
 }
 
 #nav-login {

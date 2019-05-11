@@ -11,7 +11,7 @@
 {% block body %}
 
 <!-- Heading -->
-<div class="container index-header">
+<div class="container nav-header">
 
   <!-- Heading - Welcome <username>, Logout -->
   <div class="row my-3">
@@ -26,11 +26,11 @@
   <!-- Heading - Back to Menu, Place Order -->
   <div class="row mb-4">
     <div class="col-6">
-      <form class="index-order-links" action="{% url 'index' %}" method="get">
-        <button class="index-button">
+      <form class="nav-order-links" action="{% url 'index' %}" method="get">
+        <button class="nav-button">
           <strong>&lt;</strong>
         </button>
-        <button class="button-transparent index-text">Back to Menu</button>
+        <button class="button-transparent nav-text">Back to Menu</button>
       </form>
     </div>
 
@@ -40,7 +40,7 @@
 </div>
 
 <!-- Display Order -->
-<div class="container">
+<div class="container" style="margin-top: -2px;">
   <div class="orders">
     <div id="display_orders"></div>
     <p>Total: $<span id="total_price"></span></p>
