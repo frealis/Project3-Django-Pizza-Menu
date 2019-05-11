@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // Reloads page if user hits the "Back" button
   // https://stackoverflow.com/questions/20899274/how-to-refresh-page-on-back-button-click
   if(!!window.performance && window.performance.navigation.type === 2) {
-    console.log('Reloading');
     window.location.reload();
   }
 
@@ -44,13 +43,17 @@ document.addEventListener('DOMContentLoaded', function() {
   let items_ordered_count = 0;
   let user = document.querySelector('#user').innerHTML;
 
-  console.log(localStorage)
-
   for (let j = 0; j < localStorage.length; j++) {
-    if (JSON.parse(localStorage.getItem(j))['user'] === user) {
+    if (JSON.parse(localStorage.getItem(j)) !== null &&
+        JSON.parse(localStorage.getItem(j))['user'] === user) {
       items_ordered_count++;
     };
   };
+
+  // for (const [key, value] of Object.entries(object)) {
+  //   console.log(key, value);
+  // }
+
   document.querySelector('#total_price').append(total_price.toFixed(2));
   document.querySelector('#number-of-items-ordered').innerHTML = items_ordered_count;  
 
@@ -177,9 +180,6 @@ document.addEventListener('DOMContentLoaded', function() {
         };
       };
     };
-
-    console.log('index: ', index)
-
     return index;
   };
 
@@ -479,69 +479,63 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('.nav-order-links').onclick = () => {
 
     // Mimic what the selections() function does to gather data on selected
-    // menu items, and any selected extras or toppings
-    x = document.querySelectorAll('[type="checkbox"]')
+    // menu items, and any selected extras or toppings.
+    checkboxes = document.querySelectorAll('[type="checkbox"]')
     selected_menu_items = [];
     selected_extras_toppings = [];
-    for (let i = 0; i < x.length; i++) {
-      if (x[i].dataset.tr_id && x[i].checked) {
-        selected_menu_items.push(x[i]);
+    for (let i = 0; i < checkboxes.length; i++) {
+      if (checkboxes[i].dataset.tr_id && checkboxes[i].checked) {
+        selected_menu_items.push(checkboxes[i]);
       };
-      if (x[i]['className'] && x[i].checked) {
-        selected_extras_toppings.push(x[i]);
+      if (checkboxes[i]['className'] && checkboxes[i].checked) {
+        selected_extras_toppings.push(checkboxes[i]);
       };
     };
 
-    console.log(selected_menu_items.length)
     document.querySelector('.error-no-selections').innerHTML = ''
     if (selected_menu_items.length === 0) {
       document.querySelector('.error-no-selections').innerHTML = "No menu items are currently selected."
       return;
     };
 
-
-    // Store every attribute from any selected checkboxes as key:value pairs
-    let previous_localStorage_length = localStorage.length;
+    // Store every attribute from any selected checkboxes as key:value pairs.
     for (let j = 0; j < selected_menu_items.length; j++) {
-      let data_group = selected_menu_items[j].dataset.group;
-      let data_size = selected_menu_items[j].dataset.size;
-      let data_td_id = selected_menu_items[j].dataset.td_id;
-      let data_toppings = selected_menu_items[j].dataset.toppings;
-      let data_tr_id = selected_menu_items[j].dataset.tr_id;
-      let name = selected_menu_items[j]['name'];
-      let value = selected_menu_items[j]['value'];
+      // let data_group = selected_menu_items[j].dataset.group;
+      // let data_size = selected_menu_items[j].dataset.size;
+      // let data_td_id = selected_menu_items[j].dataset.td_id;
+      // let data_toppings = selected_menu_items[j].dataset.toppings;
+      // let data_tr_id = selected_menu_items[j].dataset.tr_id;
+      // let name = selected_menu_items[j]['name'];
+      // let value = selected_menu_items[j]['value'];
       let attributes = {
-        "data_group": data_group,
-        "data_size": data_size,
-        "data_td_id": data_td_id,
-        "data_toppings": data_toppings,
-        "data_tr_id": data_tr_id,
+        "data_group": selected_menu_items[j].dataset.group,
+        "data_size": selected_menu_items[j].dataset.size,
+        "data_td_id": selected_menu_items[j].dataset.td_id,
+        "data_toppings": selected_menu_items[j].dataset.toppings,
+        "data_tr_id": selected_menu_items[j].dataset.tr_id,
         "extras_price": 0,
         "extras": [],
-        "name": name,
+        "name": selected_menu_items[j]['name'],
         "toppings": [],
         "user": user,
-        "value": value,
+        "value": value = selected_menu_items[j]['value'],
       };
 
-      // Associate selected extras or toppings with their respective menu item
+      // Associate selected extras or toppings with their respective menu item.
       for (let k = 0; k < selected_extras_toppings.length; k++) {
         if (selected_menu_items[j].dataset.tr_id === selected_extras_toppings[k]['className']) {
 
-          // Handle pizza toppings
+          // Add any selected pizza toppings item to the selected pizza's list of 
+          // attributes.
           if (selected_menu_items[j].dataset.group === 'Regular Pizza' || selected_menu_items[j].dataset.group === 'Sicilian Pizza') {
-
-            // Add toppings item to attributes
             new_topping = selected_extras_toppings[k]['name'];
             old_toppings = attributes['toppings'];
             old_toppings.push(new_topping);
             attributes['toppings'] = old_toppings;
           };
 
-          // Handle sub extras
+          // Add any selected sub extras to the selected sub's list of attributes.          
           if (selected_menu_items[j].dataset.group === 'Subs') {
-
-            // Add extras item to attributes
             new_extra = selected_extras_toppings[k]['name'];
             old_extras = attributes['extras'];
             old_extras.push(new_extra);
@@ -553,9 +547,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // localStorage only stores strings, so you can convert dictionaries into 
       // strings when using *.setItem, and then back into dictionaries when
-      // using *.getItem
-      localStorage.setItem(j + previous_localStorage_length, JSON.stringify(attributes));
+      // using *.getItem. A random key is generated for each selected menu item
+      // that will be added to the order because that key will eventually be
+      // replaced (see the code below).
+      let random = Math.random().toString(36).substring(7);
+      localStorage.setItem(random, JSON.stringify(attributes));
+      console.log(localStorage);
     };
+
+    // Use Object.entries() to iterate over the localStorage object, which stores
+    // all of menu items that have been added to the order (menu items + their 
+    // attributes are stored in the attributes{} object), in order to transfer the
+    // contents of localStorage into a temporary array. 
+    // 
+    // The purpose is to assign each attribute{} object a unique index number, and
+    // putting each object into an array is one way to accomplish this. Once each 
+    // menu item & its associated attributes has a unique index number, they are 
+    // and then transfered -back- into localStorage.
+    temp_array = []
+    for (let [key, value] of Object.entries(localStorage)) {
+      temp_array.push(value);
+    }
+    localStorage.clear();
+    for (let i = 0; i < temp_array.length; i++) {
+      localStorage.setItem(i, temp_array[i]);
+    }
 
     // Display the modal
     let modal = document.getElementById('modal');

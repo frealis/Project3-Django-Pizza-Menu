@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (JSON.parse(localStorage.getItem(i))['user'] === user) {
       const data_group  = JSON.parse(localStorage.getItem(i))['data_group'];
       const data_size   = JSON.parse(localStorage.getItem(i))['data_size'];
+      const data_tr_id  = JSON.parse(localStorage.getItem(i))['data_tr_id'];
       const name        = JSON.parse(localStorage.getItem(i))['name'];
       const price       = parseFloat(JSON.parse(localStorage.getItem(i))['value']);
 
@@ -94,8 +95,25 @@ document.addEventListener('DOMContentLoaded', function() {
       // Append the price of the individual item and any extras to the list of 
       // orders
       br = document.createElement('br');
+      br2 = document.createElement('br');
+      span = document.createElement('span');
       total_individual_price = price + total_extras_price;
       li.append(br, '$', total_individual_price.toFixed(2));
+      li.append(br2, span);
+      span.append(br2, 'X Remove Item');
+      span.style.fontWeight = 'bold';
+      span.style.cursor = 'pointer';
+      span.addEventListener('click', function() {
+        localStorage_length = localStorage.length;
+        for (let i = 0; i < localStorage_length; i++) {
+          if (JSON.parse(localStorage.getItem(i))['user'] === user &&
+              JSON.parse(localStorage.getItem(i))['data_tr_id'] === data_tr_id &&
+              JSON.parse(localStorage.getItem(i))['data_size'] === data_size) {
+                console.log(i)
+            localStorage.removeItem(i);
+          };
+        };
+      });
 
       // Stitch together the <li> element within a <ul> element and then insert it
       // into the DOM
@@ -161,8 +179,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Send localStorage_data to views.py so that it can store all of the order
     // information in the database. Note -- this AJAX-type request sends the
-    // order data to the server for storage, but the button on orders.html when 
-    // clicked submits a GET request to redirect to success.html.
+    // order data to the server for storage, but the button on orders.html, when 
+    // clicked, submits a GET request to redirect to success.html.
     request.send(localStorage_data);
 
     // Clear out the ordered items that were just sent to the server for database
