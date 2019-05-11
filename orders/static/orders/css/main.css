@@ -71,6 +71,13 @@ html {
   color: #a51d21;
 }
 
+.index-button-invisible {
+  background-color: #faf9db;
+  border: 0;
+  font-weight: bold;
+  padding: 0;
+}
+
 .index-order-links {
   display: inline-block;
 }
