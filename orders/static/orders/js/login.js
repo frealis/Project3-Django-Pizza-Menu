@@ -110,14 +110,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const storage_extras = storage.getAttribute('data-storage_extras');
   const storage_toppings = storage.getAttribute('data-storage_toppings');
 
-  // Parse the storage_extras & storage_toppings strings and grab the names of 
-  // the individual extras & toppings, then insert them into the DOM as csv
-  // strings (0 is falsey).
-  extras = JSON.parse(storage_extras);
-  extras.forEach(i => {
-    extra = i['fields']['item'];
-    document.querySelector('.login-extras').innerHTML += (extras.indexOf(i) ? ', ' : '') + extra;
-  })
+  // Parse the storage_toppings string and grab the names of the individual 
+  // extras & toppings, then insert them into the DOM as csv strings (0 is falsey).
   toppings = JSON.parse(storage_toppings);
   toppings.forEach(i => {
     topping = i['fields']['item'];
