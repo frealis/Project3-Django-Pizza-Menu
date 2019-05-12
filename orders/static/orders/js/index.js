@@ -50,10 +50,6 @@ document.addEventListener('DOMContentLoaded', function() {
     };
   };
 
-  // for (const [key, value] of Object.entries(object)) {
-  //   console.log(key, value);
-  // }
-
   document.querySelector('#total_price').append(total_price.toFixed(2));
   document.querySelector('#number-of-items-ordered').innerHTML = items_ordered_count;  
 
@@ -486,27 +482,30 @@ document.addEventListener('DOMContentLoaded', function() {
     for (let i = 0; i < checkboxes.length; i++) {
       if (checkboxes[i].dataset.tr_id && checkboxes[i].checked) {
         selected_menu_items.push(checkboxes[i]);
+        // console.log('checkboxes[i].dataset.tr_id: ', checkboxes[i].dataset.tr_id)
+        // console.log('checkboxes[i].checked: ', checkboxes[i].checked)
+        // console.log('checkboxes[i]: ', checkboxes[i])
       };
       if (checkboxes[i]['className'] && checkboxes[i].checked) {
         selected_extras_toppings.push(checkboxes[i]);
+        // console.log('checkboxes[i]["className"]: ', checkboxes[i]['className'])
+        // console.log('checkboxes[i].checked: ', checkboxes[i].checked)
+        // console.log('checkboxes[i]: ', checkboxes[i])
       };
     };
 
-    document.querySelector('.error-no-selections').innerHTML = ''
+    // If no items are selected, display an error message on the DOM and also
+    // return false in order to prevent the modal from being displayed towards 
+    // the end of this 'onclick' event function.
+    document.querySelector('.error-selections').innerHTML = ''
     if (selected_menu_items.length === 0) {
-      document.querySelector('.error-no-selections').innerHTML = "No menu items are currently selected."
-      return;
+      document.querySelector('.error-selections').innerHTML = "No menu items are currently selected."
+      return false;
     };
 
     // Store every attribute from any selected checkboxes as key:value pairs.
+    staging_array = []
     for (let j = 0; j < selected_menu_items.length; j++) {
-      // let data_group = selected_menu_items[j].dataset.group;
-      // let data_size = selected_menu_items[j].dataset.size;
-      // let data_td_id = selected_menu_items[j].dataset.td_id;
-      // let data_toppings = selected_menu_items[j].dataset.toppings;
-      // let data_tr_id = selected_menu_items[j].dataset.tr_id;
-      // let name = selected_menu_items[j]['name'];
-      // let value = selected_menu_items[j]['value'];
       let attributes = {
         "data_group": selected_menu_items[j].dataset.group,
         "data_size": selected_menu_items[j].dataset.size,
@@ -545,16 +544,49 @@ document.addEventListener('DOMContentLoaded', function() {
         };
       };
 
+      // Ensure that pizzas that come with 1 or more toppings actually have them
+      // selected.
+      if (attributes['name'] === "1 topping" && attributes['toppings'].length < 1) {
+        document.querySelector('.error-selections').innerHTML = "Must select 1 topping for a 1 topping pizza."
+        return false;
+      } else if (attributes['name'] === "2 toppings" && attributes['toppings'].length < 2) {
+        document.querySelector('.error-selections').innerHTML = "Must select 2 toppings for a 2 topping pizza."
+        return false;
+      } else if (attributes['name'] === "3 toppings" && attributes['toppings'].length < 3) {
+        document.querySelector('.error-selections').innerHTML = "Must select 3 toppings for a 3 topping pizza."
+        return false;
+      };
+
+      // Store information from the current checkbox being iterated over into a
+      // 'staging' object, and push that object into a 'staging' array. The idea
+      // is that if the parent FOR loop continues to completion (ie. it avoids
+      // any conditions where a pizza with toppings is selected and submitted to
+      // the order via the 'Add to Order' button, but the user forgot to submit
+      // the required number of toppings), then the data from the 'stagin' array
+      // gets transferred to localStorage later on. Otherwise, the selected data
+      // is lost and nothing gets transferred to localStorage.
+      staging_array.push(attributes);
+
       // localStorage only stores strings, so you can convert dictionaries into 
       // strings when using *.setItem, and then back into dictionaries when
-      // using *.getItem. A random key is generated for each selected menu item
-      // that will be added to the order because that key will eventually be
-      // replaced (see the code below).
-      let random = Math.random().toString(36).substring(7);
-      localStorage.setItem(random, JSON.stringify(attributes));
-      console.log(localStorage);
+      // using *.getItem. This only triggers if the parent FOR loop iterates to
+      // completion, ie. j === (selected_menu_items.length - 1).
+      //
+      // A random key is generated for each selected menu item that may eventually
+      // be added to the order -- that key will eventually be replaced (see the 
+      // code below) so it doesn't matter what it is, as long as it is unique
+      // (there is a minute chance of generating the same random key more than 
+      // once for the duration of this 'onclick' callback function).
+      if (j === (selected_menu_items.length - 1)) {
+        for (let i = 0; i < staging_array.length; i++) {
+          let random = Math.random().toString(36).substring(7);
+          localStorage.setItem(random, JSON.stringify(staging_array[i]));
+        };
+      };
     };
 
+    // Change localStorage indices from random characters into integers starting
+    // at 0 and stepping up by 1 for each object -- basically, an array.
     localStorageIndexUpdate();
 
     // Display the modal

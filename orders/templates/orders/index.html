@@ -30,7 +30,7 @@
         <button class="nav-button">+</button> 
         <span class="nav-text">Add to Order</span>
       </div>
-      <div class="error-no-selections"></div>
+      <div class="error-selections"></div>
     </div>
     <div class="col-6 text-right">
       <form class="nav-order-links" action="{% url 'orders' %}" method="get">
@@ -71,7 +71,7 @@
           </tr>
           {% for item in menu %}
             {% if item.group == 'Regular Pizza' and item.item != 'Cheese' %}
-              <tr id="{{ item.group }} + {{ item.item }}" data-group = "{{ item.group }}" data-tr_id="{{ item.group }} + {{ item.item }}" data-td_id="{{ item.item }} + {{ item.price_sm }}" name="{{ item.item }}" value="{{ item.price_sm }}" data-toppings="true" data-size="Small">
+              <tr id="{{ item.group }} + {{ item.item }}">
                 <td>{{ item.item }}</td>
                 <td>
                   {{ item.price_sm }} 
