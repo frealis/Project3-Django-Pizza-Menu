@@ -117,5 +117,4 @@ document.addEventListener('DOMContentLoaded', function() {
     topping = i['fields']['item'];
     document.querySelector('.login-toppings').innerHTML += (toppings.indexOf(i) ? ', ' : '') + topping;
   })
-
 });
