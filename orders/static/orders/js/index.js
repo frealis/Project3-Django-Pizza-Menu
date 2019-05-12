@@ -555,6 +555,15 @@ document.addEventListener('DOMContentLoaded', function() {
       } else if (attributes['name'] === "3 toppings" && attributes['toppings'].length < 3) {
         document.querySelector('.error-selections').innerHTML = "Must select 3 toppings for a 3 topping pizza."
         return false;
+      }else if (attributes['name'] === "1 item" && attributes['toppings'].length < 1) {
+        document.querySelector('.error-selections').innerHTML = "Must select 1 item for a 1 topping sicilian pizza."
+        return false;
+      }else if (attributes['name'] === "2 items" && attributes['toppings'].length < 2) {
+        document.querySelector('.error-selections').innerHTML = "Must select 2 items for a 2 topping sicilian pizza."
+        return false;
+      }else if (attributes['name'] === "3 items" && attributes['toppings'].length < 3) {
+        document.querySelector('.error-selections').innerHTML = "Must select 3 items for a 3 topping sicilian pizza."
+        return false;
       };
 
       // Store information from the current checkbox being iterated over into a
