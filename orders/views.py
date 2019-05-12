@@ -80,7 +80,7 @@ def register_view(request):
   # Try to see if the username already exists in the database; if not, register
   # a new user.
   try:
-    existing_username = User.objects.get(username=username)
+    User.objects.get(username=username)
     return HttpResponse('{"success": false, "message": "Username already exists."}')
   except:
 
@@ -119,58 +119,57 @@ def orders_view(request):
           )
     add.save()
 
-    # Make API request to Stripe to create a charge
-    # Set your secret key: remember to change this to your live secret key in production
-    # See your keys here: https://dashboard.stripe.com/account/apikeys    
+    # Make API request to Stripe to create a charge -- set your secret key, but
+    # remember to change this to your live secret key in production.
+    # See your keys here: https://dashboard.stripe.com/account/apikeys.  
     try:
-      # Use Stripe's library to make requests...
       import stripe
-      stripe.api_key = "sk_test_1xe9xL3ilJwRXLABHF1JfPhL00QFOSOlPx"
+      # stripe.api_key = "sk_test_1xe9xL3ilJwRXLABHF1JfPhL00QFOSOlPx"
 
-      # Stripe requires the amount to be in the smallest unit of currency, ie.
-      # pennies in the US
+      # Stripe requires the price to be in the smallest unit of currency, ex.
+      # pennies in the US.
       price = int(float(request.POST['price'] + request.POST['extras_price']) * 100)
-
       charge = stripe.Charge.create(
-      amount=price,
-      currency="usd",
-      source="tok_visa", # obtained with Stripe.js
-      description=("Charge for " + request.POST['user']),
-      )
+        amount=price,
+        currency="usd",
+        source="tok_visa", # obtained with Stripe.js
+        description=("Charge for " + request.POST['user']),)
       pass
 
+    # Errors are caught in stripe.error.Carderror.
     except stripe.error.CardError as e:
-      # Since it's a decline, stripe.error.CardError will be caught
       body = e.json_body
       err  = body.get('error', {})
-
       print("Status is: %s" % e.http_status)
       print("Type is: %s" % err.get('type'))
       print("Code is: %s" % err.get('code'))
-      # param is '' in this case
-      print("Param is: %s" % err.get('param'))
+      print("Param is: %s" % err.get('param')) # 'param' is '' in this case
       print("Message is: %s" % err.get('message'))
+
+    # Too many requests made to the API too quickly.
     except stripe.error.RateLimitError as e:
-      # Too many requests made to the API too quickly
       pass
+
+    # Invalid parameters were supplied to Stripe's API.
     except stripe.error.InvalidRequestError as e:
-      # Invalid parameters were supplied to Stripe's API
       pass
+
+    # Authentication with Stripe's API failed (ex. invalid secret key).    
     except stripe.error.AuthenticationError as e:
-      # Authentication with Stripe's API failed
-      # (maybe you changed API keys recently)
       pass
+
+    # Network communication with Stripe failed.
     except stripe.error.APIConnectionError as e:
-      # Network communication with Stripe failed
       pass
+
+    # Display a very generic error to the user (might be a good idea to trigger
+    # a notification email to the site admin).
     except stripe.error.StripeError as e:
-      # Display a very generic error to the user, and maybe send
-      # yourself an email
       pass
+
+    # Something else happened, completely unrelated to Stripe
     except Exception as e:
-      # Something else happened, completely unrelated to Stripe
       pass
 
     print(charge)
-
   return HttpResponse('Success!')
