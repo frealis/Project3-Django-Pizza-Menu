@@ -6,3 +6,4 @@ venv/
 *.scss
 *.css.map
 *.exe
+.env
