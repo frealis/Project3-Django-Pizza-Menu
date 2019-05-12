@@ -93,3 +93,33 @@ _orders.html, orders.js, views.py_
 # Personal touch
 
 - The personal touch was integrating the Stripe library & interacting with the Stripe API whenever an order is placed to process a money transaction (although in its current state it is still in development and not suitable for production).
+
+# Switching from local SQLite to local Postgres database
+
+- In order to switch local databases from the stock sqlite3 database to a local Postges database (assuming one is installed on the local computer), you can use Django's manage.py program:
+
+  1. Store data from the sqlite3 database as a *.json file:
+
+    $ python manage.py dumpdata > dump.json
+
+  2. Swap the DATABASE settings in settings.py from sqlite3 to Postgres
+
+  3. Migrate the existing database schema to the new local Postgres database:
+
+    $ python manage.py makemigrations (if necessary)
+    $ python manage.py migrate
+
+  4. python manage.py loaddata dump.json
+
+  ... at this point the data may fail to load from dump.json into the new local Postgres database because, for some reason, manage.py encodes dump.json as utf-8-bom. You can write a script to stop the BOM (byte order marker) from dump.json, and make it usable in step #4, with a Python script like this:
+
+-- decode-utf-8-bom.py
+  import sys
+
+  file_write = open(sys.argv[2], mode='w', encoding="utf-8")
+
+  with open(sys.argv[1], mode='r', encoding='utf-8-sig') as file_read:
+    for line in file_read:
+      file_write.write(line)
+
+  file_write.close()
