@@ -6,13 +6,21 @@
 
 - Additionally, a test request is made to the Stripe API which is a service used to process online payments. This project is in the development phase and not yet suitable for production -- you'd probably want to use an external database and use a Stripe production API key in order to actually process customer transactions.
 
-# Configuration, Structure
+# Configuration, Structure - Run Locally
 
 - Navigate to the ~/project3 folder and run pip3 install -r requirements.txt to make sure that Django is installed -- requirements.txt lists Django==2.0.3
 
 - Start the Django pizza application from within ~/project3 by running:
 
   $ python manage.py runserver
+
+  ... and the website should be accessible at 127.0.0.1:8000. 
+
+- To start the web application locally using the Heroku Local CLI plugin:
+
+  $ heroku local web -f Procfile.windows
+
+  ... and the website should be accessible at localhost:5000.
 
 - The structure of this Django project follows something like this: the project itself, project3, is named "pizza", and the app that handles orders is called "orders". So within the project3/ folder there is a project3/pizza/ folder and a project3/orders/ folder, and the confusing thing they both contain a urls.py file. 
 
