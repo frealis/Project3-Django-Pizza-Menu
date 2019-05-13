@@ -94,7 +94,7 @@ _orders.html, orders.js, views.py_
 
 - The personal touch was integrating the Stripe library & interacting with the Stripe API whenever an order is placed to process a money transaction (although in its current state it is still in development and not suitable for production).
 
-# Switching from local SQLite to local Postgres database
+# Transferring Data from One Database to Another (ie. from sqlite3 to Postgres)
 
 - In order to switch local databases from the stock sqlite3 database to a local Postges database (assuming one is installed on the local computer), you can use Django's manage.py program:
 
@@ -111,9 +111,12 @@ _orders.html, orders.js, views.py_
 
   4. python manage.py loaddata dump.json
 
-  ... at this point the data may fail to load from dump.json into the new local Postgres database because, for some reason, manage.py encodes dump.json as utf-8-bom. You can write a script to stop the BOM (byte order marker) from dump.json, and make it usable in step #4, with a Python script like this:
+  ... at this point the data may fail to load from dump.json into the new local Postgres database because, for some reason, manage.py encodes dump.json as utf-8-bom. You can write a script to remove the BOM (byte order marker) from dump.json, and make it usable in step #4, with a Python script like this:
 
 -- decode-utf-8-bom.py
+
+  # Syntax: python decode-utf-8-bom <read file> <write file>
+
   import sys
 
   file_write = open(sys.argv[2], mode='w', encoding="utf-8")
@@ -123,3 +126,9 @@ _orders.html, orders.js, views.py_
       file_write.write(line)
 
   file_write.close()
+
+  ... so you can use this script locally to update a local Postgres database that is used for development, or you can push the script & local database data (assuming you have used the above script or otherwise have your data in plain utf-8 encoding) to Heroku and then insert it into the Heroku Postgres database like this:
+
+  $ heroku run python manage.py loaddata dump_no_BOM.json
+
+  ... where 'dump_no_BOM.json' is your local database data that has utf-8 encoding.
