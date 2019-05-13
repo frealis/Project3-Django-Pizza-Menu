@@ -89,20 +89,20 @@ WSGI_APPLICATION = 'pizza.wsgi.application'
 # }
 
 # Local Postgres database
-# DATABASES = {
-#   'default': {
-#     'ENGINE': 'django.db.backends.postgresql',
-#     'NAME': os.getenv("POSTGRES_NAME"),
-#     'USER': os.getenv("POSTGRES_USER"),
-#     'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
-#     'HOST': '127.0.0.1',
-#     'PORT': '5432',
-#   }
-# }
+DATABASES = {
+  'default': {
+    'ENGINE': 'django.db.backends.postgresql',
+    'NAME': os.getenv("POSTGRES_NAME"),
+    'USER': os.getenv("POSTGRES_USER"),
+    'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
+    'HOST': '127.0.0.1',
+    'PORT': '5432',
+  }
+}
 
 # Heroku Database
-DATABASE_URL = os.environ['DATABASE_URL']
-conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+# DATABASE_URL = os.environ['DATABASE_URL']
+# conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -147,5 +147,5 @@ import django_heroku
 django_heroku.settings(locals()) # this line has to occur after STATIC_ROOT
 
 # Postgres w/Heroku
-import dj_database_url
-DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# import dj_database_url
+# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
